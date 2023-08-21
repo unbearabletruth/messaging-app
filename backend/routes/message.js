@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router({ mergeParams: true });
-
+const { getMessages, createMessage, deleteMessage, updateMessage } = require('../controllers/message_controller');
 
 router.get("/messages", getMessages);
 

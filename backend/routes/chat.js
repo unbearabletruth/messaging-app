@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const messageRouter = require('./message');
+const { getChat, getChats, createChat, updateChat, deleteChat } = require('../controllers/chat_controller');
 
 router.get("/", getChats);
 
