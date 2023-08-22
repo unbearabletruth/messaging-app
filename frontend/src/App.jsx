@@ -8,11 +8,11 @@ import { useAuthContext } from './hooks/UseAuthContext';
 
 function App() {
   const {user} = useAuthContext()
-
+  console.log(user)
   return (
     <BrowserRouter>
       <Routes>
-        <Route path='/*' element={user ? <><Sidebar /><Content /></> : <Navigate to='/login'/>} />
+        <Route path='/*' element={ <><Sidebar /><Content /></>} />
         <Route path="/login" element={<Login />} />                            
       </Routes>
     </BrowserRouter>

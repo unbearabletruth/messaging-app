@@ -1,0 +1,50 @@
+#sidebar{
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  width: 420px;
+  border-right: 1px solid var(--border);
+}
+
+.sidebarChat{
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  transition: background-color 0.2s ease-out;
+}
+
+.sidebarChat:hover{
+  background-color: #f5f5f5;
+  cursor: pointer;
+}
+
+.sidebarChatContent{
+  display: flex;
+  gap: 15px;
+}
+
+.sidebarChatMain{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+}
+
+.sidebarChatPic{
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+}
+
+.sidebarChatUser{
+  font-weight: bold;
+  color: var(--main-font-color)
+}
+
+.sidebarChatLatest{
+  color: var(--light-font-color)
+}
+
+.sidebarChatUpdated{
+  color: var(--main-font-color)
+}
