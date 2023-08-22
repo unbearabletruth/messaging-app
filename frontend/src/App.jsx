@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
 import './App.css'
 import Sidebar from './components/Sidebar';
 import Content from './components/Content';
@@ -12,8 +12,7 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path='/*' element={<><Sidebar />
-                                    <Content /></>} />
+        <Route path='/*' element={user ? <><Sidebar /><Content /></> : <Navigate to='/login'/>} />
         <Route path="/login" element={<Login />} />                            
       </Routes>
     </BrowserRouter>

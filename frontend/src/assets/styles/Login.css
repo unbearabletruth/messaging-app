@@ -1,0 +1,60 @@
+#loginPage{
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: var(--main-font-color);
+  gap: 35px;
+}
+
+#loginForm,
+#signupForm{
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.loginInput{
+  width: 300px;
+  height: 35px;
+  border-radius: 5px;
+  padding: 0px 8px;
+  border: 1px solid var(--border)
+}
+
+.loginInput:focus{
+  outline: none;
+  border: 2px solid var(--main-color);
+}
+
+.fontButton{
+  appearance: none;
+  border: 0px;
+  background: white;
+  font-size: 1rem;
+  color: var(--main-darker);
+  font-weight: bold;
+}
+
+.fontButton:hover{
+  cursor: pointer;
+}
+
+#dontHaveAccount{
+  display: flex;
+  gap: 10px;
+}
+
+#signupPopup{
+  position: relative;
+  width: 350px;
+  height: 300px;
+  background-color: white;
+  padding: 50px 20px 20px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  border-radius: 10px;
+}

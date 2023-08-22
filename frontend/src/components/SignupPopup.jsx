@@ -1,10 +1,9 @@
 import { useState } from "react"
 import { useAuthContext } from "../hooks/UseAuthContext"
 import { useNavigate  } from "react-router-dom";
-import Signup from "../components/SignupPopup";
-import '../assets/styles/Login.css'
+import closeIcon from '../assets/images/close-icon.svg'
 
-function Login() {
+function Signup({closePopup}) {
   const navigate = useNavigate()
   const {dispatch} = useAuthContext()
   const [user, setUser] = useState({
@@ -13,7 +12,6 @@ function Login() {
   })
   const [error, setError] = useState() 
   const [isLoading, setIsLoading] = useState()
-  const [signup, setSignup] = useState(false)
 
   const handleInput = (e) => {
     setUser({
@@ -22,13 +20,13 @@ function Login() {
     })
   }
 
-  const handleLogin = async (e) => {
+  const handleSignup = async (e) => {
     e.preventDefault()
-    const login = async (user) => {
+    const signup = async (user) => {
       setIsLoading(true)
       setError(null)
   
-      const response = await fetch(`http://localhost:3000/users/login`, {
+      const response = await fetch(`http://localhost:3000/users/signup`, {
         method: 'POST',
         body: JSON.stringify(user),
         headers: {
@@ -47,19 +45,18 @@ function Login() {
         navigate("/");
       }
     }
-    await login(user)
-  }
-
-  const closePopup = () => {
-    setSignup(false)
+    await signup(user)
   }
 
   return (
-      <div id="loginPage">
-        <h1 id="loginTitle">Sign in to Messanger</h1>
-        <form id="loginForm" onSubmit={handleLogin}>
+    <div id="popupBackground">
+      <div id="signupPopup">
+        <button onClick={closePopup} className="closePopup">
+          <img src={closeIcon} alt="x" className="closeIcon"></img>
+        </button>
+        <h1 id="signupTitle">Sign up</h1>
+        <form id="signupForm" onSubmit={handleSignup}>
           <input 
-            type="text"
             className="loginInput" 
             name="username" 
             onChange={handleInput}
@@ -68,7 +65,6 @@ function Login() {
           >
           </input>
           <input 
-            type="password"
             className="loginInput" 
             name="password" 
             onChange={handleInput}
@@ -76,16 +72,12 @@ function Login() {
             placeholder="Password"
           >
           </input>
-          <button disabled={isLoading} className="formButton">Log in</button>
+          <button disabled={isLoading} className="formButton">Sign up</button>
           {error && <p>{error}</p>}
         </form>
-        <div id="dontHaveAccount">
-          <p>Don't have an account?</p>
-          <button className="fontButton" onClick={() => setSignup(true)}>Sign up</button>
-        </div>
-        {signup && <Signup closePopup={closePopup}/>}
+      </div>
     </div>
   )
 }
 
-export default Login
+export default Signup
