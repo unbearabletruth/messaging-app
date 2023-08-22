@@ -4,8 +4,10 @@ import './App.css'
 import Sidebar from './components/Sidebar';
 import Content from './components/Content';
 import Login from './pages/Login';
+import { useAuthContext } from './hooks/UseAuthContext';
 
 function App() {
+  const {user} = useAuthContext()
 
   return (
     <BrowserRouter>
