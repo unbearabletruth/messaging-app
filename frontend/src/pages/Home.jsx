@@ -9,7 +9,9 @@ function Home() {
   }
 
   return (
-    <button onClick={handleLogout}>Log out</button>
+    <div className="background">
+
+    </div>
   )
 }
 
