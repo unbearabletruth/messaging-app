@@ -25,7 +25,7 @@ function Chat() {
     }
 
     fetchMessages()
-  }, [])
+  }, [id])
 
   useEffect(() => {
     const fetchChat = async () => {
@@ -37,7 +37,7 @@ function Chat() {
     }
 
     fetchChat()
-  }, [])
+  }, [id])
 
   const submitMessage = async (e) => {
     e.preventDefault()
@@ -62,7 +62,7 @@ function Chat() {
       text: e.target.value
     })
   }
-  console.log(newMessage)
+  console.log(id)
   return (
     <>
       <div className="chatHeader">

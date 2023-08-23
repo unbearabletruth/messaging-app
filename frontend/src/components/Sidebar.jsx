@@ -4,13 +4,14 @@ import '../assets/styles/Sidebar.css'
 import moment from 'moment';
 import pencilIcon from '../assets/images/pencil-icon.svg'
 import backIcon from '../assets/images/back-icon.svg'
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function Sidebar() {
   const {user, dispatch} = useAuthContext()
   const [chats, setChats] = useState(null)
   const [users, setUsers] = useState(null)
   const [write, setWrite] = useState(false)
+  const navigate = useNavigate()
 
   const handleLogout = () => {
     localStorage.removeItem('user')
@@ -40,6 +41,22 @@ function Sidebar() {
 
     fetchUsers()
   }, [])
+
+  const newChat = async (e, partnerId) => {
+    e.preventDefault()
+    const users = {users: [user.id, partnerId]}
+    const response = await fetch(`http://localhost:3000/chats`, {
+      method: 'POST',
+      body: JSON.stringify(users),
+      headers: {
+        'Content-type': 'application/json'
+      }
+    })
+    const json = await response.json()
+    if (response.ok) {
+      navigate(`/${json._id}`)
+    }
+  }
   
   return (
     <div id="sidebar">
@@ -50,7 +67,7 @@ function Sidebar() {
           </button>
           {users && users.map(user => {
             return (
-              <div className="sidebarUser">
+              <div className="sidebarUser" key={user._id} onClick={(e) => newChat(e, user._id)}>
                 <img src={user.profilePic} alt="profile picture" className="sidebarPic"></img>
                 <div>
                   <p className="sidebarName">{user.username}</p>

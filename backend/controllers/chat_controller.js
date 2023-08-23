@@ -16,7 +16,7 @@ exports.getChat = async (req, res, next) => {
 exports.createChat = async (req, res) => {
     const newChat = new Chat({
         name: req.body.name,
-        isGroupChat: req.body.isGroupChat,
+        isGroupChat: false,
         users: req.body.users,
         latestMessage: null
     })
