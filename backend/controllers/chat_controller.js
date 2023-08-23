@@ -6,7 +6,7 @@ exports.getChats = async (req, res) => {
 };
 
 exports.getChat = async (req, res, next) => {
-    const chat = await Chat.findById(req.params.id).populate('author').populate('users').exec()
+    const chat = await Chat.findById(req.params.id).populate('users', 'username profilePic').exec()
     if (chat){
         return res.status(200).json(chat)
     }

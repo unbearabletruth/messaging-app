@@ -1,3 +1,21 @@
+.chatHeader{
+  height: 70px;
+  display: flex;
+  align-items: center;
+  padding: 0px 15px;
+}
+
+.chatHeaderUser{
+  display: flex;
+  gap: 15px;
+}
+
+.chatHeaderPic{
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+}
+
 .background{
   display: flex;
   flex-direction: column;
@@ -39,4 +57,23 @@
 .messageTime{
   color: var(--light-font-color);
   font-size: 0.7rem;
+}
+
+#messageForm{
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#messageInput{
+  width: 80%;
+  height: 35px;
+  padding: 0px 8px;
+  border: 1px solid var(--light-border);
+  border-radius: 5px;
+}
+
+#messageInput:focus{
+  outline: none;
 }

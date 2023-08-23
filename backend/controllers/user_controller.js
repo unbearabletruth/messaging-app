@@ -10,7 +10,8 @@ exports.loginUser = async (req, res) => {
     try {
         const user = await User.login(username, password)
         const token = createToken(user._id)
-        res.status(200).json({username, token})
+        const id = user._id
+        res.status(200).json({id, username, token})
     } catch(error) {
         res.status(400).json({error: error.message})
     }
@@ -21,7 +22,8 @@ exports.signupUser = async (req, res) => {
     try {
         const user = await User.signup(username, password)
         const token = createToken(user._id)
-        res.status(200).json({username, token})
+        const id = user._id
+        res.status(200).json({id, username, token})
     } catch(error) {
         res.status(400).json({error: error.message})
     }
@@ -30,4 +32,9 @@ exports.signupUser = async (req, res) => {
 exports.getUsers = async (req, res) => {
   const users = await User.find().exec()
   res.status(200).json(users)
+};
+
+exports.getUser = async (req, res) => {
+    const users = await User.findById(req.params.userId).exec()
+    res.status(200).json(users)
 };
