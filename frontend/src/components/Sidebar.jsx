@@ -4,6 +4,7 @@ import '../assets/styles/Sidebar.css'
 import moment from 'moment';
 import pencilIcon from '../assets/images/pencil-icon.svg'
 import backIcon from '../assets/images/back-icon.svg'
+import { Link } from "react-router-dom";
 
 function Sidebar() {
   const {user, dispatch} = useAuthContext()
@@ -66,7 +67,7 @@ function Sidebar() {
               !chat.isGroupChat && chat.users.map(u => {
                 return (
                   u.username !== user.username ?
-                    <div key={chat._id} className="sidebarChat">
+                    <Link to={`/${chat._id}`} key={chat._id} className="sidebarChat">
                       <div className="sidebarChatContent">
                         <img src={u.profilePic} alt="profile picture" className="sidebarPic"></img>
                         <div className="sidebarChatMain">
@@ -79,7 +80,7 @@ function Sidebar() {
                         </div>
                       </div>
                       <p className="sidebarChatUpdatedAt">{moment(chat.updatedAt).format('DD.MM.YYYY')}</p>
-                    </div>
+                    </Link>
                     :
                     null
                   )
