@@ -1,7 +1,7 @@
 const Chat = require("../models/chat");
 
 exports.getChats = async (req, res) => {
-    const chats = await Chat.find().populate('latestMessage').populate('users', 'username profilePic').sort({updatedAt: -1}).exec()
+    const chats = await Chat.find({users: { $in: [req.params.id] }}).populate('latestMessage').populate('users', 'username profilePic').sort({updatedAt: -1}).exec()
     res.status(200).json(chats)
 };
 

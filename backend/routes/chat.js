@@ -3,7 +3,7 @@ const router = express.Router();
 const messageRouter = require('./message');
 const { getChat, getChats, createChat, updateChat, deleteChat } = require('../controllers/chat_controller');
 
-router.get("/", getChats);
+router.get("/users/:id", getChats);
 
 router.get("/:id", getChat);
 

@@ -20,7 +20,7 @@ function Sidebar() {
 
   useEffect(() => {
     const fetchChats = async () => {
-      const response = await fetch(`http://localhost:3000/chats`)
+      const response = await fetch(`http://localhost:3000/chats/users/${user.id}`)
       const json = await response.json()
       if (response.ok) {
         setChats(json)
@@ -57,7 +57,7 @@ function Sidebar() {
       navigate(`/${json._id}`)
     }
   }
-  
+  console.log(chats)
   return (
     <div id="sidebar">
       {write ? 
@@ -90,7 +90,7 @@ function Sidebar() {
                         <div className="sidebarChatMain">
                           <p className="sidebarChatUser">{u.username}</p>
                           {chat.latestMessage ?
-                            <p className="sidebarChatLatest">{chat.latestMessage}</p>
+                            <p className="sidebarChatLatest">{chat.latestMessage.text}</p>
                             :
                             <p className="sidebarChatLatest">Click to start a conversation!</p>
                           }

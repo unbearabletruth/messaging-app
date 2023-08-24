@@ -10,10 +10,27 @@ function Chat() {
   const {user} = useAuthContext()
   const [chat, setChat] = useState(null)
   const [newMessage, setNewMessage] = useState({
-    author: user.id,
-    chat: id,
+    author: '',
+    chat: '',
     text: ''
   })
+
+  useEffect(() => {
+    const fetchChat = async () => {
+      const response = await fetch(`http://localhost:3000/chats/${id}`)
+      const json = await response.json()
+      if (response.ok) {
+        setChat(json)
+        setNewMessage({
+          author: user.id,
+          chat: id,
+          text: ''
+        })
+      }
+    }
+
+    fetchChat()
+  }, [id])
 
   useEffect(() => {
     const fetchMessages = async () => {
@@ -27,23 +44,30 @@ function Chat() {
     fetchMessages()
   }, [id])
 
-  useEffect(() => {
-    const fetchChat = async () => {
-      const response = await fetch(`http://localhost:3000/chats/${id}`)
-      const json = await response.json()
-      if (response.ok) {
-        setChat(json)
-      }
-    }
-
-    fetchChat()
-  }, [id])
-
   const submitMessage = async (e) => {
     e.preventDefault()
     const response = await fetch(`http://localhost:3000/chats/${id}/messages`, {
       method: 'POST',
       body: JSON.stringify(newMessage),
+      headers: {
+        'Content-type': 'application/json'
+      }
+    })
+    const json = await response.json()
+    if (response.ok) {
+      setNewMessage({
+        ...newMessage,
+        text: ''
+      })
+      updateChatLatestMessage(json)
+    }
+  }
+
+  const updateChatLatestMessage = async (message) => {
+    const latestMessage = {latestMessage: message._id}
+    const response = await fetch(`http://localhost:3000/chats/${id}`, {
+      method: 'PATCH',
+      body: JSON.stringify(latestMessage),
       headers: {
         'Content-type': 'application/json'
       }
@@ -62,7 +86,7 @@ function Chat() {
       text: e.target.value
     })
   }
-  console.log(id)
+
   return (
     <>
       <div className="chatHeader">
