@@ -3,16 +3,33 @@ import { useState, useEffect } from 'react';
 import { useParams } from "react-router-dom";
 import moment from 'moment';
 import { useAuthContext } from '../hooks/UseAuthContext';
+import { io } from 'socket.io-client'
+
+let socket;
 
 function Chat() {
   const {id} = useParams();
-  const [messages, setMessages] = useState(null)
+  const [messages, setMessages] = useState([])
   const {user} = useAuthContext()
   const [chat, setChat] = useState(null)
   const [newMessage, setNewMessage] = useState({
     author: '',
     chat: '',
     text: ''
+  })
+  const [socketCon, setSocketCon] = useState(false)
+
+  useEffect(() => {
+    socket = io('http://localhost:3000')
+    socket.emit('setup', user)
+    socket.on('connection', () => setSocketCon(true))
+  }, [])
+
+  useEffect(() => {
+    socket.on('receive message', (newMessage) => {
+      console.log(messages, newMessage)
+      setMessages([...messages, newMessage])
+    })
   })
 
   useEffect(() => {
@@ -60,6 +77,7 @@ function Chat() {
         text: ''
       })
       updateChatLatestMessage(json)
+      socket.emit('new message', json)
     }
   }
 
@@ -107,7 +125,7 @@ function Chat() {
       <div className="background">
         {messages && messages.map(message => {
           return (
-            <div className={message.author.username === user.username ? 'myMessage' : 'message'} key={message._id}>
+            <div className={message.author === user.id ? 'myMessage' : 'message'} key={message._id}>
               <span className='messageText'>{message.text}</span>
               <span className='messageTime'>{moment(message.createdAt).format('hh:mm')}</span>
             </div>

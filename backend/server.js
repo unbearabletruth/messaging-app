@@ -25,6 +25,26 @@ app.use(express.json());
 app.use('/chats', chatsRouter);
 app.use('/users', userRouter);
  
-app.listen(port, () => {
+const server = app.listen(port, () => {
   console.log(`Server is running on port: ${port}`);
 });
+
+const io = require('socket.io')(server, {
+  cors: { 
+    origin: ['http://localhost:5173', 'http://localhost:5174']
+  },
+  pingTimeout: 60000
+})
+
+io.on("connection", (socket) => {
+  console.log('connected to socket.io')
+
+  socket.on('setup', (user) => {
+    socket.join(user.id)
+    socket.emit('connected')
+  })
+
+  socket.on('new message', (message) => {
+    io.emit('receive message', message)
+  })
+})

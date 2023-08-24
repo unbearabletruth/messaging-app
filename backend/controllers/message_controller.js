@@ -1,7 +1,7 @@
 const Message = require("../models/message");
 
 exports.getMessages = async (req, res) => {
-    const messages = await Message.find({chat: req.params.id}).populate('author', 'username').sort({timestamp: -1}).exec()
+    const messages = await Message.find({chat: req.params.id}).sort({timestamp: -1}).exec()
     res.status(200).json(messages)
 };
 
