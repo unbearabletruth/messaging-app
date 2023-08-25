@@ -1,10 +1,9 @@
 #sidebar{
-  min-height: 100vh;
+  height: 100vh;
   display: flex;
   flex-direction: column;
   width: 420px;
   border-right: 1px solid var(--light-border);
-  position: relative;
 }
 
 .sidebarChat{

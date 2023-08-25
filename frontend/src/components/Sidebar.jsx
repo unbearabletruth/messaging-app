@@ -54,7 +54,7 @@ function Sidebar() {
     })
     const json = await response.json()
     if (response.ok) {
-      navigate(`/${json._id}`)
+      navigate(`/${json._id}`, {state: {json}})
     }
   }
   console.log(chats)
@@ -79,12 +79,13 @@ function Sidebar() {
       :
         <>
           <button onClick={handleLogout}>Log out</button>
+          <p>Logged in as {user.username}</p>
           {chats && chats.map(chat => {
             return (
               !chat.isGroupChat && chat.users.map(u => {
                 return (
                   u.username !== user.username ?
-                    <Link to={`/${chat._id}`} key={chat._id} className="sidebarChat">
+                    <Link to={`/${u.username.replace(/\s+/g,'')}`} state={chat} key={chat._id} className="sidebarChat">
                       <div className="sidebarChatContent">
                         <img src={u.profilePic} alt="profile picture" className="sidebarPic"></img>
                         <div className="sidebarChatMain">

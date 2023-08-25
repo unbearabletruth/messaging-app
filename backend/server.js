@@ -31,7 +31,7 @@ const server = app.listen(port, () => {
 
 const io = require('socket.io')(server, {
   cors: { 
-    origin: ['http://localhost:5173', 'http://localhost:5174']
+    origin: ['http://localhost:5173', 'http://localhost:5174', 'http://localhost:5175']
   },
   pingTimeout: 60000
 })
@@ -44,7 +44,9 @@ io.on("connection", (socket) => {
     socket.emit('connected')
   })
 
-  socket.on('new message', (message) => {
-    io.emit('receive message', message)
+  socket.on('new message', (message, chat) => {
+    chat.users.forEach(user => {
+      socket.in(user._id).emit('receive message', message)
+    });
   })
 })

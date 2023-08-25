@@ -1,6 +1,6 @@
 import '../assets/styles/Chat.css'
-import { useState, useEffect } from 'react';
-import { useParams } from "react-router-dom";
+import { useState, useEffect, useRef } from 'react';
+import { useLocation } from "react-router-dom";
 import moment from 'moment';
 import { useAuthContext } from '../hooks/UseAuthContext';
 import { io } from 'socket.io-client'
@@ -8,7 +8,6 @@ import { io } from 'socket.io-client'
 let socket;
 
 function Chat() {
-  const {id} = useParams();
   const [messages, setMessages] = useState([])
   const {user} = useAuthContext()
   const [chat, setChat] = useState(null)
@@ -18,6 +17,7 @@ function Chat() {
     text: ''
   })
   const [socketCon, setSocketCon] = useState(false)
+  const { state } = useLocation()
 
   useEffect(() => {
     socket = io('http://localhost:3000')
@@ -27,13 +27,12 @@ function Chat() {
 
   useEffect(() => {
     socket.on('receive message', (newMessage) => {
-      console.log(messages, newMessage)
-      setMessages([...messages, newMessage])
+      setMessages(prevState => [...prevState, newMessage])
     })
-  })
+  }, [])
 
   useEffect(() => {
-    const fetchChat = async () => {
+    /*const fetchChat = async () => {
       const response = await fetch(`http://localhost:3000/chats/${id}`)
       const json = await response.json()
       if (response.ok) {
@@ -46,24 +45,31 @@ function Chat() {
       }
     }
 
-    fetchChat()
-  }, [id])
+    fetchChat()*/
+    setChat(state)
+    setNewMessage({
+      author: user.id,
+      chat: state._id,
+      text: ''
+    })
+  }, [state])
 
   useEffect(() => {
     const fetchMessages = async () => {
-      const response = await fetch(`http://localhost:3000/chats/${id}/messages`)
+      const response = await fetch(`http://localhost:3000/chats/${chat._id}/messages`)
       const json = await response.json()
       if (response.ok) {
         setMessages(json)
       }
     }
-
-    fetchMessages()
-  }, [id])
+    if (chat) {
+      fetchMessages()
+    }
+  }, [chat])
 
   const submitMessage = async (e) => {
     e.preventDefault()
-    const response = await fetch(`http://localhost:3000/chats/${id}/messages`, {
+    const response = await fetch(`http://localhost:3000/chats/${chat._id}/messages`, {
       method: 'POST',
       body: JSON.stringify(newMessage),
       headers: {
@@ -77,25 +83,19 @@ function Chat() {
         text: ''
       })
       updateChatLatestMessage(json)
-      socket.emit('new message', json)
+      socket.emit('new message', json, chat)
     }
   }
 
   const updateChatLatestMessage = async (message) => {
     const latestMessage = {latestMessage: message._id}
-    const response = await fetch(`http://localhost:3000/chats/${id}`, {
+    const response = await fetch(`http://localhost:3000/chats/${chat._id}`, {
       method: 'PATCH',
       body: JSON.stringify(latestMessage),
       headers: {
         'Content-type': 'application/json'
       }
     })
-    if (response.ok) {
-      setNewMessage({
-        ...newMessage,
-        text: ''
-      })
-    }
   }
   
   const handleMessage = (e) => {
@@ -105,6 +105,7 @@ function Chat() {
     })
   }
 
+  console.log('hey')
   return (
     <>
       <div className="chatHeader">
@@ -122,8 +123,8 @@ function Chat() {
           )
         }
       </div>
-      <div className="background">
-        {messages && messages.map(message => {
+      <div className="chatField">
+        {messages && messages.toReversed().map(message => {
           return (
             <div className={message.author === user.id ? 'myMessage' : 'message'} key={message._id}>
               <span className='messageText'>{message.text}</span>
