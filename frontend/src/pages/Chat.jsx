@@ -5,7 +5,7 @@ import moment from 'moment';
 import { useAuthContext } from '../hooks/UseAuthContext';
 import { io } from 'socket.io-client'
 
-let socket;
+let socket = io('http://localhost:3000')
 
 function Chat() {
   const [messages, setMessages] = useState([])
@@ -16,36 +16,18 @@ function Chat() {
     chat: '',
     text: ''
   })
-  const [socketCon, setSocketCon] = useState(false)
   const { state } = useLocation()
 
   useEffect(() => {
-    socket = io('http://localhost:3000')
-    socket.emit('setup', user)
-    socket.on('connection', () => setSocketCon(true))
-  }, [])
-
-  useEffect(() => {
     socket.on('receive message', (newMessage) => {
-      setMessages(prevState => [...prevState, newMessage])
+      if (chat && chat._id === newMessage.chat) {
+        setMessages(prevState => [...prevState, newMessage])
+      }
     })
-  }, [])
+    return () => socket.off('receive message')
+  }, [chat])
 
   useEffect(() => {
-    /*const fetchChat = async () => {
-      const response = await fetch(`http://localhost:3000/chats/${id}`)
-      const json = await response.json()
-      if (response.ok) {
-        setChat(json)
-        setNewMessage({
-          author: user.id,
-          chat: id,
-          text: ''
-        })
-      }
-    }
-
-    fetchChat()*/
     setChat(state)
     setNewMessage({
       author: user.id,
@@ -60,6 +42,7 @@ function Chat() {
       const json = await response.json()
       if (response.ok) {
         setMessages(json)
+        socket.emit('joined chat', chat._id)
       }
     }
     if (chat) {
@@ -83,6 +66,7 @@ function Chat() {
         text: ''
       })
       updateChatLatestMessage(json)
+      setMessages(prevState => [...prevState, json])
       socket.emit('new message', json, chat)
     }
   }
@@ -105,7 +89,6 @@ function Chat() {
     })
   }
 
-  console.log('hey')
   return (
     <>
       <div className="chatHeader">

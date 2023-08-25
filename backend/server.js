@@ -39,14 +39,12 @@ const io = require('socket.io')(server, {
 io.on("connection", (socket) => {
   console.log('connected to socket.io')
 
-  socket.on('setup', (user) => {
-    socket.join(user.id)
-    socket.emit('connected')
+  socket.on('joined chat', (chat) => {
+    socket.join(chat)
+    console.log('user joined chat:', chat)
   })
 
   socket.on('new message', (message, chat) => {
-    chat.users.forEach(user => {
-      socket.in(user._id).emit('receive message', message)
-    });
+    socket.to(chat._id).emit('receive message', message)
   })
 })
