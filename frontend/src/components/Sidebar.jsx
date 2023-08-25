@@ -1,9 +1,11 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { useAuthContext } from '../hooks/UseAuthContext';
 import '../assets/styles/Sidebar.css'
 import moment from 'moment';
 import pencilIcon from '../assets/images/pencil-icon.svg'
 import backIcon from '../assets/images/back-icon.svg'
+import menuIcon from '../assets/images/menu-icon.svg'
+import logoutIcon from '../assets/images/logout-icon.svg'
 import { Link, useNavigate } from "react-router-dom";
 
 function Sidebar() {
@@ -11,6 +13,8 @@ function Sidebar() {
   const [chats, setChats] = useState(null)
   const [users, setUsers] = useState(null)
   const [write, setWrite] = useState(false)
+  const [menu, setMenu] = useState(false)
+  const menuPopupRef = useRef(null);
   const navigate = useNavigate()
 
   const handleLogout = () => {
@@ -57,7 +61,19 @@ function Sidebar() {
       navigate(`/${json._id}`, {state: {json}})
     }
   }
-  console.log(chats)
+
+  useEffect(() => {
+    function handleClickOutside(e) {
+      if (menuPopupRef.current && !menuPopupRef.current.contains(e.target)){
+        setMenu(false)
+      }
+    }
+    document.addEventListener("click", handleClickOutside);
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, [menuPopupRef]);
+
   return (
     <div id="sidebar">
       {write ? 
@@ -78,8 +94,24 @@ function Sidebar() {
         </>
       :
         <>
-          <button onClick={handleLogout}>Log out</button>
-          <p>Logged in as {user.username}</p>
+          <div id="sidebarHeader">
+            <div id="menuWrapper">
+              <button id="menuButton" onClick={() => setMenu(!menu)} ref={menuPopupRef}>
+                <img src={menuIcon} alt="menu" id="menuImg"></img>
+              </button>
+              {menu &&
+                <div id="menu">
+                  <div className="menuOption">
+                    <img src={logoutIcon} alt="log out" className="menuOptionIcon"></img>
+                    <p className="menuOptionText" onClick={handleLogout}>Log out</p>
+                  </div>
+                  <p className="menuOption">Logged in as {user.username}</p>
+                  <p className="menuOption">Profile</p>
+                </div>
+              }
+            </div>
+            <input type="search"></input>
+          </div>
           {chats && chats.map(chat => {
             return (
               !chat.isGroupChat && chat.users.map(u => {
