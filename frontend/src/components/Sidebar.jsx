@@ -6,6 +6,7 @@ import pencilIcon from '../assets/images/pencil-icon.svg'
 import backIcon from '../assets/images/back-icon.svg'
 import menuIcon from '../assets/images/menu-icon.svg'
 import logoutIcon from '../assets/images/logout-icon.svg'
+import closeIcon from '../assets/images/close-icon.svg'
 import { Link, useNavigate } from "react-router-dom";
 
 function Sidebar() {
@@ -14,6 +15,8 @@ function Sidebar() {
   const [users, setUsers] = useState(null)
   const [write, setWrite] = useState(false)
   const [menu, setMenu] = useState(false)
+  const [newGroupPopup, setNewGroupPopup] = useState(false)
+  const [groupName, setGroupName] = useState('')
   const menuPopupRef = useRef(null);
   const navigate = useNavigate()
 
@@ -48,16 +51,40 @@ function Sidebar() {
 
   const newChat = async (e, partnerId) => {
     e.preventDefault()
-    const users = {users: [user.id, partnerId]}
+    const newChat = {
+      isGroupChat: false,
+      users: [user.id, partnerId]
+    }
     const response = await fetch(`http://localhost:3000/chats`, {
       method: 'POST',
-      body: JSON.stringify(users),
+      body: JSON.stringify(newChat),
       headers: {
         'Content-type': 'application/json'
       }
     })
     const json = await response.json()
     if (response.ok) {
+      navigate(`/${json._id}`, {state: {json}})
+    }
+  }
+
+  const newGroupChat = async (e) => {
+    e.preventDefault()
+    const newGroup = {
+      name: groupName,
+      isGroupChat: true,
+      users: [user.id]
+    }
+    const response = await fetch(`http://localhost:3000/chats`, {
+      method: 'POST',
+      body: JSON.stringify(newGroup),
+      headers: {
+        'Content-type': 'application/json'
+      }
+    })
+    const json = await response.json()
+    if (response.ok) {
+      setNewGroupPopup(false)
       navigate(`/${json._id}`, {state: {json}})
     }
   }
@@ -101,12 +128,13 @@ function Sidebar() {
               </button>
               {menu &&
                 <div id="menu">
-                  <div className="menuOption">
-                    <img src={logoutIcon} alt="log out" className="menuOptionIcon"></img>
-                    <p className="menuOptionText" onClick={handleLogout}>Log out</p>
-                  </div>
                   <p className="menuOption">Logged in as {user.username}</p>
+                  <p className="menuOption" onClick={() => setNewGroupPopup(true)}>New group chat</p>
                   <p className="menuOption">Profile</p>
+                  <div className="menuOption" onClick={handleLogout}>
+                    <img src={logoutIcon} alt="log out" className="menuOptionIcon"></img>
+                    <p className="menuOptionText">Log out</p>
+                  </div>
                 </div>
               }
             </div>
@@ -114,33 +142,68 @@ function Sidebar() {
           </div>
           {chats && chats.map(chat => {
             return (
-              !chat.isGroupChat && chat.users.map(u => {
-                return (
-                  u.username !== user.username ?
-                    <Link to={`/${u.username.replace(/\s+/g,'')}`} state={chat} key={chat._id} className="sidebarChat">
-                      <div className="sidebarChatContent">
-                        <img src={u.profilePic} alt="profile picture" className="sidebarPic"></img>
-                        <div className="sidebarChatMain">
-                          <p className="sidebarChatUser">{u.username}</p>
-                          {chat.latestMessage ?
-                            <p className="sidebarChatLatest">{chat.latestMessage.text}</p>
-                            :
-                            <p className="sidebarChatLatest">Click to start a conversation!</p>
-                          }
+              chat.isGroupChat ?
+                <Link to={`/${chat.name.replace(/\s+/g,'')}`} state={chat} key={chat._id} className="sidebarChat">
+                  <div className="sidebarChatContent">
+                    <div className="sidebarChatMain">
+                      <p className="sidebarChatUser">{chat.name}</p>
+                      {chat.latestMessage ?
+                        <p className="sidebarChatLatest">{chat.latestMessage.text}</p>
+                        :
+                        <p className="sidebarChatLatest">Click to start a conversation!</p>
+                      }
+                    </div>
+                  </div>
+                  <p className="sidebarChatUpdatedAt">{moment(chat.updatedAt).format('DD.MM.YYYY')}</p>
+                </Link>
+              :
+                !chat.isGroupChat && chat.users.map(u => {
+                  return (
+                    u.username !== user.username ?
+                      <Link to={`/${u.username.replace(/\s+/g,'')}`} state={chat} key={chat._id} className="sidebarChat">
+                        <div className="sidebarChatContent">
+                          <img src={u.profilePic} alt="profile picture" className="sidebarPic"></img>
+                          <div className="sidebarChatMain">
+                            <p className="sidebarChatUser">{u.username}</p>
+                            {chat.latestMessage ?
+                              <p className="sidebarChatLatest">{chat.latestMessage.text}</p>
+                              :
+                              <p className="sidebarChatLatest">Click to start a conversation!</p>
+                            }
+                          </div>
                         </div>
-                      </div>
-                      <p className="sidebarChatUpdatedAt">{moment(chat.updatedAt).format('DD.MM.YYYY')}</p>
-                    </Link>
-                    :
-                    null
-                  )
-                })
-              )
+                        <p className="sidebarChatUpdatedAt">{moment(chat.updatedAt).format('DD.MM.YYYY')}</p>
+                      </Link>
+                      :
+                      null
+                    )
+                  })
+                )
             })
           }
           <button id="writeButton" onClick={() => setWrite(true)}>
             <img src={pencilIcon} alt="write someone" id="writeButtonImg"></img>
           </button>
+          {newGroupPopup &&
+            <div id="popupBackground">
+              <div id="newGroupPopup">
+                <button onClick={() => setNewGroupPopup(false)} className="closePopup">
+                  <img src={closeIcon} alt="x" className="closeIcon"></img>
+                </button>
+                <form id="newGroupForm" onSubmit={newGroupChat}>
+                  <input 
+                    id="newGroupInput" 
+                    name="name" 
+                    onChange={(e) => setGroupName(e.target.value)}
+                    aria-label="group name"
+                    placeholder="Name"
+                  >
+                  </input>
+                  <button className="formButton">Create</button>
+                </form>
+              </div>
+            </div>
+          }
         </>
       }
     </div>

@@ -92,8 +92,7 @@ function Chat() {
   return (
     <>
       <div className="chatHeader">
-        {chat && 
-          !chat.isGroupChat && chat.users.map(u => {
+        {chat && chat.isGroupChat === false && chat.users.map(u => {
             return (
               u.username !== user.username &&
                 <div className='chatHeaderUser' key={u._id}>
@@ -103,7 +102,9 @@ function Chat() {
                   </div>
                 </div>
             )}
-          )
+          )}
+        {chat && chat.isGroupChat && 
+          <p> Welcome to {chat.name} group!</p>
         }
       </div>
       <div className="chatField">
