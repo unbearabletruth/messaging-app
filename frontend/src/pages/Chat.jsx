@@ -46,6 +46,7 @@ function Chat() {
       }
     }
     if (chat) {
+      console.log(chat)
       fetchMessages()
     }
   }, [chat])
