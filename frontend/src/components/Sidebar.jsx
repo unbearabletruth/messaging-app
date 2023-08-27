@@ -14,6 +14,7 @@ function Sidebar() {
   const [users, setUsers] = useState(null)
   const [write, setWrite] = useState(false)
   const [searchPage, setSearchPage] = useState(false)
+  const [searchResults, setSearchResults] = useState([])
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -55,12 +56,16 @@ function Sidebar() {
     })
     const json = await response.json()
     if (response.ok) {
-      navigate(`/${json._id}`, {state: {json}})
+      navigate(`/${json.username.replace(/\s+/g,'')}`, {state: json})
     }
   }
 
   const toggleSearch = (value) => {
     setSearchPage(value)
+  }
+  
+  const handleSearchResults = (results) => {
+    setSearchResults(results)
   }
 
   return (
@@ -77,7 +82,7 @@ function Sidebar() {
         :
           <Menu />
         }
-        <Search toggleSearch={toggleSearch}/>
+        <Search toggleSearch={toggleSearch} handleSearchResults={handleSearchResults}/>
       </div>
       {write ? 
         <>
@@ -94,12 +99,12 @@ function Sidebar() {
         </>
       : searchPage ?
         <>
-          {users && users.map(user => {
+          {searchResults && searchResults.map(result => {
             return (
-              <div className="sidebarUser" key={user._id} onClick={(e) => newChat(e, user._id)}>
-                <img src={user.profilePic} alt="profile picture" className="sidebarPic"></img>
+              <div className="sidebarUser" key={result._id} onClick={(e) => newChat(e, result._id)}>
+                <img src={result.profilePic} alt="profile picture" className="sidebarPic"></img>
                 <div>
-                  <p className="sidebarName">{user.username}</p>
+                  <p className="sidebarName">{result.username}</p>
                 </div>
               </div>
             )

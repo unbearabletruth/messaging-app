@@ -35,6 +35,14 @@ exports.getUsers = async (req, res) => {
 };
 
 exports.getUser = async (req, res) => {
-    const users = await User.findById(req.params.userId).exec()
-    res.status(200).json(users)
+	const users = await User.findById(req.params.userId).exec()
+	res.status(200).json(users)
+};
+
+exports.searchUsers = async (req, res) => {
+	if (req.query.search) {
+		const keyword = {username: {$regex: req.query.search, $options: 'i'}}
+		const users = await User.find(keyword).exec()
+		res.status(200).json(users)
+	}
 };

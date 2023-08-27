@@ -43,7 +43,7 @@ function Menu() {
     const json = await response.json()
     if (response.ok) {
       setNewGroupPopup(false)
-      navigate(`/${json._id}`, {state: {json}})
+      navigate(`/${json.name.replace(/\s+/g,'')}`, {state: json})
     }
   }
 
