@@ -3,6 +3,7 @@
   width: 100%;
   display: flex;
   align-items: center;
+  justify-content: space-between;
   background-color: white;
   padding: 0px 15px;
   border-bottom: 1px solid var(--light-border);
@@ -41,25 +42,47 @@
   border-radius: 20px;
 }
 
-.message{
+.joinChatButton{
+  border: 0px;
+  height: 50px;
+  background-color: var(--main-color);
+  color: white;
+  font-weight: bold;
+  font-size: 1.4rem;
+  transition: background-color 0.2s ease-out;
+}
+
+.joinChatButton:hover{
+  cursor: pointer;
+  background-color: var(--main-darker);
+}
+
+.message,
+.myMessage{
   display: flex;
-  gap: 5px;
+  flex-direction: column;
+  gap: 3px;
   padding: 8px 12px;
   background-color: white;
   border-radius: 10px;
   width: fit-content;
-  margin-right: auto;
   box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
 }
 
-.myMessage{
+.message{
+  margin-right: auto;
+}
+
+.messageContent{
   display: flex;
-  gap: 5px;
-  padding: 8px 12px;
-  background-color: white;
-  border-radius: 10px;
-  width: fit-content;
-  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+  gap: 10px;
+  align-items: flex-end;
+}
+
+.messageAuthor{
+  color: var(--light-font-color);
+  font-weight: bold;
+  font-size: 0.9rem;
 }
 
 .messageText{

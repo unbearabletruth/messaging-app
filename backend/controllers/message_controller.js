@@ -1,7 +1,7 @@
 const Message = require("../models/message");
 
 exports.getMessages = async (req, res) => {
-    const messages = await Message.find({chat: req.params.id}).sort({timestamp: -1}).exec()
+    const messages = await Message.find({chat: req.params.id}).populate('author', 'username').sort({timestamp: -1}).exec()
     res.status(200).json(messages)
 };
 
@@ -13,6 +13,7 @@ exports.createMessage = async (req, res) => {
     })
     try{
         const message = await newMessage.save()
+        await message.populate('author', 'username');
         res.status(200).json(message)
     } catch (error){
         res.status(400).json({error: error.message})

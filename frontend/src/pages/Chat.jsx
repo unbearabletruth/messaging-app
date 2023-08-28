@@ -46,7 +46,6 @@ function Chat() {
       }
     }
     if (chat) {
-      console.log(chat)
       fetchMessages()
     }
   }, [chat])
@@ -85,24 +84,32 @@ function Chat() {
 
   const joinGroupChat = async () => {
     const userId = {user: user.id}
-    await fetch(`http://localhost:3000/chats/${chat._id}/add`, {
+    const response = await fetch(`http://localhost:3000/chats/${chat._id}/add`, {
       method: 'PATCH',
       body: JSON.stringify(userId),
       headers: {
         'Content-type': 'application/json'
       }
     })
+    const json = await response.json()
+    if (response.ok) {
+      setChat(json)
+    }
   }
 
   const leaveGroupChat = async () => {
     const userId = {user: user.id}
-    await fetch(`http://localhost:3000/chats/${chat._id}/remove`, {
+    const response = await fetch(`http://localhost:3000/chats/${chat._id}/remove`, {
       method: 'PATCH',
       body: JSON.stringify(userId),
       headers: {
         'Content-type': 'application/json'
       }
     })
+    const json = await response.json()
+    if (response.ok) {
+      setChat(json)
+    }
   }
   
   const handleMessage = (e) => {
@@ -111,7 +118,7 @@ function Chat() {
       text: e.target.value
     })
   }
-  chat && console.log(chat.users.some(u => u._id === user.id))
+  chat && console.log(chat, chat.users.some(u => u._id === user.id), user.id)
   return (
     <>
       <div className="chatHeader">
@@ -128,25 +135,30 @@ function Chat() {
           )}
         {chat && chat.isGroupChat && 
           <>
-            <p> Welcome to {chat.name} group!</p>
+            <p> Welcome to {chat.name}!</p>
             {chat.users.some(u => u._id === user.id) &&
-              <button onClick={leaveGroupChat}>Leave group</button>
+              <button id='leaveChat' onClick={leaveGroupChat}>Leave group</button>
             }
           </>
         }
       </div>
       <div className="chatField">
-        {messages && messages.toReversed().map(message => {
+        {chat && messages && messages.toReversed().map(message => {
           return (
-            <div className={message.author === user.id ? 'myMessage' : 'message'} key={message._id}>
-              <span className='messageText'>{message.text}</span>
-              <span className='messageTime'>{moment(message.createdAt).format('hh:mm')}</span>
+            <div className={message.author._id === user.id ? 'myMessage' : 'message'} key={message._id}>
+              {chat.isGroupChat && message.author._id !== user.id &&
+                <span className='messageAuthor'>{message.author.username}</span>
+              }
+              <div className='messageContent'>
+                <span className='messageText'>{message.text}</span>
+                <span className='messageTime'>{moment(message.createdAt).format('hh:mm')}</span>
+              </div>
             </div>
           )
         })}
       </div>
       {chat && !chat.users.some(u => u._id === user.id) &&
-        <button onClick={joinGroupChat}>Join group</button>
+        <button className='joinChatButton' onClick={joinGroupChat}>Join group</button>
       }
       <form onSubmit={submitMessage} id='messageForm'>
         <input type='text' onChange={handleMessage} value={newMessage.text} id='messageInput' placeholder='Message'></input>
