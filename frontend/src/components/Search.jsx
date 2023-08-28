@@ -3,7 +3,7 @@ import '../assets/styles/Search.css'
 import searchIcon from '../assets/images/search-icon.svg'
 import { useNavigate } from "react-router-dom";
 
-function Search({toggleSearch, handleSearchResults}){
+function Search({toggleSearch, handleUserResults, handleChatResults}){
   const [input, setInput] = useState('')
   const [searchActive, setSearchActive] = useState(false)
   const searchRef = useRef(null)
@@ -17,18 +17,19 @@ function Search({toggleSearch, handleSearchResults}){
       ])
       const jsonUsers = await resUsers.json()
       const jsonChats = await resChats.json()
-      const json = [...jsonChats, ...jsonUsers]
-      console.log(json)
       if (resUsers.ok) {
-        handleSearchResults(json)
+        handleUserResults(jsonUsers)
       }
-
+      if (resChats.ok) {
+        handleChatResults(jsonChats)
+      }
     }
 
     if (input.length > 0) {
       fetchUsers()
     } else {
-      handleSearchResults([])
+      handleUserResults([])
+      handleChatResults([])
     }
   }, [input])
 

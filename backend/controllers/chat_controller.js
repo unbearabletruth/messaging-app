@@ -30,7 +30,27 @@ exports.createChat = async (req, res) => {
 
 exports.updateChat = async (req, res) => {
     const chat = await Chat.findByIdAndUpdate(req.params.id, {
-        ...req.body
+        ...req.body,
+    })
+    if (chat){
+        return res.status(200).json(chat)
+    }
+    res.status(400).json({error: 'No such chat'})
+}
+
+exports.addToChat = async (req, res) => {
+    const chat = await Chat.findByIdAndUpdate(req.params.id, {
+        $push: { users: req.body.user }
+    })
+    if (chat){
+        return res.status(200).json(chat)
+    }
+    res.status(400).json({error: 'No such chat'})
+}
+
+exports.removeFromChat = async (req, res) => {
+    const chat = await Chat.findByIdAndUpdate(req.params.id, {
+        $pull: { users: req.body.user }
     })
     if (chat){
         return res.status(200).json(chat)

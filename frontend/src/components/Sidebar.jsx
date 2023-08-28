@@ -14,7 +14,8 @@ function Sidebar() {
   const [users, setUsers] = useState(null)
   const [write, setWrite] = useState(false)
   const [searchPage, setSearchPage] = useState(false)
-  const [searchResults, setSearchResults] = useState([])
+  const [searchUserResults, setSearchUserResults] = useState([])
+  const [searchChatResults, setSearchChatResults] = useState([])
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -64,8 +65,12 @@ function Sidebar() {
     setSearchPage(value)
   }
   
-  const handleSearchResults = (results) => {
-    setSearchResults(results)
+  const handleUserResults = (results) => {
+    setSearchUserResults(results)
+  }
+
+  const handleChatResults = (results) => {
+    setSearchChatResults(results)
   }
 
   return (
@@ -82,7 +87,11 @@ function Sidebar() {
         :
           <Menu />
         }
-        <Search toggleSearch={toggleSearch} handleSearchResults={handleSearchResults}/>
+        <Search 
+          toggleSearch={toggleSearch} 
+          handleUserResults={handleUserResults}
+          handleChatResults={handleChatResults}
+        />
       </div>
       {write ? 
         <>
@@ -99,16 +108,43 @@ function Sidebar() {
         </>
       : searchPage ?
         <>
-          {searchResults && searchResults.map(result => {
-            return (
-              <div className="sidebarUser" key={result._id} onClick={(e) => newChat(e, result._id)}>
-                <img src={result.profilePic} alt="profile picture" className="sidebarPic"></img>
-                <div>
-                  <p className="sidebarName">{result.username}</p>
-                </div>
-              </div>
-            )
-          })}
+          {searchUserResults.length > 0 && 
+            <>
+              <h1>users</h1> 
+              {searchUserResults.map(result => {
+                return (
+                  <div className="sidebarUser" key={result._id} onClick={(e) => newChat(e, result._id)}>
+                    <img src={result.profilePic} alt="profile picture" className="sidebarPic"></img>
+                    <div>
+                      <p className="sidebarName">{result.username}</p>
+                    </div>
+                  </div>
+                )
+              })}
+            </>
+          }
+          {searchChatResults.length > 0 && 
+            <>
+              <h1>chats</h1> 
+              {searchChatResults.map(result => {
+                return (
+                  <Link to={`/${result.name.replace(/\s+/g,'')}`} state={result} key={result._id} className="sidebarChat">
+                    <div className="sidebarChatContent">
+                      <div className="sidebarChatMain">
+                        <p className="sidebarChatUser">{result.name}</p>
+                        {result.latestMessage ?
+                          <p className="sidebarChatLatest">{result.latestMessage.text}</p>
+                          :
+                          <p className="sidebarChatLatest">Click to start a conversation!</p>
+                        }
+                      </div>
+                    </div>
+                    <p className="sidebarChatUpdatedAt">{moment(result.updatedAt).format('DD.MM.YYYY')}</p>
+                  </Link>
+                )
+              })}
+            </>
+          }
         </>
       :
         <>

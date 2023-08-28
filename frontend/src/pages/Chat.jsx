@@ -74,9 +74,31 @@ function Chat() {
 
   const updateChatLatestMessage = async (message) => {
     const latestMessage = {latestMessage: message._id}
-    const response = await fetch(`http://localhost:3000/chats/${chat._id}`, {
+    await fetch(`http://localhost:3000/chats/${chat._id}`, {
       method: 'PATCH',
       body: JSON.stringify(latestMessage),
+      headers: {
+        'Content-type': 'application/json'
+      }
+    })
+  }
+
+  const joinGroupChat = async () => {
+    const userId = {user: user.id}
+    await fetch(`http://localhost:3000/chats/${chat._id}/add`, {
+      method: 'PATCH',
+      body: JSON.stringify(userId),
+      headers: {
+        'Content-type': 'application/json'
+      }
+    })
+  }
+
+  const leaveGroupChat = async () => {
+    const userId = {user: user.id}
+    await fetch(`http://localhost:3000/chats/${chat._id}/remove`, {
+      method: 'PATCH',
+      body: JSON.stringify(userId),
       headers: {
         'Content-type': 'application/json'
       }
@@ -89,11 +111,11 @@ function Chat() {
       text: e.target.value
     })
   }
-
+  chat && console.log(chat.users.some(u => u._id === user.id))
   return (
     <>
       <div className="chatHeader">
-        {chat && chat.isGroupChat === false && chat.users.map(u => {
+        {chat && !chat.isGroupChat && chat.users.map(u => {
             return (
               u.username !== user.username &&
                 <div className='chatHeaderUser' key={u._id}>
@@ -105,7 +127,12 @@ function Chat() {
             )}
           )}
         {chat && chat.isGroupChat && 
-          <p> Welcome to {chat.name} group!</p>
+          <>
+            <p> Welcome to {chat.name} group!</p>
+            {chat.users.some(u => u._id === user.id) &&
+              <button onClick={leaveGroupChat}>Leave group</button>
+            }
+          </>
         }
       </div>
       <div className="chatField">
@@ -118,6 +145,9 @@ function Chat() {
           )
         })}
       </div>
+      {chat && !chat.users.some(u => u._id === user.id) &&
+        <button onClick={joinGroupChat}>Join group</button>
+      }
       <form onSubmit={submitMessage} id='messageForm'>
         <input type='text' onChange={handleMessage} value={newMessage.text} id='messageInput' placeholder='Message'></input>
       </form>
