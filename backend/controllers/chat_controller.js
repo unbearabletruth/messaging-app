@@ -45,3 +45,11 @@ exports.deleteChat = async (req, res) => {
     }
     res.status(400).json({error: 'No such chat'})
 }
+
+exports.searchChats = async (req, res) => {
+    if (req.query.search) {
+        const keyword = {name: {$regex: req.query.search, $options: 'i'}}
+        const chats = await Chat.find(keyword).exec()
+        res.status(200).json(chats)
+    }
+};

@@ -11,11 +11,18 @@ function Search({toggleSearch, handleSearchResults}){
 
   useEffect(() => {
     const fetchUsers = async () => {
-      const response = await fetch(`http://localhost:3000/users/search?search=${input}`)
-      const json = await response.json()
-      if (response.ok) {
+      const [resUsers, resChats] = await Promise.all([
+        fetch(`http://localhost:3000/users/search?search=${input}`),
+        fetch(`http://localhost:3000/chats/search?search=${input}`)
+      ])
+      const jsonUsers = await resUsers.json()
+      const jsonChats = await resChats.json()
+      const json = [...jsonChats, ...jsonUsers]
+      console.log(json)
+      if (resUsers.ok) {
         handleSearchResults(json)
       }
+
     }
 
     if (input.length > 0) {
