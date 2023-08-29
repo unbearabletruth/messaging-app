@@ -1,22 +1,19 @@
 import '../assets/styles/Chat.css'
 import { useState, useEffect, useRef } from 'react';
-import { useLocation } from "react-router-dom";
 import moment from 'moment';
 import { useAuthContext } from '../hooks/UseAuthContext';
 import { io } from 'socket.io-client'
 
 let socket = io('http://localhost:3000')
 
-function Chat({chats, handleChats, refetchChats}) {
+function Chat({chat, handleChat, chats, handleChats, refetchChats}) {
   const [messages, setMessages] = useState([])
   const {user} = useAuthContext()
-  const [chat, setChat] = useState(null)
   const [newMessage, setNewMessage] = useState({
     author: '',
     chat: '',
     text: ''
   })
-  const { state } = useLocation()
 
   useEffect(() => {
     socket.on('receive message', (newMessage) => {
@@ -25,16 +22,15 @@ function Chat({chats, handleChats, refetchChats}) {
       }
     })
     return () => socket.off('receive message')
-  }, [chat])
+  }, [])
 
   useEffect(() => {
-    setChat(state)
     setNewMessage({
       author: user.id,
-      chat: state._id,
+      chat: chat._id,
       text: ''
     })
-  }, [state])
+  }, [])
 
   useEffect(() => {
     const fetchMessages = async () => {
@@ -104,8 +100,10 @@ function Chat({chats, handleChats, refetchChats}) {
         'Content-type': 'application/json'
       }
     })
+    const json = await response.json()
     if (response.ok) {
       refetchChats()
+      handleChat(json)
     }
   }
 
@@ -118,8 +116,10 @@ function Chat({chats, handleChats, refetchChats}) {
         'Content-type': 'application/json'
       }
     })
+    const json = await response.json()
     if (response.ok) {
       refetchChats()
+      handleChat(json)
     }
   }
   
@@ -130,6 +130,7 @@ function Chat({chats, handleChats, refetchChats}) {
     })
   }
   //chat && console.log(chat, chat.users.some(u => u._id === user.id), user.id)
+  console.log(chat)
   return (
     <>
       <div className="chatHeader">

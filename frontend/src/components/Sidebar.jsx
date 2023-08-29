@@ -1,20 +1,24 @@
 import { useState, useEffect } from "react"
 import { useAuthContext } from '../hooks/UseAuthContext';
 import '../assets/styles/Sidebar.css'
+import '../assets/styles/Content.css'
 import moment from 'moment';
 import pencilIcon from '../assets/images/pencil-icon.svg'
 import backIcon from '../assets/images/back-icon.svg'
 import { Link, useNavigate } from "react-router-dom";
+import Chat from '../pages/Chat';
+import Home from '../pages/Home';
 import Search from "./Search";
 import Menu from "./Menu";
 
-function Sidebar({chats}) {
+function Sidebar({chats, handleChats, refetchChats}) {
   const { user } = useAuthContext()
   const [users, setUsers] = useState(null)
   const [write, setWrite] = useState(false)
   const [searchPage, setSearchPage] = useState(false)
   const [searchUserResults, setSearchUserResults] = useState([])
   const [searchChatResults, setSearchChatResults] = useState([])
+  const [currentChat, setCurrentChat] = useState(null)
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -44,7 +48,7 @@ function Sidebar({chats}) {
     })
     const json = await response.json()
     if (response.ok) {
-      navigate(`/${json.username.replace(/\s+/g,'')}`, {state: json})
+      setCurrentChat(json)
     }
   }
 
@@ -60,7 +64,12 @@ function Sidebar({chats}) {
     setSearchChatResults(results)
   }
 
+  const handleChat = (chat) => {
+    setCurrentChat(chat)
+  }
+
   return (
+    <>
     <div id="sidebar">
       <div id="sidebarHeader">
         {write ?
@@ -98,12 +107,12 @@ function Sidebar({chats}) {
           {searchUserResults.length > 0 && 
             <>
               <h1>users</h1> 
-              {searchUserResults.map(result => {
+              {searchUserResults.map(chat => {
                 return (
-                  <div className="sidebarUser" key={result._id} onClick={(e) => newChat(e, result._id)}>
-                    <img src={result.profilePic} alt="profile picture" className="sidebarPic"></img>
+                  <div className="sidebarUser" key={chat._id} onClick={(e) => newChat(e, chat._id)}>
+                    <img src={chat.profilePic} alt="profile picture" className="sidebarPic"></img>
                     <div>
-                      <p className="sidebarName">{result.username}</p>
+                      <p className="sidebarName">{chat.username}</p>
                     </div>
                   </div>
                 )
@@ -113,21 +122,21 @@ function Sidebar({chats}) {
           {searchChatResults.length > 0 && 
             <>
               <h1>chats</h1> 
-              {searchChatResults.map(result => {
+              {searchChatResults.map(chat => {
                 return (
-                  <Link to={`/${result.name.replace(/\s+/g,'')}`} state={result} key={result._id} className="sidebarChat">
+                  <div onClick={() => setCurrentChat(chat)} key={chat._id} className="sidebarChat">
                     <div className="sidebarChatContent">
                       <div className="sidebarChatMain">
-                        <p className="sidebarChatUser">{result.name}</p>
-                        {result.latestMessage ?
-                          <p className="sidebarChatLatest">{result.latestMessage.text}</p>
+                        <p className="sidebarChatUser">{chat.name}</p>
+                        {chat.latestMessage ?
+                          <p className="sidebarChatLatest">{chat.latestMessage.text}</p>
                           :
                           <p className="sidebarChatLatest">Click to start a conversation!</p>
                         }
                       </div>
                     </div>
-                    <p className="sidebarChatUpdatedAt">{moment(result.updatedAt).format('DD.MM.YYYY')}</p>
-                  </Link>
+                    <p className="sidebarChatUpdatedAt">{moment(chat.updatedAt).format('DD.MM.YYYY')}</p>
+                  </div>
                 )
               })}
             </>
@@ -138,7 +147,7 @@ function Sidebar({chats}) {
           {chats && chats.map(chat => {
             return (
               chat.isGroupChat ?
-                <Link to={`/${chat.name.replace(/\s+/g,'')}`} state={chat} key={chat._id} className="sidebarChat">
+                <div onClick={() => setCurrentChat(chat)} key={chat._id} className="sidebarChat">
                   <div className="sidebarChatContent">
                     <div className="sidebarChatMain">
                       <p className="sidebarChatUser">{chat.name}</p>
@@ -150,12 +159,12 @@ function Sidebar({chats}) {
                     </div>
                   </div>
                   <p className="sidebarChatUpdatedAt">{moment(chat.updatedAt).format('DD.MM.YYYY')}</p>
-                </Link>
+                </div>
               :
                 !chat.isGroupChat && chat.users.map(u => {
                   return (
                     u.username !== user.username ?
-                      <Link to={`/${u.username.replace(/\s+/g,'')}`} state={chat} key={chat._id} className="sidebarChat">
+                      <div onClick={() => setCurrentChat(chat)} key={chat._id} className="sidebarChat">
                         <div className="sidebarChatContent">
                           <img src={u.profilePic} alt="profile picture" className="sidebarPic"></img>
                           <div className="sidebarChatMain">
@@ -168,7 +177,7 @@ function Sidebar({chats}) {
                           </div>
                         </div>
                         <p className="sidebarChatUpdatedAt">{moment(chat.updatedAt).format('DD.MM.YYYY')}</p>
-                      </Link>
+                      </div>
                       :
                       null
                     )
@@ -182,6 +191,20 @@ function Sidebar({chats}) {
         </>
       }
     </div>
+    <div id='content'>
+      {currentChat ?
+        <Chat 
+          chat={currentChat}
+          handleChat={handleChat}
+          chats={chats} 
+          handleChats={handleChats} 
+          refetchChats={refetchChats}
+        />
+      :
+        <Home />
+      }
+    </div>
+    </>
   )
 }
 
