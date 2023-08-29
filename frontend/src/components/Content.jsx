@@ -3,12 +3,12 @@ import Home from '../pages/Home';
 import Chat from '../pages/Chat';
 import '../assets/styles/Content.css'
 
-function Content() {
+function Content({chats, handleChats, refetchChats}) {
   return(
     <div id='content'>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/:id" element={<Chat />} />
+        <Route path="/:id" element={<Chat chats={chats} handleChats={handleChats} refetchChats={refetchChats} />} />
       </Routes>
     </div>
   )

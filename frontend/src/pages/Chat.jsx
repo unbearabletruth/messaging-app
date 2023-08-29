@@ -7,7 +7,7 @@ import { io } from 'socket.io-client'
 
 let socket = io('http://localhost:3000')
 
-function Chat() {
+function Chat({chats, handleChats, refetchChats}) {
   const [messages, setMessages] = useState([])
   const {user} = useAuthContext()
   const [chat, setChat] = useState(null)
@@ -73,13 +73,26 @@ function Chat() {
 
   const updateChatLatestMessage = async (message) => {
     const latestMessage = {latestMessage: message._id}
-    await fetch(`http://localhost:3000/chats/${chat._id}`, {
+    const response = await fetch(`http://localhost:3000/chats/${chat._id}`, {
       method: 'PATCH',
       body: JSON.stringify(latestMessage),
       headers: {
         'Content-type': 'application/json'
       }
     })
+    const json = await response.json()
+    if (response.ok) {
+      const updateChats = chats.map(chat => {
+        if (chat._id === json._id) {
+          return {
+            ...chat, 
+            latestMessage: json.latestMessage
+          };
+        }
+        return chat;
+      })
+      handleChats(updateChats);
+    }
   }
 
   const joinGroupChat = async () => {
@@ -91,9 +104,8 @@ function Chat() {
         'Content-type': 'application/json'
       }
     })
-    const json = await response.json()
     if (response.ok) {
-      setChat(json)
+      refetchChats()
     }
   }
 
@@ -106,9 +118,8 @@ function Chat() {
         'Content-type': 'application/json'
       }
     })
-    const json = await response.json()
     if (response.ok) {
-      setChat(json)
+      refetchChats()
     }
   }
   
@@ -118,7 +129,7 @@ function Chat() {
       text: e.target.value
     })
   }
-  chat && console.log(chat, chat.users.some(u => u._id === user.id), user.id)
+  //chat && console.log(chat, chat.users.some(u => u._id === user.id), user.id)
   return (
     <>
       <div className="chatHeader">

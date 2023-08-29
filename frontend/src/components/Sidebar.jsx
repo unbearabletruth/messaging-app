@@ -8,27 +8,14 @@ import { Link, useNavigate } from "react-router-dom";
 import Search from "./Search";
 import Menu from "./Menu";
 
-function Sidebar() {
+function Sidebar({chats}) {
   const { user } = useAuthContext()
-  const [chats, setChats] = useState(null)
   const [users, setUsers] = useState(null)
   const [write, setWrite] = useState(false)
   const [searchPage, setSearchPage] = useState(false)
   const [searchUserResults, setSearchUserResults] = useState([])
   const [searchChatResults, setSearchChatResults] = useState([])
   const navigate = useNavigate()
-
-  useEffect(() => {
-    const fetchChats = async () => {
-      const response = await fetch(`http://localhost:3000/chats/users/${user.id}`)
-      const json = await response.json()
-      if (response.ok) {
-        setChats(json)
-      }
-    }
-
-    fetchChats()
-  }, [])
 
   useEffect(() => {
     const fetchUsers = async () => {

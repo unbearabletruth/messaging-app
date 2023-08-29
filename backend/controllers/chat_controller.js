@@ -31,7 +31,7 @@ exports.createChat = async (req, res) => {
 exports.updateChat = async (req, res) => {
     const chat = await Chat.findByIdAndUpdate(req.params.id, {
         ...req.body,
-    })
+    }, { new: true }).populate('latestMessage')
     if (chat){
         return res.status(200).json(chat)
     }
@@ -39,10 +39,11 @@ exports.updateChat = async (req, res) => {
 }
 
 exports.addToChat = async (req, res) => {
-    const chat = await Chat.findByIdAndUpdate(req.params.id, 
-    { $push: { users: req.body.user }},
-    { new: true }
+    const chat = await Chat.findByIdAndUpdate(req.params.id, { 
+        $push: { users: req.body.user }
+    }, { new: true }
     ).populate('latestMessage').populate('users', 'username profilePic')
+
     if (chat){
         return res.status(200).json(chat)
     }
@@ -50,10 +51,11 @@ exports.addToChat = async (req, res) => {
 }
 
 exports.removeFromChat = async (req, res) => {
-    const chat = await Chat.findByIdAndUpdate(req.params.id, 
-    { $pull: { users: req.body.user }},
-    { new: true }
+    const chat = await Chat.findByIdAndUpdate(req.params.id, { 
+        $pull: { users: req.body.user }
+    }, { new: true }
     ).populate('latestMessage').populate('users', 'username profilePic')
+    
     if (chat){
         return res.status(200).json(chat)
     }
