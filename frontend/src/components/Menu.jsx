@@ -6,7 +6,7 @@ import logoutIcon from '../assets/images/logout-icon.svg'
 import closeIcon from '../assets/images/close-icon.svg'
 import '../assets/styles/Menu.css'
 
-function Menu({handleChat}) {
+function Menu({handleChat, chats, updateChats}) {
   const {user, dispatch} = useAuthContext()
   const [menu, setMenu] = useState(false)
   const menuPopupRef = useRef(null);
@@ -43,6 +43,7 @@ function Menu({handleChat}) {
     const json = await response.json()
     if (response.ok) {
       setNewGroupPopup(false)
+      updateChats([json, ...chats])
       handleChat(json)
     }
   }

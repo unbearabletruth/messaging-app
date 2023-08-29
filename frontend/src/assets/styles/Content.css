@@ -4,3 +4,11 @@
   flex: 1;
   height: 100vh;
 }
+
+.homeField{
+  display: flex;
+  flex: 1;
+  height: 100vh;
+  background-image: url('/src/assets/images/background.jpg');
+  background-position: center;
+} 

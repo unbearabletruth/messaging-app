@@ -1,5 +1,5 @@
 import '../assets/styles/Chat.css'
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import moment from 'moment';
 import { useAuthContext } from '../hooks/UseAuthContext';
 import { io } from 'socket.io-client'
@@ -78,7 +78,7 @@ function Chat({chat, handleChat, chats, updateChats}) {
     })
     const json = await response.json()
     if (response.ok) {
-      const updateChats = chats.map(chat => {
+      const setChats = chats.map(chat => {
         if (chat._id === json._id) {
           return {
             ...chat, 
@@ -87,7 +87,7 @@ function Chat({chat, handleChat, chats, updateChats}) {
         }
         return chat;
       })
-      updateChats(updateChats);
+      updateChats(setChats);
     }
   }
 

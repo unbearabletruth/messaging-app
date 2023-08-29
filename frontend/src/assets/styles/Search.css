@@ -40,7 +40,7 @@
 #search.active{
   outline: none;
   background-color: white;
-  border: 1px solid #1DA1F2;
+  border: 1px solid var(--main-color);
 }
 
 #search.active{
@@ -53,6 +53,6 @@
 
 #searchIconWrapper.active.active #searchIcon,
 #search.active #searchIcon{
-  filter: invert(59%) sepia(18%) saturate(6224%) hue-rotate(175deg) brightness(93%) contrast(103%);
+  filter: invert(53%) sepia(36%) saturate(2185%) hue-rotate(166deg) brightness(93%) contrast(96%);
 }
 

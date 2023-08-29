@@ -24,7 +24,6 @@ function MainWindow() {
   }, [])
 
   const updateChats = (chats) => {
-    console.log('update')
     setChats(chats)
   }
 

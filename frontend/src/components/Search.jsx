@@ -10,7 +10,7 @@ function Search({toggleSearch, handleUserResults, handleChatResults}){
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchUsers = async () => {
+    const fetchSearch = async () => {
       const [resUsers, resChats] = await Promise.all([
         fetch(`http://localhost:3000/users/search?search=${input}`),
         fetch(`http://localhost:3000/chats/search?search=${input}`)
@@ -26,7 +26,7 @@ function Search({toggleSearch, handleUserResults, handleChatResults}){
     }
 
     if (input.length > 0) {
-      fetchUsers()
+      fetchSearch()
     } else {
       handleUserResults([])
       handleChatResults([])

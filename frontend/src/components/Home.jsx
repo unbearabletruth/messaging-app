@@ -1,10 +1,6 @@
-
 function Home() {
-
   return (
-    <div className="background">
-
-    </div>
+    <div className="homeField"></div>
   )
 }
 
