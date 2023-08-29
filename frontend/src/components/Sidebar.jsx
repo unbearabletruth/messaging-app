@@ -70,7 +70,7 @@ function Sidebar({chats, handleChat, updateChats})  {
             <img src={backIcon} alt="back" className="backImg"></img>
           </button>
         :
-          <Menu />
+          <Menu handleChat={handleChat}/>
         }
         <Search 
           toggleSearch={toggleSearch} 
