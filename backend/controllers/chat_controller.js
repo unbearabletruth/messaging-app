@@ -22,6 +22,7 @@ exports.createChat = async (req, res) => {
     })
     try{
         const chat = await newChat.save()
+        await chat.populate('users', 'username profilePic')
         res.status(200).json(chat)
     } catch (error){
         res.status(400).json({error: error.message})
@@ -55,7 +56,7 @@ exports.removeFromChat = async (req, res) => {
         $pull: { users: req.body.user }
     }, { new: true }
     ).populate('latestMessage').populate('users', 'username profilePic')
-    
+
     if (chat){
         return res.status(200).json(chat)
     }

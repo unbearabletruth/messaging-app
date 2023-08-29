@@ -6,7 +6,7 @@ import { io } from 'socket.io-client'
 
 let socket = io('http://localhost:3000')
 
-function Chat({chat, handleChat, chats, handleChats, refetchChats}) {
+function Chat({chat, handleChat, chats, updateChats}) {
   const [messages, setMessages] = useState([])
   const {user} = useAuthContext()
   const [newMessage, setNewMessage] = useState({
@@ -87,7 +87,7 @@ function Chat({chat, handleChat, chats, handleChats, refetchChats}) {
         }
         return chat;
       })
-      handleChats(updateChats);
+      updateChats(updateChats);
     }
   }
 
@@ -102,7 +102,7 @@ function Chat({chat, handleChat, chats, handleChats, refetchChats}) {
     })
     const json = await response.json()
     if (response.ok) {
-      refetchChats()
+      updateChats([json, ...chats])
       handleChat(json)
     }
   }
@@ -118,7 +118,7 @@ function Chat({chat, handleChat, chats, handleChats, refetchChats}) {
     })
     const json = await response.json()
     if (response.ok) {
-      refetchChats()
+      updateChats(chats.filter(c => c._id !== chat._id))
       handleChat(json)
     }
   }
@@ -132,7 +132,7 @@ function Chat({chat, handleChat, chats, handleChats, refetchChats}) {
   //chat && console.log(chat, chat.users.some(u => u._id === user.id), user.id)
   console.log(chat)
   return (
-    <>
+    <div id='content'>
       <div className="chatHeader">
         {chat && !chat.isGroupChat && chat.users.map(u => {
             return (
@@ -175,7 +175,7 @@ function Chat({chat, handleChat, chats, handleChats, refetchChats}) {
       <form onSubmit={submitMessage} id='messageForm'>
         <input type='text' onChange={handleMessage} value={newMessage.text} id='messageInput' placeholder='Message'></input>
       </form>
-    </>
+    </div>
   )
 }
 

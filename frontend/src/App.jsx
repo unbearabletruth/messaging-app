@@ -1,14 +1,13 @@
 import { useState, useEffect } from 'react'
 import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
 import './App.css'
-import Sidebar from './components/Sidebar';
+import MainWindow from './components/MainWindow';
 import Login from './pages/Login';
 import { useAuthContext } from './hooks/UseAuthContext';
 
 function App() {
   const {user} = useAuthContext()
   const [chats, setChats] = useState(null)
-  const [fetchChats, setFetchChats] = useState(false)
 
   useEffect(() => {
     const fetchChats = async () => {
@@ -20,21 +19,18 @@ function App() {
     }
 
     fetchChats()
-  }, [fetchChats])
+  }, [])
 
-  const handleChats = (chats) => {
+  const updateChats = (chats) => {
     setChats(chats)
   }
 
-  const refetchChats = () => {
-    setFetchChats(!fetchChats)
-  }
-
+  console.log('app chats', chats)
   return (
     <BrowserRouter>
       <Routes>
         <Route path='/*' element={user ? 
-          <Sidebar chats={chats} handleChats={handleChats} refetchChats={refetchChats}/>
+          <MainWindow chats={chats} updateChats={updateChats} />
           : 
           <Navigate to='/login' />} />
         <Route path="/login" element={<Login />} />                            
