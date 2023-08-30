@@ -3,13 +3,13 @@ import '../assets/styles/Sidebar.css'
 import '../assets/styles/Content.css'
 import Sidebar from "../components/Sidebar";
 import Chat from '../components/Chat';
-import Home from '../components/Home';
 import { useAuthContext } from '../hooks/UseAuthContext';
 
 function MainWindow() {
   const {user} = useAuthContext()
   const [chats, setChats] = useState(null)
   const [currentChat, setCurrentChat] = useState(null)
+  const [refetch, setRefetch] = useState(false)
 
   useEffect(() => {
     const fetchChats = async () => {
@@ -21,7 +21,7 @@ function MainWindow() {
     }
 
     fetchChats()
-  }, [])
+  }, [refetch])
 
   const updateChats = (chats) => {
     setChats(chats)
@@ -31,6 +31,10 @@ function MainWindow() {
     setCurrentChat(chat)
   }
 
+  const refetchChats = () => {
+    setRefetch(!refetch)
+  }
+
   return (
     <>
       <Sidebar
@@ -38,16 +42,13 @@ function MainWindow() {
         handleChat={handleChat}
         updateChats={updateChats} 
       />
-      {currentChat ?
-        <Chat 
-          chat={currentChat}
-          handleChat={handleChat}
-          chats={chats} 
-          updateChats={updateChats} 
-        />
-      :
-        <Home />
-      }
+      <Chat 
+        chat={currentChat}
+        handleChat={handleChat}
+        chats={chats} 
+        updateChats={updateChats}
+        refetchChats={refetchChats} 
+      />
     </>
   )
 }

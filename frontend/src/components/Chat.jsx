@@ -6,7 +6,7 @@ import { io } from 'socket.io-client'
 
 let socket = io('http://localhost:3000')
 
-function Chat({chat, handleChat, chats, updateChats}) {
+function Chat({chat, handleChat, chats, updateChats, refetchChats}) {
   const [messages, setMessages] = useState([])
   const {user} = useAuthContext()
   const [newMessage, setNewMessage] = useState({
@@ -17,20 +17,25 @@ function Chat({chat, handleChat, chats, updateChats}) {
 
   useEffect(() => {
     socket.on('receive message', (newMessage) => {
+      console.log('reveive m')
       if (chat && chat._id === newMessage.chat) {
         setMessages(prevState => [...prevState, newMessage])
+      } else {
+        refetchChats()
       }
     })
     return () => socket.off('receive message')
-  }, [])
+  }, [chat])
 
   useEffect(() => {
-    setNewMessage({
-      author: user.id,
-      chat: chat._id,
-      text: ''
-    })
-  }, [])
+    if (chat) {
+      setNewMessage({
+        author: user.id,
+        chat: chat._id,
+        text: ''
+      })
+    }
+  }, [chat])
 
   useEffect(() => {
     const fetchMessages = async () => {
@@ -133,48 +138,54 @@ function Chat({chat, handleChat, chats, updateChats}) {
   console.log(chat)
   return (
     <div id='content'>
-      <div className="chatHeader">
-        {chat && !chat.isGroupChat && chat.users.map(u => {
-            return (
-              u.username !== user.username &&
-                <div className='chatHeaderUser' key={u._id}>
-                  <img src={u.profilePic} alt="profile picture" className="chatHeaderPic"></img>
-                  <div>
-                    <p className="sidebarName">{u.username}</p>
+      {chat ?
+      <>
+        <div className="chatHeader">
+          {chat && !chat.isGroupChat && chat.users.map(u => {
+              return (
+                u.username !== user.username &&
+                  <div className='chatHeaderUser' key={u._id}>
+                    <img src={u.profilePic} alt="profile picture" className="chatHeaderPic"></img>
+                    <div>
+                      <p className="sidebarName">{u.username}</p>
+                    </div>
                   </div>
-                </div>
+              )}
             )}
-          )}
-        {chat && chat.isGroupChat && 
-          <>
-            <p> Welcome to {chat.name}!</p>
-            {chat.users.some(u => u._id === user.id) &&
-              <button id='leaveChat' onClick={leaveGroupChat}>Leave group</button>
-            }
-          </>
-        }
-      </div>
-      <div className="chatField">
-        {chat && messages && messages.toReversed().map(message => {
-          return (
-            <div className={message.author._id === user.id ? 'myMessage' : 'message'} key={message._id}>
-              {chat.isGroupChat && message.author._id !== user.id &&
-                <span className='messageAuthor'>{message.author.username}</span>
+          {chat && chat.isGroupChat && 
+            <>
+              <p> Welcome to {chat.name}!</p>
+              {chat.users.some(u => u._id === user.id) &&
+                <button id='leaveChat' onClick={leaveGroupChat}>Leave group</button>
               }
-              <div className='messageContent'>
-                <span className='messageText'>{message.text}</span>
-                <span className='messageTime'>{moment(message.createdAt).format('hh:mm')}</span>
+            </>
+          }
+        </div>
+        <div className="chatField">
+          {chat && messages && messages.toReversed().map(message => {
+            return (
+              <div className={message.author._id === user.id ? 'myMessage' : 'message'} key={message._id}>
+                {chat.isGroupChat && message.author._id !== user.id &&
+                  <span className='messageAuthor'>{message.author.username}</span>
+                }
+                <div className='messageContent'>
+                  <span className='messageText'>{message.text}</span>
+                  <span className='messageTime'>{moment(message.createdAt).format('hh:mm')}</span>
+                </div>
               </div>
-            </div>
-          )
-        })}
-      </div>
-      {chat && !chat.users.some(u => u._id === user.id) &&
-        <button className='joinChatButton' onClick={joinGroupChat}>Join group</button>
+            )
+          })}
+        </div>
+        {chat && !chat.users.some(u => u._id === user.id) &&
+          <button className='joinChatButton' onClick={joinGroupChat}>Join group</button>
+        }
+        <form onSubmit={submitMessage} id='messageForm'>
+          <input type='text' onChange={handleMessage} value={newMessage.text} id='messageInput' placeholder='Message'></input>
+        </form>
+      </>
+      :
+      <div className="homeField"></div>
       }
-      <form onSubmit={submitMessage} id='messageForm'>
-        <input type='text' onChange={handleMessage} value={newMessage.text} id='messageInput' placeholder='Message'></input>
-      </form>
     </div>
   )
 }
