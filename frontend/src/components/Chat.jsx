@@ -2,9 +2,7 @@ import '../assets/styles/Chat.css'
 import { useState, useEffect } from 'react';
 import moment from 'moment';
 import { useAuthContext } from '../hooks/UseAuthContext';
-import { io } from 'socket.io-client'
-
-let socket = io('http://localhost:3000')
+import { socket } from '../socket';
 
 function Chat({chat, handleChat, chats, updateChats, refetchChats}) {
   const [messages, setMessages] = useState([])
@@ -17,8 +15,7 @@ function Chat({chat, handleChat, chats, updateChats, refetchChats}) {
 
   useEffect(() => {
     socket.on('receive message', (newMessage) => {
-      console.log('reveive m')
-      if (chat && chat._id === newMessage.chat) {
+      if (chat && chat._id === newMessage.chat._id) {
         setMessages(prevState => [...prevState, newMessage])
       } else {
         refetchChats()

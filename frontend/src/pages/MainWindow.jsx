@@ -4,6 +4,7 @@ import '../assets/styles/Content.css'
 import Sidebar from "../components/Sidebar";
 import Chat from '../components/Chat';
 import { useAuthContext } from '../hooks/UseAuthContext';
+import { socket } from '../socket';
 
 function MainWindow() {
   const {user} = useAuthContext()
@@ -22,6 +23,10 @@ function MainWindow() {
 
     fetchChats()
   }, [refetch])
+
+  useEffect(() => {
+    socket.emit('setup', user)
+  }, [])
 
   const updateChats = (chats) => {
     setChats(chats)

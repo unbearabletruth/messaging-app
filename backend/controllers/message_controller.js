@@ -13,6 +13,7 @@ exports.createMessage = async (req, res) => {
     })
     try{
         const message = await newMessage.save()
+        await message.populate('chat')
         await message.populate('author', 'username');
         res.status(200).json(message)
     } catch (error){
