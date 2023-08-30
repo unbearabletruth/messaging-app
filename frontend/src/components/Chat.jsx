@@ -132,7 +132,6 @@ function Chat({chat, handleChat, chats, updateChats, refetchChats}) {
     })
   }
   //chat && console.log(chat, chat.users.some(u => u._id === user.id), user.id)
-  console.log(chat)
   return (
     <div id='content'>
       {chat ?

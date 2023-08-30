@@ -99,12 +99,12 @@ a:active {
 }
 
 .backButton:hover{
-  background-color: #e4e4e7;
+  background-color: var(--hover);
   cursor: pointer;
 }
 
 .backImg{
   width: 20px;
   height: auto;
-  filter: invert(48%) sepia(0%) saturate(0%) hue-rotate(29deg) brightness(93%) contrast(90%);
+  filter: invert(24%) sepia(0%) saturate(5%) hue-rotate(205deg) brightness(98%) contrast(95%);
 }

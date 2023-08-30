@@ -45,7 +45,7 @@
 .joinChatButton{
   border: 0px;
   height: 50px;
-  background-color: var(--main-color);
+  background-color: var(--main-darker);
   color: white;
   font-weight: bold;
   font-size: 1.4rem;
@@ -54,7 +54,7 @@
 
 .joinChatButton:hover{
   cursor: pointer;
-  background-color: var(--main-darker);
+  background-color: var(--main-color);
 }
 
 .message,

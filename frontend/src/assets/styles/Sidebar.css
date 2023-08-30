@@ -27,6 +27,10 @@
   cursor: pointer;
 }
 
+.sidebarChat.selected{
+  background-color: var(--main-darker);
+}
+
 .sidebarChatContent{
   display: flex;
   gap: 15px;
@@ -49,13 +53,25 @@
   color: var(--main-font-color);
 }
 
+.sidebarChatUser.selected{
+  color: white;
+}
+
 .sidebarChatLatest{
   color: var(--light-font-color);
+}
+
+.sidebarChatLatest.selected{
+  color: white;
 }
 
 .sidebarChatUpdatedAt{
   color: var(--main-font-color);
   font-size: 0.8rem;
+}
+
+.sidebarChatUpdatedAt.selected{
+  color: white;
 }
 
 #writeButton{
@@ -66,12 +82,12 @@
   height: 55px;
   border-radius: 50%;
   border: 0px;
-  background-color: var(--main-color);
+  background-color: var(--main-darker);
   transition: background-color 0.2s ease-out;
 }
 
 #writeButton:hover{
-  background-color: var(--main-darker);
+  background-color: var(--main-color);
   cursor: pointer;
 }
 

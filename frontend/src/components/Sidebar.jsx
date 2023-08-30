@@ -13,6 +13,7 @@ function Sidebar({chats, handleChat, updateChats})  {
   const [searchPage, setSearchPage] = useState(false)
   const [searchUserResults, setSearchUserResults] = useState([])
   const [searchChatResults, setSearchChatResults] = useState([])
+  const [selected, setSelected] = useState(null)
 
   const newChat = async (e, partnerId) => {
     e.preventDefault()
@@ -58,6 +59,12 @@ function Sidebar({chats, handleChat, updateChats})  {
     setSearchChatResults(results)
   }
 
+  const setChat = (chat) => {
+    console.log(chat)
+    setSelected(chat._id)
+    handleChat(chat)
+  }
+  console.log(selected)
   return (
     <div id="sidebar">
       <div id="sidebarHeader">
@@ -136,7 +143,7 @@ function Sidebar({chats, handleChat, updateChats})  {
           {chats && chats.map(chat => {
             return (
               chat.isGroupChat ?
-                <div onClick={() => handleChat(chat)} key={chat._id} className="sidebarChat">
+                <div onClick={() => setChat(chat)} key={chat._id} className={`sidebarChat ${selected === chat._id ? 'selected' : ''}`}>
                   <div className="sidebarChatContent">
                     <div className="sidebarChatMain">
                       <p className="sidebarChatUser">{chat.name}</p>
@@ -153,19 +160,19 @@ function Sidebar({chats, handleChat, updateChats})  {
                 !chat.isGroupChat && chat.users.map(u => {
                   return (
                     u.username !== user.username ?
-                      <div onClick={() => handleChat(chat)} key={chat._id} className="sidebarChat">
+                      <div onClick={() => setChat(chat)} key={chat._id} className={`sidebarChat ${selected === chat._id ? 'selected' : ''}`}>
                         <div className="sidebarChatContent">
                           <img src={u.profilePic} alt="profile picture" className="sidebarPic"></img>
                           <div className="sidebarChatMain">
-                            <p className="sidebarChatUser">{u.username}</p>
+                            <p className={`sidebarChatUser ${selected === chat._id ? 'selected' : ''}`}>{u.username}</p>
                             {chat.latestMessage ?
-                              <p className="sidebarChatLatest">{chat.latestMessage.text}</p>
+                              <p className={`sidebarChatLatest ${selected === chat._id ? 'selected' : ''}`}>{chat.latestMessage.text}</p>
                               :
-                              <p className="sidebarChatLatest">Click to start a conversation!</p>
+                              <p className={`sidebarChatLatest ${selected === chat._id ? 'selected' : ''}`}>Click to start a conversation!</p>
                             }
                           </div>
                         </div>
-                        <p className="sidebarChatUpdatedAt">{moment(chat.updatedAt).format('DD.MM.YYYY')}</p>
+                        <p className={`sidebarChatUpdatedAt ${selected === chat._id ? 'selected' : ''}`}>{moment(chat.updatedAt).format('DD.MM.YYYY')}</p>
                       </div>
                       :
                       null
