@@ -74,29 +74,6 @@
   color: white;
 }
 
-#writeButton{
-  position: fixed;
-  bottom: 50px;
-  left: 350px;
-  width: 55px;
-  height: 55px;
-  border-radius: 50%;
-  border: 0px;
-  background-color: var(--main-darker);
-  transition: background-color 0.2s ease-out;
-}
-
-#writeButton:hover{
-  background-color: var(--main-color);
-  cursor: pointer;
-}
-
-#writeButtonImg{
-  width: 20px;
-  height: auto;
-  filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(93deg) brightness(103%) contrast(103%);
-}
-
 .sidebarUser{
   width: 100%;
   display: flex;

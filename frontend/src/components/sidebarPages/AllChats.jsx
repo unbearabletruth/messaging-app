@@ -63,8 +63,8 @@ function AllChats({chats, handleChat, handleSidebarContent}) {
           )
       })
     }
-    <button id="writeButton" onClick={() => handleSidebarContent('write')}>
-      <img src={pencilIcon} alt="write someone" id="writeButtonImg"></img>
+    <button className="bigButton" onClick={() => handleSidebarContent('write')}>
+      <img src={pencilIcon} alt="write someone" className="bigButtonImg"></img>
     </button>
     </>
   )

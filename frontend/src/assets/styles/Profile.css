@@ -1,0 +1,118 @@
+#profileInfo{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#profileHeader{
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  align-items: center;
+  padding: 10px;
+}
+
+#profilePicture{
+  width: 100%;
+  height: auto;
+}
+
+#profileUsernameBlock{
+  display: flex;
+  justify-content: space-between;
+  padding: 20px;
+  height: 100px;
+  width: 100%;
+  background-color: var(--main-color);
+  color: white;
+}
+
+#profileUsernameMain{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+#profileUsernameTitle{
+  font-size: 0.8rem;
+}
+
+#profileUsername{
+  font-size: 1.3rem;
+  font-weight: bold;
+}
+
+/*form*/
+.bigButton.submit{
+  top: 50px;
+  right: 20px;
+}
+
+#profileEditForm{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 50px;
+}
+
+.changeProfilePicture{
+    padding: 10px;
+    position: relative;
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+}
+
+.uploadProfileImage{
+    width: 130px;
+    height: 130px;
+    border-radius: 50%;
+    border: 3px solid var(--main-color);
+}
+
+.addImageWrapper{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+    width: 45px;
+    height: 45px;
+    background: rgba(34, 34, 34, 0.7);
+    border-radius: 50%;
+    transition: background-color 0.2s ease-out;
+}
+
+.addImageWrapper:hover{
+    background: rgba(34, 34, 34, 0.6);
+    cursor: pointer;
+}
+
+.addImageWrapper:active{
+    background: rgba(34, 34, 34, 0.2);
+}
+
+#uploadInput{
+  display: none;
+}
+
+.uploadImageAdd{
+    width: 22px;
+    height: auto;
+    filter: invert(100%) sepia(40%) saturate(2%) hue-rotate(335deg) brightness(109%) contrast(101%);
+}   
+
+.profileInput{
+  width: 80%;
+  height: 35px;
+  border-radius: 5px;
+  padding: 0px 8px;
+  border: 1px solid var(--border);
+}
+
+.profileInput:focus{
+  outline: none;
+  border: 2px solid var(--main-color);
+}

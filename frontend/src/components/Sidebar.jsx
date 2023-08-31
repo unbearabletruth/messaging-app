@@ -4,6 +4,7 @@ import Search from "./Search";
 import Menu from "./Menu";
 import AllChats from "./sidebarPages/AllChats";
 import SearchResults from "./sidebarPages/SearchResults";
+import Profile from "./sidebarPages/Profile";
 import { useAuthContext } from '../hooks/UseAuthContext';
 
 function Sidebar({chats, handleChat, updateChats})  {
@@ -59,25 +60,43 @@ function Sidebar({chats, handleChat, updateChats})  {
 
   return (
     <div id="sidebar">
-      <div id="sidebarHeader">
-        {sidebarContent === 'write' ?
-          <button onClick={() => handleSidebarContent('')} className="backButton">
-            <img src={backIcon} alt="back" className="backImg"></img>
-          </button>
-        : sidebarContent === 'search' ?
-          <button onClick={() => handleSidebarContent('')} className="backButton">
-            <img src={backIcon} alt="back" className="backImg"></img>
-          </button>
+      
+        {sidebarContent === 'write' || sidebarContent === 'search' ?
+          <div id="sidebarHeader">
+            <button onClick={() => handleSidebarContent('')} className="mainButton">
+              <img src={backIcon} alt="back" className="mainButtonImg"></img>
+            </button>
+            <Search 
+              handleSidebarContent={handleSidebarContent} 
+              handleUserResults={handleUserResults}
+              handleChatResults={handleChatResults}
+            />
+          </div>
+        : !sidebarContent ?
+          <div id="sidebarHeader">
+            <Menu 
+              handleChat={handleChat} 
+              chats={chats} 
+              updateChats={updateChats}
+              handleSidebarContent={handleSidebarContent}
+            />
+            <Search 
+              handleSidebarContent={handleSidebarContent} 
+              handleUserResults={handleUserResults}
+              handleChatResults={handleChatResults}
+            />
+          </div>
         :
-          <Menu handleChat={handleChat} chats={chats} updateChats={updateChats}/>
+          null
         }
-        <Search 
-          handleSidebarContent={handleSidebarContent} 
-          handleUserResults={handleUserResults}
-          handleChatResults={handleChatResults}
+      {!sidebarContent &&
+        <AllChats 
+          chats={chats} 
+          handleChat={handleChat} 
+          handleSidebarContent={handleSidebarContent}
         />
-      </div>
-      {sidebarContent === 'write' ? 
+      }
+      {sidebarContent === 'write' &&
         <>
           {users && users.map(user => {
             return (
@@ -90,14 +109,16 @@ function Sidebar({chats, handleChat, updateChats})  {
             )
           })}
         </>
-      : sidebarContent === 'search' ?
+      }
+      {sidebarContent === 'search' &&
         <SearchResults 
           handleSidebarContent={handleSidebarContent}
           searchUserResults={searchUserResults}
           searchChatResults={searchChatResults}
         />
-      :
-        <AllChats chats={chats} handleChat={handleChat} handleSidebarContent={handleSidebarContent}/>
+      }
+      {sidebarContent === 'profile' &&
+        <Profile handleSidebarContent={handleSidebarContent}/>
       }
     </div>
   )

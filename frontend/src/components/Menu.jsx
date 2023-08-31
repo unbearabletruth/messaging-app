@@ -5,7 +5,7 @@ import logoutIcon from '../assets/images/logout-icon.svg'
 import closeIcon from '../assets/images/close-icon.svg'
 import '../assets/styles/Menu.css'
 
-function Menu({handleChat, chats, updateChats}) {
+function Menu({handleChat, chats, updateChats, handleSidebarContent}) {
   const {user, dispatch} = useAuthContext()
   const [menu, setMenu] = useState(false)
   const menuPopupRef = useRef(null);
@@ -53,14 +53,14 @@ function Menu({handleChat, chats, updateChats}) {
 
   return (
     <div id="menuWrapper">
-      <button id="menuButton" onClick={() => setMenu(!menu)} ref={menuPopupRef}>
-        <img src={menuIcon} alt="menu" id="menuImg"></img>
+      <button className="mainButton" onClick={() => setMenu(!menu)} ref={menuPopupRef}>
+        <img src={menuIcon} alt="menu" className="mainButtonImg"></img>
       </button>
       {menu &&
         <div id="menu">
           <p className="menuOption">Logged in as {user.username}</p>
           <p className="menuOption" onClick={() => setNewGroupPopup(true)}>New group chat</p>
-          <p className="menuOption">Profile</p>
+          <p className="menuOption" onClick={() => handleSidebarContent('profile')}>Profile</p>
           <div className="menuOption" onClick={handleLogout}>
             <img src={logoutIcon} alt="log out" className="menuOptionIcon"></img>
             <p className="menuOptionText">Log out</p>

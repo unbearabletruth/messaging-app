@@ -90,7 +90,7 @@ a:active {
   height: auto;
 }
 
-.backButton{
+.mainButton{
   width: 40px;
   height: 40px;
   border-radius: 50%;
@@ -99,13 +99,36 @@ a:active {
   transition: background-color 0.2s ease-out;
 }
 
-.backButton:hover{
+.mainButton:hover{
   background-color: var(--hover);
   cursor: pointer;
 }
 
-.backImg{
+.mainButtonImg{
   width: 20px;
   height: auto;
   filter: invert(24%) sepia(0%) saturate(5%) hue-rotate(205deg) brightness(98%) contrast(95%);
+}
+
+.bigButton{
+  position: fixed;
+  bottom: 50px;
+  left: 350px;
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  border: 0px;
+  background-color: var(--main-darker);
+  transition: background-color 0.2s ease-out;
+}
+
+.bigButton:hover{
+  background-color: var(--main-color);
+  cursor: pointer;
+}
+
+.bigButtonImg{
+  width: 20px;
+  height: auto;
+  filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(93deg) brightness(103%) contrast(103%);
 }
