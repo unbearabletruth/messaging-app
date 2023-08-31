@@ -1,6 +1,5 @@
 import { useState, useRef, useEffect } from "react"
 import { useAuthContext } from '../hooks/UseAuthContext';
-import { useNavigate } from "react-router-dom";
 import menuIcon from '../assets/images/menu-icon.svg'
 import logoutIcon from '../assets/images/logout-icon.svg'
 import closeIcon from '../assets/images/close-icon.svg'
@@ -12,7 +11,6 @@ function Menu({handleChat, chats, updateChats}) {
   const menuPopupRef = useRef(null);
   const [newGroupPopup, setNewGroupPopup] = useState(false)
   const [groupName, setGroupName] = useState('')
-  const navigate = useNavigate()
 
   useEffect(() => {
     function handleClickOutside(e) {

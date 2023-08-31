@@ -39,16 +39,17 @@ a:active {
 .formButton{
   width: 100px;
   height: 40px;
-  background-color: var(--main-color);
+  background-color: var(--main-darker);
   color: white;
   border: 0px;
   border-radius: 5px;
   font-size: 1.1rem;
+  transition: background-color 0.2s ease-out;
 }
 
 .formButton:hover{
   cursor: pointer;
-  background-color: var(--main-darker);
+  background-color: var(--main-color);
 }
 
 #popupBackground{

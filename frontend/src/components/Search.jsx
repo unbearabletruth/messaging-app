@@ -1,13 +1,11 @@
 import { useState, useEffect, useRef } from "react";
 import '../assets/styles/Search.css'
 import searchIcon from '../assets/images/search-icon.svg'
-import { useNavigate } from "react-router-dom";
 
-function Search({toggleSearch, handleUserResults, handleChatResults}){
+function Search({handleSidebarContent, handleUserResults, handleChatResults}){
   const [input, setInput] = useState('')
   const [searchActive, setSearchActive] = useState(false)
   const searchRef = useRef(null)
-  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchSearch = async () => {
@@ -51,7 +49,7 @@ function Search({toggleSearch, handleUserResults, handleChatResults}){
 
   const handleClick = () => {
     setSearchActive(true)
-    toggleSearch(true)
+    handleSidebarContent('search')
   }
 
   return(
