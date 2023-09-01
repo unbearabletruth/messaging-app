@@ -4,7 +4,7 @@ export const AuthContext = createContext()
 
 export const authReducer = (state, action) => {
   switch (action.type) {
-    case 'login':
+    case 'set':
       return {user: action.payload}
     case 'logout':
       return {user: null}
@@ -17,13 +17,6 @@ export const AuthContextProvider = ({children}) => {
   const [state, dispatch] = useReducer(authReducer, {
     user: JSON.parse(localStorage.getItem('user'))
   })
-
-  /*useEffect(() => {
-    const user = JSON.parse(localStorage.getItem('user'))
-    if (user) {
-      dispatch({type: 'login', payload: user})
-    }
-  }, [])*/            //dive deeper 
 
   console.log('authcontext state:', state)
 

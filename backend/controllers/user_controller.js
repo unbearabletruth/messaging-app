@@ -11,9 +11,8 @@ exports.loginUser = async (req, res) => {
         const user = await User.login(username, password)
         console.log(user)
         const token = createToken(user._id)
-        const id = user._id
-        const profilePic = user.profilePic
-        res.status(200).json({id, username, token, profilePic})
+        const _id = user._id
+        res.status(200).json({_id, username, token})
     } catch(error) {
         res.status(400).json({error: error.message})
     }
@@ -24,9 +23,8 @@ exports.signupUser = async (req, res) => {
     try {
         const user = await User.signup(username, password)
         const token = createToken(user._id)
-        const id = user._id
-        const profilePic = user.profilePic
-        res.status(200).json({id, username, token, profilePic})
+        const _id = user._id
+        res.status(200).json({_id, username, token})
     } catch(error) {
         res.status(400).json({error: error.message})
     }
@@ -38,8 +36,8 @@ exports.getUsers = async (req, res) => {
 };
 
 exports.getUser = async (req, res) => {
-	const users = await User.findById(req.params.userId).exec()
-	res.status(200).json(users)
+	const user = await User.findById(req.params.id).exec()
+	res.status(200).json(user)
 };
 
 exports.searchUsers = async (req, res) => {
@@ -49,3 +47,22 @@ exports.searchUsers = async (req, res) => {
 		res.status(200).json(users)
 	}
 };
+
+exports.updateUser = async (req, res) => {
+    let url;
+    if (req.file){
+      url = `${req.protocol}://${req.get('host')}/profiles/${req.file.filename}`
+    }
+    const user = await User.findByIdAndUpdate(req.params.id, {
+        username: req.body.username,
+        profilePic: url
+    }, { new: true })
+    if (user){
+        const updatedFileds = {
+            username: user.username,
+            profilePic: user.profilePic
+        }
+        return res.status(200).json(updatedFileds)
+    }
+    res.status(400).json({error: 'No such chat'})
+}

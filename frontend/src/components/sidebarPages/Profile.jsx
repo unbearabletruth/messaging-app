@@ -8,7 +8,7 @@ import submitIcon from '../../assets/images/submit.svg'
 
 
 function Profile({handleSidebarContent}) {
-  const { user } = useAuthContext()
+  const { user, dispatch } = useAuthContext()
   const [form, setForm] = useState(false)
   const [profileInfo, setProfileInfo] = useState({
     username: '',
@@ -18,7 +18,7 @@ function Profile({handleSidebarContent}) {
   const onProfileImageChange = (e) => {
     setProfileInfo({
       ...profileInfo,
-      image: e.target.files[0]
+      profilePic: e.target.files[0]
     })  
   }
 
@@ -29,11 +29,23 @@ function Profile({handleSidebarContent}) {
     })
   }
 
-  const onEditSubmit = (e) => {
+  const onEditSubmit = async (e) => {
     e.preventDefault()
-
+    const formData = new FormData();
+    formData.append('profilePic', profileInfo.profilePic);
+    formData.append('username', profileInfo.username);
+    
+    const response = await fetch(`http://localhost:3000/users/${user._id}`, {
+      method: 'PATCH',
+      body: formData,
+    })
+    const json = await response.json()
+    if (response.ok) {
+      setForm(false)
+      dispatch({type: 'set', payload: json})
+    }
   }
-
+  console.log(profileInfo)
   return (
     !form ?
       <div id='profileInfo'>
@@ -59,13 +71,13 @@ function Profile({handleSidebarContent}) {
         <button onClick={() => setForm(false)} className="mainButton">
           <img src={backIcon} alt="back" className="mainButtonImg"></img>
         </button>
-        <form onSubmit={onEditSubmit} id='profileEditForm'>
-          <button className='bigButton submit'>
+        <form onSubmit={onEditSubmit} id='profileEditForm' encType="multipart/form-data">
+          <button className='bigButton submit' onSubmit={onEditSubmit}>
             <img src={submitIcon} alt='submit' className='bigButtonImg'></img>
           </button>
           <div className='changeProfilePicture'>
             <img 
-              src={profileInfo.image ? URL.createObjectURL(profileInfo.image) : user.profilePic}
+              src={profileInfo.profilePic ? URL.createObjectURL(profileInfo.profilePic) : user.profilePic}
               alt="profile picture" 
               className='uploadProfileImage'
             >
@@ -73,7 +85,7 @@ function Profile({handleSidebarContent}) {
             <label>
               <div className='addImageWrapper'>
                 <input type="file" id='uploadInput' onChange={onProfileImageChange}></input>
-                <img src={addPhoto} alt='add photo' className='uploadImageAdd'></img>
+                <img src={addPhoto} alt='add photo' className='uploadImageAdd' name='profilePic'></img>
               </div>
             </label>
           </div>

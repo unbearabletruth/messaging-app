@@ -29,7 +29,7 @@ function Menu({handleChat, chats, updateChats, handleSidebarContent}) {
     const newGroup = {
       name: groupName,
       isGroupChat: true,
-      users: [user.id]
+      users: [user._id]
     }
     const response = await fetch(`http://localhost:3000/chats`, {
       method: 'POST',

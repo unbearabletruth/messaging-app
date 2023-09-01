@@ -7,14 +7,28 @@ import { useAuthContext } from '../hooks/UseAuthContext';
 import { socket } from '../socket';
 
 function MainWindow() {
-  const {user} = useAuthContext()
+  const {user, dispatch} = useAuthContext()
   const [chats, setChats] = useState(null)
   const [currentChat, setCurrentChat] = useState(null)
   const [refetch, setRefetch] = useState(false)
 
   useEffect(() => {
+    const fetchUser = async () => {
+      const response = await fetch(`http://localhost:3000/users/${user._id}`)
+      const json = await response.json()
+      console.log(json)
+      if (response.ok) {
+        dispatch({type: 'set', payload: json})
+      }
+    }
+    if (user) {
+      fetchUser()
+    }
+  }, [])
+
+  useEffect(() => {
     const fetchChats = async () => {
-      const response = await fetch(`http://localhost:3000/chats/users/${user.id}`)
+      const response = await fetch(`http://localhost:3000/chats/users/${user._id}`)
       const json = await response.json()
       if (response.ok) {
         setChats(json)

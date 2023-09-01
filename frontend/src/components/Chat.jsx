@@ -27,7 +27,7 @@ function Chat({chat, handleChat, chats, updateChats, refetchChats}) {
   useEffect(() => {
     if (chat) {
       setNewMessage({
-        author: user.id,
+        author: user._id,
         chat: chat._id,
         text: ''
       })
@@ -94,7 +94,7 @@ function Chat({chat, handleChat, chats, updateChats, refetchChats}) {
   }
 
   const joinGroupChat = async () => {
-    const userId = {user: user.id}
+    const userId = {user: user._id}
     const response = await fetch(`http://localhost:3000/chats/${chat._id}/add`, {
       method: 'PATCH',
       body: JSON.stringify(userId),
@@ -110,7 +110,7 @@ function Chat({chat, handleChat, chats, updateChats, refetchChats}) {
   }
 
   const leaveGroupChat = async () => {
-    const userId = {user: user.id}
+    const userId = {user: user._id}
     const response = await fetch(`http://localhost:3000/chats/${chat._id}/remove`, {
       method: 'PATCH',
       body: JSON.stringify(userId),
@@ -151,7 +151,7 @@ function Chat({chat, handleChat, chats, updateChats, refetchChats}) {
           {chat && chat.isGroupChat && 
             <>
               <p> Welcome to {chat.name}!</p>
-              {chat.users.some(u => u._id === user.id) &&
+              {chat.users.some(u => u._id === user._id) &&
                 <button id='leaveChat' onClick={leaveGroupChat}>Leave group</button>
               }
             </>
@@ -160,8 +160,8 @@ function Chat({chat, handleChat, chats, updateChats, refetchChats}) {
         <div className="chatField">
           {chat && messages && messages.toReversed().map(message => {
             return (
-              <div className={message.author._id === user.id ? 'myMessage' : 'message'} key={message._id}>
-                {chat.isGroupChat && message.author._id !== user.id &&
+              <div className={message.author._id === user._id ? 'myMessage' : 'message'} key={message._id}>
+                {chat.isGroupChat && message.author._id !== user._id &&
                   <span className='messageAuthor'>{message.author.username}</span>
                 }
                 <div className='messageContent'>
@@ -172,7 +172,7 @@ function Chat({chat, handleChat, chats, updateChats, refetchChats}) {
             )
           })}
         </div>
-        {chat && !chat.users.some(u => u._id === user.id) &&
+        {chat && !chat.users.some(u => u._id === user._id) &&
           <button className='joinChatButton' onClick={joinGroupChat}>Join group</button>
         }
         <form onSubmit={submitMessage} id='messageForm'>

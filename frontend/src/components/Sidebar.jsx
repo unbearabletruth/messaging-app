@@ -18,7 +18,7 @@ function Sidebar({chats, handleChat, updateChats})  {
     e.preventDefault()
     const newChat = {
       isGroupChat: false,
-      users: [user.id, partnerId]
+      users: [user._id, partnerId]
     }
     const response = await fetch(`http://localhost:3000/chats`, {
       method: 'POST',
