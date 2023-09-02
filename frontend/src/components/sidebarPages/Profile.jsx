@@ -1,6 +1,6 @@
 import { useAuthContext } from '../../hooks/UseAuthContext';
 import '../../assets/styles/Profile.css'
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import addPhoto from '../../assets/images/add-photo.png'
 import editIcon from '../../assets/images/edit.svg'
 import backIcon from '../../assets/images/back-icon.svg'
@@ -8,6 +8,9 @@ import submitIcon from '../../assets/images/submit.svg'
 
 
 function Profile({handleSidebarContent}) {
+  const isImage = ['gif','jpg','jpeg','png'];
+  const [wrongFile, setWrongFile] = useState(false)
+  const fileInputRef = useRef(null);
   const { user, dispatch } = useAuthContext()
   const [form, setForm] = useState(false)
   const [profileInfo, setProfileInfo] = useState({
@@ -22,11 +25,17 @@ function Profile({handleSidebarContent}) {
     })
   }, [])
 
-  const onProfileImageChange = (e) => {
-    setProfileInfo({
-      ...profileInfo,
-      profilePic: e.target.files[0]
-    })  
+  const onMediaChange = (e) => {
+    if(isImage.some(type => e.target.files[0].type.includes(type))) {
+        setProfileInfo({
+          ...profileInfo,
+          profilePic: e.target.files[0]
+        })  
+      }
+    else{
+      fileInputRef.current.value = null
+      setWrongFile(true)
+    }
   }
 
   const handleEditChange = (e) => {
@@ -50,19 +59,30 @@ function Profile({handleSidebarContent}) {
     if (response.ok) {
       setForm(false)
       dispatch({type: 'set', payload: json})
-    } else {
-      console.log(json)
-    }
+    } 
   }
 
+  useEffect(() => {
+    if (wrongFile === true){
+      const timeId = setTimeout(() => {
+          setWrongFile(false)
+        }, 7000)
+    
+      return () => {
+        clearTimeout(timeId)
+      }
+    }
+  }, [wrongFile]);
+  console.log(profileInfo.username)
   return (
-    !form ?
+    <>
+    {!form ?
       <div id='profileInfo'>
         <div id='profileHeader'>
           <button onClick={() => handleSidebarContent('')} className="mainButton">
             <img src={backIcon} alt="back" className="mainButtonImg"></img>
           </button>
-          <p>Profile</p>
+          <h1 className='sidebarTitle'>Profile</h1>
           <button onClick={() => setForm(true)} className='mainButton'>
             <img src={editIcon} alt='edit' className='mainButtonImg'></img>
           </button>
@@ -77,13 +97,22 @@ function Profile({handleSidebarContent}) {
       </div>
     :
       <>
-        <button onClick={() => setForm(false)} className="mainButton">
-          <img src={backIcon} alt="back" className="mainButtonImg"></img>
-        </button>
-        <form onSubmit={onEditSubmit} id='profileEditForm' encType="multipart/form-data">
-          <button className='bigButton submit' onSubmit={onEditSubmit}>
-            <img src={submitIcon} alt='submit' className='bigButtonImg'></img>
+        <div id='profileHeader'>
+          <button onClick={() => setForm(false)} className="mainButton">
+            <img src={backIcon} alt="back" className="mainButtonImg"></img>
           </button>
+          <h1 className='sidebarTitle'>Edit profile</h1>
+        </div>
+        <form onSubmit={onEditSubmit} id='profileEditForm' encType="multipart/form-data">
+          {profileInfo.profilePic !== null || !['', user.username].includes(profileInfo.username) ?
+            <button className='profileSubmit' onSubmit={onEditSubmit}>
+              <img src={submitIcon} alt='submit' className='bigButtonImg'></img>
+            </button>
+            :
+            <button className='profileSubmitInactive' type='button'>
+              <img src={submitIcon} alt='submit' className='bigButtonImg'></img>
+            </button>
+          }
           <div className='changeProfilePicture'>
             <img 
               src={profileInfo.profilePic ? URL.createObjectURL(profileInfo.profilePic) : user.profilePic}
@@ -93,7 +122,14 @@ function Profile({handleSidebarContent}) {
             </img>
             <label>
               <div className='addImageWrapper'>
-                <input type="file" id='uploadInput' onChange={onProfileImageChange}></input>
+                <input 
+                  type="file" 
+                  id='uploadInput' 
+                  onChange={onMediaChange} 
+                  accept='.gif,.jpg,.jpeg,.png'
+                  ref={fileInputRef} 
+                >
+                </input>
                 <img src={addPhoto} alt='add photo' className='uploadImageAdd' name='profilePic'></img>
               </div>
             </label>
@@ -108,6 +144,14 @@ function Profile({handleSidebarContent}) {
           </input>
         </form>
       </>
+    }
+    {wrongFile &&
+      <div id="wrongFileMessage">
+        <p className="wrongFileLine">Please, check that your file is:</p>
+        <p className="wrongFileLine">Image: gif, jpg, jpeg, png</p>
+      </div>
+    }
+    </>
   )
 }
 

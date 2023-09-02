@@ -111,9 +111,6 @@ a:active {
 }
 
 .bigButton{
-  position: fixed;
-  bottom: 50px;
-  left: 350px;
   width: 55px;
   height: 55px;
   border-radius: 50%;

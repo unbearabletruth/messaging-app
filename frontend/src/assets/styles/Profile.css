@@ -43,12 +43,28 @@
 }
 
 /*form*/
-.bigButton.submit{
-  top: 50px;
-  right: 20px;
+.profileSubmit,
+.profileSubmitInactive{
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  border: 0px;
+  background-color: var(--main-darker);
+  transition: background-color 0.2s ease-out;
+  margin-left: auto;
+}
+
+.profileSubmitInactive{
+  opacity: 0.3;
+}
+
+.profileSubmit:hover{
+  background-color: var(--main-color);
+  cursor: pointer;
 }
 
 #profileEditForm{
+  padding: 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -105,7 +121,7 @@
 }   
 
 .profileInput{
-  width: 80%;
+  width: 90%;
   height: 35px;
   border-radius: 5px;
   padding: 0px 8px;
@@ -115,4 +131,25 @@
 .profileInput:focus{
   outline: none;
   border: 2px solid var(--main-color);
+}
+
+/**/
+
+#wrongFileMessage{
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  align-items: center;
+  border-radius: 5px;
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, 0);
+  bottom: 5vh;
+  width: 300px;
+  height: 60px;
+  background-color: var(--main-darker);
+  color: white;
+  font-weight: bold;
 }
