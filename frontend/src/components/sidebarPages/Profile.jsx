@@ -90,14 +90,14 @@ function Profile({handleSidebarContent}) {
           </button>
         </div>
         <img src={user.profilePic} alt='profile picture' id='profilePicture'></img>
-        <div id='profileUsernameBlock'>
-          <p id='profileUsernameTitle'>Username</p>
-          <p id='profileUsername'>{user.username}</p>
+        <div className='profileInfoBlock'>
+          <p className='profileInfoTitle'>Username</p>
+          <p className='profileInfo'>{user.username}</p>
         </div>
         {user.bio &&
-          <div id='profileUsernameBlock'>
-            <p id='profileUsernameTitle'>Bio</p>
-            <p id='profileUsername'>{user.bio}</p>
+          <div className='profileInfoBlock'>
+            <p className='profileInfoTitle'>Bio</p>
+            <p className='profileInfo'>{user.bio}</p>
           </div>
         }
       </div>

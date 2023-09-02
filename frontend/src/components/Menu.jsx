@@ -1,6 +1,8 @@
 import { useState, useRef, useEffect } from "react"
 import { useAuthContext } from '../hooks/UseAuthContext';
 import menuIcon from '../assets/images/menu-icon.svg'
+import groupIcon from '../assets/images/group.svg'
+import profileIcon from '../assets/images/profile.png'
 import logoutIcon from '../assets/images/logout-icon.svg'
 import closeIcon from '../assets/images/close-icon.svg'
 import '../assets/styles/Menu.css'
@@ -58,9 +60,15 @@ function Menu({handleChat, chats, updateChats, handleSidebarContent}) {
       </button>
       {menu &&
         <div id="menu">
-          <p className="menuOption">Logged in as {user.username}</p>
-          <p className="menuOption" onClick={() => setNewGroupPopup(true)}>New group chat</p>
-          <p className="menuOption" onClick={() => handleSidebarContent('profile')}>Profile</p>
+          <p id="menuTitle">Logged in as {user.username}</p>
+          <div className="menuOption" onClick={() => setNewGroupPopup(true)}>
+            <img src={groupIcon} alt="new group" className="menuOptionIcon"></img>
+            <p>New group chat</p>
+          </div>
+          <div className="menuOption" onClick={() => handleSidebarContent('profile')}>
+            <img src={profileIcon} alt="profile" className="menuOptionIcon"></img>
+            <p>Profile</p>
+          </div>
           <div className="menuOption" onClick={handleLogout}>
             <img src={logoutIcon} alt="log out" className="menuOptionIcon"></img>
             <p className="menuOptionText">Log out</p>

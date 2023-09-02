@@ -7,6 +7,7 @@
 #profileHeader{
   display: flex;
   justify-content: space-between;
+  height: 70px;
   width: 100%;
   align-items: center;
   padding: 10px;
@@ -17,24 +18,27 @@
   height: auto;
 }
 
-#profileUsernameBlock{
+.profileInfoBlock{
   display: flex;
   justify-content: space-between;
   flex-direction: column;
   padding: 20px;
   height: 100px;
   width: 100%;
-  background-color: var(--main-color);
-  color: white;
+  background-color: #fafafa;
+  margin-bottom: 10px;
+  border-bottom: 1px solid var(--light-border);
 }
 
-#profileUsernameTitle{
+.profileInfoTitle{
   font-size: 0.8rem;
+  color: var(--main-font-color);
 }
 
-#profileUsername{
+.profileInfo{
   font-size: 1.3rem;
   font-weight: bold;
+  color: var(--main-darker);
 }
 
 /*form*/
