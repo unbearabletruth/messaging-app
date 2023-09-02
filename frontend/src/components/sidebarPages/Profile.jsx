@@ -15,6 +15,7 @@ function Profile({handleSidebarContent}) {
   const [form, setForm] = useState(false)
   const [profileInfo, setProfileInfo] = useState({
     username: '',
+    bio: '',
     profilePic: null
   })
 
@@ -50,6 +51,7 @@ function Profile({handleSidebarContent}) {
     const formData = new FormData();
     formData.append('profilePic', profileInfo.profilePic);
     formData.append('username', profileInfo.username);
+    formData.append('bio', profileInfo.bio);
     
     const response = await fetch(`http://localhost:3000/users/${user._id}`, {
       method: 'PATCH',
@@ -73,7 +75,7 @@ function Profile({handleSidebarContent}) {
       }
     }
   }, [wrongFile]);
-  console.log(profileInfo.username)
+  console.log(profileInfo)
   return (
     <>
     {!form ?
@@ -89,11 +91,15 @@ function Profile({handleSidebarContent}) {
         </div>
         <img src={user.profilePic} alt='profile picture' id='profilePicture'></img>
         <div id='profileUsernameBlock'>
-          <div id='profileUsernameMain'>
-            <p id='profileUsernameTitle'>Username</p>
-            <p id='profileUsername'>{user.username}</p>
-          </div>
+          <p id='profileUsernameTitle'>Username</p>
+          <p id='profileUsername'>{user.username}</p>
         </div>
+        {user.bio &&
+          <div id='profileUsernameBlock'>
+            <p id='profileUsernameTitle'>Bio</p>
+            <p id='profileUsername'>{user.bio}</p>
+          </div>
+        }
       </div>
     :
       <>
@@ -104,7 +110,8 @@ function Profile({handleSidebarContent}) {
           <h1 className='sidebarTitle'>Edit profile</h1>
         </div>
         <form onSubmit={onEditSubmit} id='profileEditForm' encType="multipart/form-data">
-          {profileInfo.profilePic !== null || !['', user.username].includes(profileInfo.username) ?
+          {profileInfo.profilePic !== null || !['', user.username].includes(profileInfo.username) ||
+          !['', user.bio].includes(profileInfo.bio) ?
             <button className='profileSubmit' onSubmit={onEditSubmit}>
               <img src={submitIcon} alt='submit' className='bigButtonImg'></img>
             </button>
@@ -140,6 +147,14 @@ function Profile({handleSidebarContent}) {
             placeholder='Username'
             name='username'
             value={profileInfo.username}
+          >
+          </input>
+          <input
+            className='profileInput' 
+            onChange={handleEditChange} 
+            placeholder='Bio'
+            name='bio'
+            value={profileInfo.bio}
           >
           </input>
         </form>

@@ -36,7 +36,7 @@ exports.getUsers = async (req, res) => {
 };
 
 exports.getUser = async (req, res) => {
-	const user = await User.findById(req.params.id, 'username profilePic').exec()
+	const user = await User.findById(req.params.id, 'username profilePic bio').exec()
 	res.status(200).json(user)
 };
 
@@ -50,6 +50,7 @@ exports.searchUsers = async (req, res) => {
 
 exports.updateUser = async (req, res) => {
     let url, user;
+    console.log(req.body)
     if (req.file){
         url = `${req.protocol}://${req.get('host')}/profiles/${req.file.filename}`
         user = await User.findByIdAndUpdate(req.params.id, {
@@ -59,6 +60,11 @@ exports.updateUser = async (req, res) => {
     if (req.body.username) {
         user = await User.findByIdAndUpdate(req.params.id, {
             username: req.body.username,
+        }, { new: true })
+    }
+    if (req.body.bio) {
+        user = await User.findByIdAndUpdate(req.params.id, {
+            bio: req.body.bio,
         }, { new: true })
     }
 

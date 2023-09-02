@@ -20,17 +20,12 @@
 #profileUsernameBlock{
   display: flex;
   justify-content: space-between;
+  flex-direction: column;
   padding: 20px;
   height: 100px;
   width: 100%;
   background-color: var(--main-color);
   color: white;
-}
-
-#profileUsernameMain{
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
 }
 
 #profileUsernameTitle{
