@@ -26,6 +26,11 @@ app.use(express.json());
 app.use('/chats', chatsRouter);
 app.use('/users', userRouter);
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.use((err, req, res, next) => {
+  const message = err.message
+  res.status(500).json({message})
+});
  
 const server = app.listen(port, () => {
   console.log(`Server is running on port: ${port}`);

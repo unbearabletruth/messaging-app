@@ -1,6 +1,6 @@
 import { useAuthContext } from '../../hooks/UseAuthContext';
 import '../../assets/styles/Profile.css'
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import addPhoto from '../../assets/images/add-photo.png'
 import editIcon from '../../assets/images/edit.svg'
 import backIcon from '../../assets/images/back-icon.svg'
@@ -14,6 +14,13 @@ function Profile({handleSidebarContent}) {
     username: '',
     profilePic: null
   })
+
+  useEffect(() => {
+    setProfileInfo({
+      ...profileInfo,
+      username: user.username
+    })
+  }, [])
 
   const onProfileImageChange = (e) => {
     setProfileInfo({
@@ -43,9 +50,11 @@ function Profile({handleSidebarContent}) {
     if (response.ok) {
       setForm(false)
       dispatch({type: 'set', payload: json})
+    } else {
+      console.log(json)
     }
   }
-  console.log(profileInfo)
+
   return (
     !form ?
       <div id='profileInfo'>

@@ -36,7 +36,7 @@ exports.getUsers = async (req, res) => {
 };
 
 exports.getUser = async (req, res) => {
-	const user = await User.findById(req.params.id).exec()
+	const user = await User.findById(req.params.id, 'username profilePic').exec()
 	res.status(200).json(user)
 };
 
@@ -49,20 +49,21 @@ exports.searchUsers = async (req, res) => {
 };
 
 exports.updateUser = async (req, res) => {
-    let url;
+    let url, user;
     if (req.file){
-      url = `${req.protocol}://${req.get('host')}/profiles/${req.file.filename}`
+        url = `${req.protocol}://${req.get('host')}/profiles/${req.file.filename}`
+        user = await User.findByIdAndUpdate(req.params.id, {
+            profilePic: url
+        }, { new: true })
     }
-    const user = await User.findByIdAndUpdate(req.params.id, {
-        username: req.body.username,
-        profilePic: url
-    }, { new: true })
+    if (req.body.username) {
+        user = await User.findByIdAndUpdate(req.params.id, {
+            username: req.body.username,
+        }, { new: true })
+    }
+
     if (user){
-        const updatedFileds = {
-            username: user.username,
-            profilePic: user.profilePic
-        }
-        return res.status(200).json(updatedFileds)
+        return res.status(200).json(user)
     }
     res.status(400).json({error: 'No such chat'})
 }
