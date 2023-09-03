@@ -1,7 +1,7 @@
 const express = require('express');
 const { loginUser, signupUser, getUsers, getUser, searchUsers, updateUser } = require('../controllers/user_controller');
 const router = express.Router();
-const { upload } = require('../utilities/uploadImage')
+const { upload } = require('../utilities/uploadProfileImg')
 
 
 router.post('/login', loginUser)

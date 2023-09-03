@@ -50,7 +50,6 @@ exports.searchUsers = async (req, res) => {
 
 exports.updateUser = async (req, res) => {
     let url, user;
-    console.log(req.body)
     if (req.file){
         url = `${req.protocol}://${req.get('host')}/profiles/${req.file.filename}`
         user = await User.findByIdAndUpdate(req.params.id, {

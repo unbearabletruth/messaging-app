@@ -6,11 +6,22 @@ exports.getMessages = async (req, res) => {
 };
 
 exports.createMessage = async (req, res) => {
-    const newMessage = new Message({
-        text: req.body.text,
-        author: req.body.author,
-        chat: req.body.chat,
-    })
+    let newMessage, url;
+    if (req.file) {
+        url = `${req.protocol}://${req.get('host')}/media/${req.file.filename}`
+        newMessage = new Message({
+            text: req.body.text,
+            author: req.body.author,
+            chat: req.body.chat,
+            media: url
+        })
+    } else {
+        newMessage = new Message({
+            text: req.body.text,
+            author: req.body.author,
+            chat: req.body.chat,
+        })
+    }
     try{
         const message = await newMessage.save()
         await message.populate('chat')
