@@ -11,6 +11,8 @@ function Chat({chat, handleChat, chats, updateChats, refetchChats}) {
   const [wrongFile, setWrongFile] = useState(false)
   const fileInputRef = useRef(null);
   const [uploadPopup, setUploadPopup] = useState(false)
+  const [mediaPopup, setMediaPopup] = useState(false)
+  const [bigImage, setBigImage] = useState(null)
   const [messages, setMessages] = useState([])
   const {user} = useAuthContext()
   const [newMessage, setNewMessage] = useState({
@@ -170,6 +172,21 @@ function Chat({chat, handleChat, chats, updateChats, refetchChats}) {
       }
     }
   }, [wrongFile]);
+
+  const showBigImage = (media) => {
+    setBigImage(media)
+    setMediaPopup(true)
+  }
+
+  const onMediaPopupClose = () => {
+    setMediaPopup(false)
+    setNewMessage({
+      ...newMessage,
+      text: '',
+      media: null
+    })
+    fileInputRef.current.value = null
+  }
   //chat && console.log(chat, chat.users.some(u => u._id === user.id), user.id)
   return (
     <div id='content'>
@@ -200,6 +217,9 @@ function Chat({chat, handleChat, chats, updateChats, refetchChats}) {
           {chat && messages && messages.toReversed().map(message => {
             return (
               <div className={message.author._id === user._id ? 'myMessage' : 'message'} key={message._id}>
+                {message.media &&
+                  <img src={message.media} alt='message media' className='messageMedia' onClick={() => showBigImage(message.media)}></img>
+                }
                 {chat.isGroupChat && message.author._id !== user._id &&
                   <span className='messageAuthor'>{message.author.username}</span>
                 }
@@ -241,7 +261,7 @@ function Chat({chat, handleChat, chats, updateChats, refetchChats}) {
         </div>
       }
       {uploadPopup &&
-        <div id="popupBackground">
+        <div className="popupBackground">
           <div className="popup" id="uploadMediaPopup">
             <button onClick={() => setUploadPopup(false)} className="closePopup">
               <img src={closeIcon} alt="x" className="closeIcon"></img>
@@ -268,6 +288,14 @@ function Chat({chat, handleChat, chats, updateChats, refetchChats}) {
               }
             </form>
           </div>
+        </div>
+      }
+      {mediaPopup &&
+        <div className="popupBackground media">
+          <button onClick={onMediaPopupClose} className="closePopup">
+              <img src={closeIcon} alt="x" className="closeIcon"></img>
+          </button>
+          <img src={bigImage} alt='media big' id='messageMediaBig'></img>
         </div>
       }
     </div>

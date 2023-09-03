@@ -47,7 +47,7 @@ io.on("connection", (socket) => {
   console.log('connected to socket.io')
 
   socket.on('setup', (user) => {
-    socket.join(user.id)
+    socket.join(user._id)
     socket.emit('connected')
     console.log('user connected', user.id)
   })

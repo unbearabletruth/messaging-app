@@ -73,10 +73,33 @@
   margin-right: auto;
 }
 
+.messageMedia{
+  width: 200px;
+  height: auto;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  border: 1px solid var(--light-border);
+}
+
+.messageMedia:hover{
+  cursor: pointer;
+}
+
+.popupBackground.media{
+  background: rgba(0, 0, 0, .85);
+}
+
+#messageMediaBig{
+  height: 80%;
+  width: auto;
+  border-radius: 25px;
+}
+
 .messageContent{
   display: flex;
   gap: 10px;
   align-items: flex-end;
+  justify-content: space-between;
 }
 
 .messageAuthor{
