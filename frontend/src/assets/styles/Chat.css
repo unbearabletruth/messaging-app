@@ -100,6 +100,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 10px;
   background-color: white;
   border-top: 1px solid var(--light-border);
 }
@@ -114,4 +115,32 @@
 
 #messageInput:focus{
   outline: none;
+}
+
+#uploadMediaPopup{
+  width: 400px;
+  min-height: 250px;
+}
+
+#uploadImagePreview{
+  border-radius: 10px;
+}
+
+#uploadForm{
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+#uploadCaptionInput{
+  width: 100%;
+  height: 35px;
+  border-radius: 5px;
+  padding: 0px 8px;
+  border: 1px solid var(--border)
+}
+
+#uploadCaptionInput:focus{
+  outline: none;
+  border: 2px solid var(--main-color);
 }

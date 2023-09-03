@@ -109,7 +109,7 @@
     background: rgba(34, 34, 34, 0.2);
 }
 
-#uploadInput{
+.uploadInput{
   display: none;
 }
 

@@ -50,7 +50,7 @@ function Signup({closePopup}) {
 
   return (
     <div id="popupBackground">
-      <div id="signupPopup">
+      <div className="popup" id="signupPopup">
         <button onClick={closePopup} className="closePopup">
           <img src={closeIcon} alt="x" className="closeIcon"></img>
         </button>

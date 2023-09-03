@@ -36,7 +36,8 @@ a:active {
   text-decoration: none;
 }
 
-.formButton{
+.formButton,
+.formButtonInactive{
   width: 100px;
   height: 40px;
   background-color: var(--main-darker);
@@ -45,6 +46,10 @@ a:active {
   border-radius: 5px;
   font-size: 1.1rem;
   transition: background-color 0.2s ease-out;
+}
+
+.formButtonInactive{
+  opacity: 0.3;
 }
 
 .formButton:hover{
@@ -97,6 +102,9 @@ a:active {
   border: 0px;
   background-color: white;
   transition: background-color 0.2s ease-out;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .mainButton:hover{
@@ -128,4 +136,14 @@ a:active {
   width: 20px;
   height: auto;
   filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(93deg) brightness(103%) contrast(103%);
+}
+
+.popup{
+  position: relative;
+  background-color: white;
+  padding: 50px 25px 25px 25px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  border-radius: 10px;
 }

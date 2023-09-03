@@ -65,7 +65,7 @@ function Profile({handleSidebarContent}) {
   }
 
   useEffect(() => {
-    if (wrongFile === true){
+    if (wrongFile === true) {
       const timeId = setTimeout(() => {
           setWrongFile(false)
         }, 7000)
@@ -75,7 +75,7 @@ function Profile({handleSidebarContent}) {
       }
     }
   }, [wrongFile]);
-  console.log(profileInfo)
+
   return (
     <>
     {!form ?
@@ -131,7 +131,7 @@ function Profile({handleSidebarContent}) {
               <div className='addImageWrapper'>
                 <input 
                   type="file" 
-                  id='uploadInput' 
+                  className='uploadInput' 
                   onChange={onMediaChange} 
                   accept='.gif,.jpg,.jpeg,.png'
                   ref={fileInputRef} 

@@ -42,14 +42,7 @@
 }
 
 #newGroupPopup{
-  position: relative;
   width: 350px;
-  background-color: white;
-  padding: 50px 20px 20px 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  border-radius: 10px;
 }
 
 #newGroupForm{
