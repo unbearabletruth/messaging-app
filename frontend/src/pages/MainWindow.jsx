@@ -11,12 +11,12 @@ function MainWindow() {
   const [chats, setChats] = useState(null)
   const [currentChat, setCurrentChat] = useState(null)
   const [refetch, setRefetch] = useState(false)
+  const [onlineUsers, setOnlineUsers] = useState([])
 
   useEffect(() => {
     const fetchUser = async () => {
       const response = await fetch(`http://localhost:3000/users/${user._id}`)
       const json = await response.json()
-      console.log(json)
       if (response.ok) {
         dispatch({type: 'set', payload: json})
       }
@@ -40,7 +40,28 @@ function MainWindow() {
 
   useEffect(() => {
     socket.emit('setup', user)
+    socket.on('online', (users) => {
+      setOnlineUsers(users)
+    })
   }, [])
+
+  useEffect(() => {
+    const handleOnlineStatus = async () => {
+      if (document.visibilityState === 'visible') {
+        socket.emit("online", user);
+        socket.on("online", (users) => {
+          setOnlineUsers(users)
+        });
+      } else {
+        socket.emit("offline", user)  
+      }
+    };
+
+    window.addEventListener("visibilitychange", handleOnlineStatus);
+    return () => {
+        window.removeEventListener("visibilitychange", handleOnlineStatus);
+    };  
+  }, []);
 
   const updateChats = (chats) => {
     setChats(chats)

@@ -43,14 +43,29 @@ const io = require('socket.io')(server, {
   pingTimeout: 60000
 })
 
+let users = []
+
 io.on("connection", (socket) => {
   console.log('connected to socket.io')
 
   socket.on('setup', (user) => {
     socket.join(user._id)
-    socket.emit('connected')
-    console.log('user connected', user.id)
+    console.log('user connected', user.username)
   })
+
+  socket.on('online', (user) => {
+    if (!users.some((u) => u === user._id)) {
+      users.push(user._id);
+    }
+    console.log("online", user.username);
+    io.emit('online', users)
+  })
+
+  socket.on("offline", (user) => {
+    users = users.filter((u) => u !== user._id);
+    console.log("offline", user.username);
+    io.emit("online", users);
+  });
 
   socket.on('joined chat', (chat) => {
     socket.join(chat)
@@ -66,7 +81,7 @@ io.on("connection", (socket) => {
   })
 
   socket.off('setup', () => {
-    console.log('user disconnected')
+    console.log('user disconnected', user.username)
     socket.leave(user._id)
   })
 })
