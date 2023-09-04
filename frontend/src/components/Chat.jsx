@@ -1,26 +1,16 @@
 import '../assets/styles/Chat.css'
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import moment from 'moment';
 import { useAuthContext } from '../hooks/UseAuthContext';
 import { socket } from '../socket';
-import attachIcon from '../assets/images/attach.svg'
 import closeIcon from '../assets/images/close-icon.svg'
+import UploadForm from './NewMessage';
 
 function Chat({chat, handleChat, chats, updateChats, refetchChats}) {
-  const isImage = ['gif','jpg','jpeg','png'];
-  const [wrongFile, setWrongFile] = useState(false)
-  const fileInputRef = useRef(null);
-  const [uploadPopup, setUploadPopup] = useState(false)
   const [mediaPopup, setMediaPopup] = useState(false)
   const [bigImage, setBigImage] = useState(null)
   const [messages, setMessages] = useState([])
   const {user} = useAuthContext()
-  const [newMessage, setNewMessage] = useState({
-    author: '',
-    chat: '',
-    text: '',
-    media: null
-  })
 
   useEffect(() => {
     socket.on('receive message', (newMessage) => {
@@ -31,16 +21,6 @@ function Chat({chat, handleChat, chats, updateChats, refetchChats}) {
       }
     })
     return () => socket.off('receive message')
-  }, [chat])
-
-  useEffect(() => {
-    if (chat) {
-      setNewMessage({
-        author: user._id,
-        chat: chat._id,
-        text: ''
-      })
-    }
   }, [chat])
 
   useEffect(() => {
@@ -56,57 +36,6 @@ function Chat({chat, handleChat, chats, updateChats, refetchChats}) {
       fetchMessages()
     }
   }, [chat])
-
-  const submitMessage = async (e) => {
-    e.preventDefault()
-    if (newMessage.text) {
-      const formData = new FormData();
-      formData.append('media', newMessage.media);
-      formData.append('text', newMessage.text);
-      formData.append('chat', newMessage.chat);
-      formData.append('author', newMessage.author);
-  
-      const response = await fetch(`http://localhost:3000/chats/${chat._id}/messages`, {
-        method: 'POST',
-        body: formData
-      })
-      const json = await response.json()
-      if (response.ok) {
-        setNewMessage({
-          ...newMessage,
-          text: ''
-        })
-        updateChatLatestMessage(json)
-        setMessages(prevState => [...prevState, json])
-        socket.emit('new message', json, chat)
-        if (uploadPopup) {setUploadPopup(false)}
-      }
-    }
-  }
-
-  const updateChatLatestMessage = async (message) => {
-    const latestMessage = {latestMessage: message._id}
-    const response = await fetch(`http://localhost:3000/chats/${chat._id}`, {
-      method: 'PATCH',
-      body: JSON.stringify(latestMessage),
-      headers: {
-        'Content-type': 'application/json'
-      }
-    })
-    const json = await response.json()
-    if (response.ok) {
-      const setChats = chats.map(chat => {
-        if (chat._id === json._id) {
-          return {
-            ...chat, 
-            latestMessage: json.latestMessage
-          };
-        }
-        return chat;
-      })
-      updateChats(setChats);
-    }
-  }
 
   const joinGroupChat = async () => {
     const userId = {user: user._id}
@@ -140,54 +69,15 @@ function Chat({chat, handleChat, chats, updateChats, refetchChats}) {
     }
   }
   
-  const handleMessage = (e) => {
-    setNewMessage({
-      ...newMessage,
-      text: e.target.value
-    })
-  }
-
-  const onMediaChange = (e) => {
-    if (isImage.some(type => e.target.files[0].type.includes(type))) {
-        setNewMessage({
-          ...newMessage,
-          media: e.target.files[0]
-        })
-        setUploadPopup(true)  
-      }
-    else {
-      fileInputRef.current.value = null
-      setWrongFile(true)
-    }
-  }
-
-  useEffect(() => {
-    if (wrongFile === true) {
-      const timeId = setTimeout(() => {
-          setWrongFile(false)
-        }, 7000)
-    
-      return () => {
-        clearTimeout(timeId)
-      }
-    }
-  }, [wrongFile]);
-
   const showBigImage = (media) => {
     setBigImage(media)
     setMediaPopup(true)
   }
 
-  const onMediaPopupClose = () => {
-    setMediaPopup(false)
-    setNewMessage({
-      ...newMessage,
-      text: '',
-      media: null
-    })
-    fileInputRef.current.value = null
+  const addMessage = (newMessage) => {
+    setMessages(prevState => [...prevState, newMessage])
   }
-  //chat && console.log(chat, chat.users.some(u => u._id === user.id), user.id)
+
   return (
     <div id='content'>
       {chat ?
@@ -234,65 +124,14 @@ function Chat({chat, handleChat, chats, updateChats, refetchChats}) {
         {chat && !chat.users.some(u => u._id === user._id) &&
           <button className='joinChatButton' onClick={joinGroupChat}>Join group</button>
         }
-        <form onSubmit={submitMessage} id='messageForm'>
-          <input type='text' onChange={handleMessage} value={newMessage.text} id='messageInput' placeholder='Message'></input>
-          <label>
-            <div className='mainButton'>
-              <input 
-                type="file" 
-                className='uploadInput' 
-                onChange={onMediaChange} 
-                accept='.gif,.jpg,.jpeg,.png'
-                ref={fileInputRef} 
-              >
-              </input>
-              <img src={attachIcon} alt='attach' className="mainButtonImg"></img>
-            </div>
-          </label>
-        </form>
+        <UploadForm chat={chat} addMessage={addMessage} chats={chats} updateChats={updateChats}/>
       </>
       :
       <div className="homeField"></div>
       }
-      {wrongFile &&
-        <div id="wrongFileMessage">
-          <p className="wrongFileLine">Please, check that your file is:</p>
-          <p className="wrongFileLine">Image: gif, jpg, jpeg, png</p>
-        </div>
-      }
-      {uploadPopup &&
-        <div className="popupBackground">
-          <div className="popup" id="uploadMediaPopup">
-            <button onClick={() => setUploadPopup(false)} className="closePopup">
-              <img src={closeIcon} alt="x" className="closeIcon"></img>
-            </button>
-            <img 
-              src={URL.createObjectURL(newMessage.media)}
-              alt="upload preview" 
-              id='uploadImagePreview'
-            >
-            </img>
-            <form id="uploadForm" onSubmit={submitMessage} encType="multipart/form-data">
-              <input 
-                id="uploadCaptionInput" 
-                name="text" 
-                onChange={handleMessage}
-                aria-label="message text"
-                placeholder="Text"
-              >
-              </input>
-              {newMessage.text ?
-                <button className="formButton">Send</button>
-                :
-                <button type='button' className="formButtonInactive">Send</button>
-              }
-            </form>
-          </div>
-        </div>
-      }
       {mediaPopup &&
         <div className="popupBackground media">
-          <button onClick={onMediaPopupClose} className="closePopup">
+          <button onClick={() => setMediaPopup(false)} className="closePopup">
               <img src={closeIcon} alt="x" className="closeIcon"></img>
           </button>
           <img src={bigImage} alt='media big' id='messageMediaBig'></img>

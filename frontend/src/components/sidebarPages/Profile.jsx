@@ -161,7 +161,7 @@ function Profile({handleSidebarContent}) {
       </>
     }
     {wrongFile &&
-      <div id="wrongFileMessage">
+      <div className="wrongFileMessage" id='wfmProfile'>
         <p className="wrongFileLine">Please, check that your file is:</p>
         <p className="wrongFileLine">Image: gif, jpg, jpeg, png</p>
       </div>
