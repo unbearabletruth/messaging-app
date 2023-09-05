@@ -7,7 +7,7 @@ import SearchResults from "./sidebarPages/SearchResults";
 import Profile from "./sidebarPages/Profile";
 import { useAuthContext } from '../hooks/UseAuthContext';
 
-function Sidebar({chats, handleChat, updateChats})  {
+function Sidebar({chats, handleChat, updateChats, onlineUsers})  {
   const { user } = useAuthContext()
   const [users, setUsers] = useState(null)
   const [sidebarContent, setSidebarContent] = useState('')
@@ -94,6 +94,7 @@ function Sidebar({chats, handleChat, updateChats})  {
           chats={chats} 
           handleChat={handleChat} 
           handleSidebarContent={handleSidebarContent}
+          onlineUsers={onlineUsers}
         />
       }
       {sidebarContent === 'write' &&
@@ -115,6 +116,7 @@ function Sidebar({chats, handleChat, updateChats})  {
           handleSidebarContent={handleSidebarContent}
           searchUserResults={searchUserResults}
           searchChatResults={searchChatResults}
+          onlineUsers={onlineUsers}
         />
       }
       {sidebarContent === 'profile' &&

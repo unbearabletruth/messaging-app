@@ -1,4 +1,4 @@
-.chatHeader{
+#chatHeader{
   height: 70px;
   width: 100%;
   display: flex;
@@ -9,15 +9,31 @@
   border-bottom: 1px solid var(--light-border);
 }
 
-.chatHeaderUser{
+#chatHeaderUser{
   display: flex;
   gap: 15px;
 }
 
-.chatHeaderPic{
+#chatHeaderPic{
   width: 45px;
   height: 45px;
   border-radius: 50%;
+}
+
+#chatUserInfo{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+#chatUsername{
+  font-weight: bold;
+  color: var(--main-font-color);
+}
+
+#chatUserStatus{
+  color: var(--main-color);
+  font-size: 0.9rem;
 }
 
 .chatField{

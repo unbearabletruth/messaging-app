@@ -40,6 +40,7 @@ function MainWindow() {
 
   useEffect(() => {
     socket.emit('setup', user)
+    socket.emit("online", user);
     socket.on('online', (users) => {
       setOnlineUsers(users)
     })
@@ -80,14 +81,16 @@ function MainWindow() {
       <Sidebar
         chats={chats}
         handleChat={handleChat}
-        updateChats={updateChats} 
+        updateChats={updateChats}
+        onlineUsers={onlineUsers} 
       />
       <Chat 
         chat={currentChat}
         handleChat={handleChat}
         chats={chats} 
         updateChats={updateChats}
-        refetchChats={refetchChats} 
+        refetchChats={refetchChats}
+        onlineUsers={onlineUsers} 
       />
     </>
   )

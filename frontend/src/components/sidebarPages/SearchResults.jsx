@@ -1,6 +1,6 @@
 import moment from 'moment';
 
-function SearchResults({searchUserResults, searchChatResults}) {
+function SearchResults({searchUserResults, searchChatResults, onlineUsers}) {
 
   return (
     <>
@@ -10,7 +10,12 @@ function SearchResults({searchUserResults, searchChatResults}) {
         {searchUserResults.map(user => {
           return (
             <div className="sidebarUser" key={user._id} onClick={(e) => newChat(e, user._id)}>
-              <img src={user.profilePic} alt="profile picture" className="sidebarPic"></img>
+              <div className='sidebarPicWrapper'>
+                <img src={user.profilePic} alt="profile picture" className="sidebarPic"></img>
+                {onlineUsers.includes(user._id) && 
+                  <div className='sidebarUserStatus'></div>
+                }
+              </div>
               <div>
                 <p className="sidebarName">{user.username}</p>
               </div>

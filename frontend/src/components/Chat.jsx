@@ -6,7 +6,7 @@ import { socket } from '../socket';
 import closeIcon from '../assets/images/close-icon.svg'
 import UploadForm from './NewMessage';
 
-function Chat({chat, handleChat, chats, updateChats, refetchChats}) {
+function Chat({chat, handleChat, chats, updateChats, refetchChats, onlineUsers}) {
   const [mediaPopup, setMediaPopup] = useState(false)
   const [bigImage, setBigImage] = useState(null)
   const [messages, setMessages] = useState([])
@@ -82,14 +82,17 @@ function Chat({chat, handleChat, chats, updateChats, refetchChats}) {
     <div id='content'>
       {chat ?
       <>
-        <div className="chatHeader">
+        <div id="chatHeader">
           {chat && !chat.isGroupChat && chat.users.map(u => {
               return (
                 u.username !== user.username &&
-                  <div className='chatHeaderUser' key={u._id}>
-                    <img src={u.profilePic} alt="profile picture" className="chatHeaderPic"></img>
-                    <div>
-                      <p className="sidebarName">{u.username}</p>
+                  <div id='chatHeaderUser' key={u._id}>
+                    <img src={u.profilePic} alt="profile picture" id="chatHeaderPic"></img>
+                    <div id='chatUserInfo'>
+                      <p id="chatUsername">{u.username}</p>
+                      {onlineUsers.includes(u._id) && 
+                        <p id='chatUserStatus'>online</p>
+                      }
                     </div>
                   </div>
               )}

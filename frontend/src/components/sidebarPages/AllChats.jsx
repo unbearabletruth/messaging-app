@@ -3,7 +3,7 @@ import { useAuthContext } from '../../hooks/UseAuthContext';
 import { useState } from 'react';
 import moment from 'moment';
 
-function AllChats({chats, handleChat, handleSidebarContent}) {
+function AllChats({chats, handleChat, handleSidebarContent, onlineUsers}) {
   const { user } = useAuthContext()
   const [selected, setSelected] = useState(null)
 
@@ -44,7 +44,12 @@ function AllChats({chats, handleChat, handleSidebarContent}) {
                   className={`sidebarChat ${selected === chat._id ? 'selected' : ''}`}
                 >
                   <div className="sidebarChatContent">
-                    <img src={u.profilePic} alt="profile picture" className="sidebarPic"></img>
+                    <div className='sidebarPicWrapper'>
+                      <img src={u.profilePic} alt="profile picture" className="sidebarPic"></img>
+                      {onlineUsers.includes(u._id) && 
+                        <div className='sidebarUserStatus'></div>
+                      }
+                    </div>
                     <div className="sidebarChatMain">
                       <p className={`sidebarChatUser ${selected === chat._id ? 'selected' : ''}`}>{u.username}</p>
                       {chat.latestMessage ?
