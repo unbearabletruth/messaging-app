@@ -77,7 +77,7 @@ function Chat({chat, handleChat, chats, updateChats, refetchChats, onlineUsers})
   const addMessage = (newMessage) => {
     setMessages(prevState => [...prevState, newMessage])
   }
-
+  console.log(chat)
   return (
     <div id='content'>
       {chat ?
@@ -90,8 +90,10 @@ function Chat({chat, handleChat, chats, updateChats, refetchChats, onlineUsers})
                     <img src={u.profilePic} alt="profile picture" id="chatHeaderPic"></img>
                     <div id='chatUserInfo'>
                       <p id="chatUsername">{u.username}</p>
-                      {onlineUsers.includes(u._id) && 
+                      {onlineUsers.includes(u._id) ? 
                         <p id='chatUserStatus'>online</p>
+                        : u.lastSeen &&
+                        <p id='chatLastSeen'>last seen {moment(u.lastSeen).fromNow()}</p>
                       }
                     </div>
                   </div>

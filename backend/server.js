@@ -5,6 +5,7 @@ const mongoose = require("mongoose");
 const chatsRouter = require('./routes/chat');
 const userRouter = require('./routes/user');
 const path = require('path');
+const User = require("./models/user");
 
 const port = process.env.PORT || 5000;
 const app = express();
@@ -61,9 +62,12 @@ io.on("connection", (socket) => {
     io.emit('online', users)
   })
 
-  socket.on("offline", (user) => {
+  socket.on("offline", async (user) => {
     users = users.filter((u) => u !== user._id);
     console.log("offline", user.username);
+    await User.findByIdAndUpdate(user._id, {
+      lastSeen: Date.now()
+    }, { new: true })
     io.emit("online", users);
   });
 

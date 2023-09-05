@@ -11,7 +11,8 @@ const UserSchema = new Schema({
     required: true,
     default: "https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg",
   },
-  bio: { type: String }
+  bio: { type: String },
+  lastSeen: { type: Date }
 });
 
 UserSchema.statics.signup = async function (username, password) {

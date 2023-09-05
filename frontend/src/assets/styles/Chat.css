@@ -36,6 +36,11 @@
   font-size: 0.9rem;
 }
 
+#chatLastSeen{
+  color: var(--light-font-color);
+  font-size: 0.9rem;
+}
+
 .chatField{
   display: flex;
   flex-direction: column-reverse;
