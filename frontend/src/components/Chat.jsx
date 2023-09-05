@@ -4,6 +4,7 @@ import moment from 'moment';
 import { useAuthContext } from '../hooks/UseAuthContext';
 import { socket } from '../socket';
 import closeIcon from '../assets/images/close-icon.svg'
+import readIcon from '../assets/images/read.svg'
 import UploadForm from './NewMessage';
 
 function Chat({chat, handleChat, chats, updateChats, refetchChats, onlineUsers}) {
@@ -16,6 +17,7 @@ function Chat({chat, handleChat, chats, updateChats, refetchChats, onlineUsers})
     socket.on('receive message', (newMessage) => {
       if (chat && chat._id === newMessage.chat._id) {
         setMessages(prevState => [...prevState, newMessage])
+        updateUserTimestampInChat()
       } else {
         refetchChats()
       }
@@ -23,13 +25,39 @@ function Chat({chat, handleChat, chats, updateChats, refetchChats, onlineUsers})
     return () => socket.off('receive message')
   }, [chat])
 
+  const updateUserTimestampInChat = async () => {
+    console.log('updating ts')
+    const lastSeenInChat = {lastSeenInChat: {id: user._id, timestamp: Date.now()}}
+    const response = await fetch(`http://localhost:3000/chats/${chat._id}/timestamp`, {
+      method: 'PATCH',
+      body: JSON.stringify(lastSeenInChat),
+      headers: {
+        'Content-type': 'application/json'
+      }
+    })
+    const json = await response.json()
+    if (response.ok) {
+      socket.emit('joined chat', chat._id)
+      const setChats = chats.map(chat => {
+        if (chat._id === json._id) {
+          return {
+            ...chat, 
+            lastSeenInChat: json.lastSeenInChat
+          };
+        }
+        return chat;
+      })
+      updateChats(setChats);
+    }
+  }
+  
   useEffect(() => {
     const fetchMessages = async () => {
       const response = await fetch(`http://localhost:3000/chats/${chat._id}/messages`)
       const json = await response.json()
       if (response.ok) {
         setMessages(json)
-        socket.emit('joined chat', chat._id)
+        updateUserTimestampInChat()
       }
     }
     if (chat) {
@@ -77,7 +105,7 @@ function Chat({chat, handleChat, chats, updateChats, refetchChats, onlineUsers})
   const addMessage = (newMessage) => {
     setMessages(prevState => [...prevState, newMessage])
   }
-  console.log(chat)
+
   return (
     <div id='content'>
       {chat ?
@@ -120,7 +148,16 @@ function Chat({chat, handleChat, chats, updateChats, refetchChats, onlineUsers})
                 }
                 <div className='messageContent'>
                   <span className='messageText'>{message.text}</span>
-                  <span className='messageTime'>{moment(message.createdAt).format('hh:mm')}</span>
+                  <div className='messageSideInfo'>
+                    <span className='messageTime'>{moment(message.createdAt).format('hh:mm')}</span>
+                    {chat.lastSeenInChat.some(lastSeen => lastSeen.id !== user._id &&
+                    lastSeen.timestamp < message.createdAt) || 
+                    message.author._id !== user._id ?
+                      null
+                      :
+                      <img src={readIcon} alt='read' className='messageRead'></img>   
+                    }
+                  </div>
                 </div>
               </div>
             )

@@ -66,6 +66,25 @@ exports.removeFromChat = async (req, res) => {
     res.status(400).json({error: 'No such chat'})
 }
 
+exports.updateUserTimestamp = async (req, res) => {
+    const newTimestamp = req.body.lastSeenInChat
+    let chat;
+    chat = await Chat.findByIdAndUpdate(req.params.id, { 
+        $pull: { 'lastSeenInChat': {'id': newTimestamp.id }}
+    }, { new: true }
+    )
+
+    chat = await Chat.findByIdAndUpdate(req.params.id, { 
+        $push: { lastSeenInChat: newTimestamp }
+    }, { new: true }
+    ).populate('latestMessage').populate('users', 'username profilePic')
+
+    if (chat){
+        return res.status(200).json(chat)
+    }
+    res.status(400).json({error: 'No such chat'})
+}
+
 exports.deleteChat = async (req, res) => {
     const chat = await Chat.findByIdAndDelete(req.params.id)
     if (chat){

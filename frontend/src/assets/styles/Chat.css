@@ -118,7 +118,7 @@
 
 .messageContent{
   display: flex;
-  gap: 10px;
+  gap: 12px;
   align-items: flex-end;
   justify-content: space-between;
 }
@@ -133,9 +133,21 @@
   color: var(--main-font-color);
 }
 
+.messageSideInfo{
+  display: flex;
+  gap: 4px;
+  align-items: flex-end;
+}
+
 .messageTime{
   color: var(--light-font-color);
   font-size: 0.7rem;
+}
+
+.messageRead{
+  height: 8px;
+  width: auto;
+  filter: invert(58%) sepia(96%) saturate(2561%) hue-rotate(166deg) brightness(92%) contrast(98%);
 }
 
 #messageForm{
