@@ -6,6 +6,7 @@ const chatsRouter = require('./routes/chat');
 const userRouter = require('./routes/user');
 const path = require('path');
 const User = require("./models/user");
+const { timeStamp } = require("console");
 
 const port = process.env.PORT || 5000;
 const app = express();
@@ -80,6 +81,15 @@ io.on("connection", (socket) => {
     chat.users.forEach(user => {
       if (user._id !== message.author._id) {
         socket.in(user._id).emit('receive message', message)
+      }
+    });
+  })
+
+  socket.on('new timestamp', (chat, timestamp) => {
+    console.log(chat)
+    chat.users.forEach(user => {
+      if (user._id !== timestamp.id) {
+        socket.in(user._id).emit('receive timestamp', chat)
       }
     });
   })

@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useAuthContext } from '../hooks/UseAuthContext';
 import { socket } from '../socket';
 
-function UploadForm({chat, addMessage, chats, updateChats}) {
+function NewMessage({chat, addMessage, chats, updateChats}) {
   const {user} = useAuthContext()
   const isImage = ['gif','jpg','jpeg','png'];
   const [wrongFile, setWrongFile] = useState(false)
@@ -187,4 +187,4 @@ function UploadForm({chat, addMessage, chats, updateChats}) {
   )
 }
 
-export default UploadForm
+export default NewMessage

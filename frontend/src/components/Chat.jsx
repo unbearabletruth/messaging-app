@@ -5,7 +5,7 @@ import { useAuthContext } from '../hooks/UseAuthContext';
 import { socket } from '../socket';
 import closeIcon from '../assets/images/close-icon.svg'
 import readIcon from '../assets/images/read.svg'
-import UploadForm from './NewMessage';
+import NewMessage from './NewMessage';
 
 function Chat({chat, handleChat, chats, updateChats, refetchChats, onlineUsers}) {
   const [mediaPopup, setMediaPopup] = useState(false)
@@ -17,13 +17,32 @@ function Chat({chat, handleChat, chats, updateChats, refetchChats, onlineUsers})
     socket.on('receive message', (newMessage) => {
       if (chat && chat._id === newMessage.chat._id) {
         setMessages(prevState => [...prevState, newMessage])
-        updateUserTimestampInChat()
+        if (onlineUsers.includes(user._id)){
+          updateUserTimestampInChat()
+        }
       } else {
         refetchChats()
       }
     })
     return () => socket.off('receive message')
   }, [chat])
+
+  useEffect(() => {
+    socket.on('receive timestamp', (updatedChat) => {
+      console.log(chat._id, updatedChat._id)
+      if (chat && chat._id === updatedChat._id) {
+        console.log('received chat with new ts')
+        handleChat(updatedChat)
+      }
+    })
+    return () => socket.off('receive timestamp')
+  }, [chat])
+
+  useEffect(() => {
+    if (onlineUsers.includes(user._id)) {
+      updateUserTimestampInChat()
+    }
+  }, [onlineUsers])
 
   const updateUserTimestampInChat = async () => {
     console.log('updating ts')
@@ -38,6 +57,7 @@ function Chat({chat, handleChat, chats, updateChats, refetchChats, onlineUsers})
     const json = await response.json()
     if (response.ok) {
       socket.emit('joined chat', chat._id)
+      socket.emit('new timestamp', json, lastSeenInChat)
       const setChats = chats.map(chat => {
         if (chat._id === json._id) {
           return {
@@ -57,7 +77,6 @@ function Chat({chat, handleChat, chats, updateChats, refetchChats, onlineUsers})
       const json = await response.json()
       if (response.ok) {
         setMessages(json)
-        updateUserTimestampInChat()
       }
     }
     if (chat) {
@@ -166,7 +185,7 @@ function Chat({chat, handleChat, chats, updateChats, refetchChats, onlineUsers})
         {chat && !chat.users.some(u => u._id === user._id) &&
           <button className='joinChatButton' onClick={joinGroupChat}>Join group</button>
         }
-        <UploadForm chat={chat} addMessage={addMessage} chats={chats} updateChats={updateChats}/>
+        <NewMessage chat={chat} addMessage={addMessage} chats={chats} updateChats={updateChats}/>
       </>
       :
       <div className="homeField"></div>
