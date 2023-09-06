@@ -144,9 +144,15 @@
   font-size: 0.7rem;
 }
 
+.messageSent{
+  height: auto;
+  width: 15px;
+  filter: invert(10%) sepia(0%) saturate(458%) hue-rotate(135deg) brightness(93%) contrast(87%);
+}
+
 .messageRead{
-  height: 8px;
-  width: auto;
+  height: auto;
+  width: 15px;
   filter: invert(58%) sepia(96%) saturate(2561%) hue-rotate(166deg) brightness(92%) contrast(98%);
 }
 

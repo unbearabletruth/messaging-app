@@ -60,7 +60,6 @@ function Sidebar({chats, handleChat, updateChats, onlineUsers})  {
 
   return (
     <div id="sidebar">
-      
         {sidebarContent === 'write' || sidebarContent === 'search' ?
           <div id="sidebarHeader">
             <button onClick={() => handleSidebarContent('')} className="mainButton">

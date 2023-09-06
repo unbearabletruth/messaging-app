@@ -5,6 +5,7 @@ import { useAuthContext } from '../hooks/UseAuthContext';
 import { socket } from '../socket';
 import closeIcon from '../assets/images/close-icon.svg'
 import readIcon from '../assets/images/read.svg'
+import sentIcon from '../assets/images/sent-check.svg'
 import NewMessage from './NewMessage';
 
 function Chat({chat, handleChat, chats, updateChats, refetchChats, onlineUsers}) {
@@ -169,12 +170,14 @@ function Chat({chat, handleChat, chats, updateChats, refetchChats, onlineUsers})
                   <span className='messageText'>{message.text}</span>
                   <div className='messageSideInfo'>
                     <span className='messageTime'>{moment(message.createdAt).format('hh:mm')}</span>
-                    {chat.lastSeenInChat.some(lastSeen => lastSeen.id !== user._id &&
-                    lastSeen.timestamp < message.createdAt) || 
-                    message.author._id !== user._id ?
-                      null
+                    {!chat.lastSeenInChat.some(lastSeen => lastSeen.id !== user._id &&
+                    lastSeen.timestamp < message.createdAt) && 
+                    message.author._id === user._id ?
+                      <img src={readIcon} alt='read' className='messageRead'></img> 
+                      : message.author._id === user._id ?
+                      <img src={sentIcon} alt='sent' className='messageSent'></img>
                       :
-                      <img src={readIcon} alt='read' className='messageRead'></img>   
+                      null
                     }
                   </div>
                 </div>
