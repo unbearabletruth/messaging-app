@@ -6,6 +6,7 @@ import { socket } from '../socket';
 import closeIcon from '../assets/images/close-icon.svg'
 import readIcon from '../assets/images/read.svg'
 import sentIcon from '../assets/images/sent-check.svg'
+import ChatHeader from './ChatHeader';
 import NewMessage from './NewMessage';
 
 function Chat({chat, handleChat, chats, updateChats, refetchChats, onlineUsers}) {
@@ -101,22 +102,6 @@ function Chat({chat, handleChat, chats, updateChats, refetchChats, onlineUsers})
       handleChat(json)
     }
   }
-
-  const leaveGroupChat = async () => {
-    const userId = {user: user._id}
-    const response = await fetch(`http://localhost:3000/chats/${chat._id}/remove`, {
-      method: 'PATCH',
-      body: JSON.stringify(userId),
-      headers: {
-        'Content-type': 'application/json'
-      }
-    })
-    const json = await response.json()
-    if (response.ok) {
-      updateChats(chats.filter(c => c._id !== chat._id))
-      handleChat(json)
-    }
-  }
   
   const showBigImage = (media) => {
     setBigImage(media)
@@ -131,32 +116,7 @@ function Chat({chat, handleChat, chats, updateChats, refetchChats, onlineUsers})
     <div id='content'>
       {chat ?
       <>
-        <div id="chatHeader">
-          {chat && !chat.isGroupChat && chat.users.map(u => {
-              return (
-                u.username !== user.username &&
-                  <div id='chatHeaderUser' key={u._id}>
-                    <img src={u.profilePic} alt="profile picture" id="chatHeaderPic"></img>
-                    <div id='chatUserInfo'>
-                      <p id="chatUsername">{u.username}</p>
-                      {onlineUsers.includes(u._id) ? 
-                        <p id='chatUserStatus'>online</p>
-                        : u.lastSeen &&
-                        <p id='chatLastSeen'>last seen {moment(u.lastSeen).fromNow()}</p>
-                      }
-                    </div>
-                  </div>
-              )}
-            )}
-          {chat && chat.isGroupChat && 
-            <>
-              <p> Welcome to {chat.name}!</p>
-              {chat.users.some(u => u._id === user._id) &&
-                <button id='leaveChat' onClick={leaveGroupChat}>Leave group</button>
-              }
-            </>
-          }
-        </div>
+        <ChatHeader chat={chat} chats={chats} onlineUsers={onlineUsers} updateChats={updateChats} handleChat={handleChat}/>
         <div className="chatField">
           {chat && messages && messages.toReversed().map(message => {
             return (

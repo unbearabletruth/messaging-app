@@ -118,6 +118,11 @@ a:active {
   filter: invert(24%) sepia(0%) saturate(5%) hue-rotate(205deg) brightness(98%) contrast(95%);
 }
 
+.mainButtonImg.dotsMenu{
+  width: 4px;
+  height: auto;
+}
+
 .bigButton{
   width: 55px;
   height: 55px;
