@@ -6,6 +6,7 @@ import AllChats from "./sidebarPages/AllChats";
 import SearchResults from "./sidebarPages/SearchResults";
 import Profile from "./sidebarPages/Profile";
 import { useAuthContext } from '../hooks/UseAuthContext';
+import moment from 'moment';
 
 function Sidebar({chats, handleChat, updateChats, onlineUsers})  {
   const { user } = useAuthContext()
@@ -58,6 +59,17 @@ function Sidebar({chats, handleChat, updateChats, onlineUsers})  {
     setSearchChatResults(results)
   }
 
+  const openChat = (e, userId) => {
+    for (let chat of chats) {
+      const chatExists = chat.users.find(u => u._id === userId)
+      if (chatExists && !chat.isGroupChat) {
+        handleChat(chat)
+        return
+      }
+    };
+    newChat(e, userId)
+  }
+
   return (
     <div id="sidebar">
         {sidebarContent === 'write' || sidebarContent === 'search' ?
@@ -98,12 +110,23 @@ function Sidebar({chats, handleChat, updateChats, onlineUsers})  {
       }
       {sidebarContent === 'write' &&
         <>
-          {users && users.map(user => {
+          {users && users.map(u => {
             return (
-              <div className="sidebarUser" key={user._id} onClick={(e) => newChat(e, user._id)}>
-                <img src={user.profilePic} alt="profile picture" className="sidebarPic"></img>
-                <div>
-                  <p className="sidebarName">{user.username}</p>
+              u._id !== user._id &&
+              <div className="sidebarUser" key={u._id} onClick={(e) => openChat(e, u._id)}>
+                <div className='sidebarPicWrapper'>
+                  <img src={u.profilePic} alt="profile picture" className="sidebarPic"></img>
+                  {onlineUsers.includes(u._id) && 
+                    <div className='sidebarUserStatus'></div>
+                  }
+                </div>
+                <div className="writeUserInfo">
+                  <p className="writeName">{u.username}</p>
+                  {onlineUsers.includes(u._id) ? 
+                    <p className='writeUserStatus'>online</p>
+                    : u.lastSeen &&
+                    <p className='writeLastSeen'>last seen {moment(u.lastSeen).fromNow()}</p>
+                  }
                 </div>
               </div>
             )
@@ -116,6 +139,8 @@ function Sidebar({chats, handleChat, updateChats, onlineUsers})  {
           searchUserResults={searchUserResults}
           searchChatResults={searchChatResults}
           onlineUsers={onlineUsers}
+          openChat={openChat}
+          handleChat={handleChat}
         />
       }
       {sidebarContent === 'profile' &&

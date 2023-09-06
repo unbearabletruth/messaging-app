@@ -30,9 +30,9 @@ function Chat({chat, handleChat, chats, updateChats, refetchChats, onlineUsers})
 
   useEffect(() => {
     socket.on('receive timestamp', (updatedChat) => {
-      console.log(chat._id, updatedChat._id)
       if (chat && chat._id === updatedChat._id) {
         console.log('received chat with new ts')
+        console.log(updatedChat)
         handleChat(updatedChat)
       }
     })
@@ -46,29 +46,30 @@ function Chat({chat, handleChat, chats, updateChats, refetchChats, onlineUsers})
   }, [onlineUsers])
 
   const updateUserTimestampInChat = async () => {
-    console.log('updating ts')
-    const lastSeenInChat = {lastSeenInChat: {id: user._id, timestamp: Date.now()}}
-    const response = await fetch(`http://localhost:3000/chats/${chat._id}/timestamp`, {
-      method: 'PATCH',
-      body: JSON.stringify(lastSeenInChat),
-      headers: {
-        'Content-type': 'application/json'
-      }
-    })
-    const json = await response.json()
-    if (response.ok) {
-      socket.emit('joined chat', chat._id)
-      socket.emit('new timestamp', json, lastSeenInChat)
-      const setChats = chats.map(chat => {
-        if (chat._id === json._id) {
-          return {
-            ...chat, 
-            lastSeenInChat: json.lastSeenInChat
-          };
+    if (chat) {
+      const lastSeenInChat = {lastSeenInChat: {id: user._id, timestamp: Date.now()}}
+      const response = await fetch(`http://localhost:3000/chats/${chat._id}/timestamp`, {
+        method: 'PATCH',
+        body: JSON.stringify(lastSeenInChat),
+        headers: {
+          'Content-type': 'application/json'
         }
-        return chat;
       })
-      updateChats(setChats);
+      const json = await response.json()
+      if (response.ok) {
+        socket.emit('joined chat', chat._id)
+        socket.emit('new timestamp', json, lastSeenInChat)
+        const setChats = chats.map(chat => {
+          if (chat._id === json._id) {
+            return {
+              ...chat, 
+              lastSeenInChat: json.lastSeenInChat
+            };
+          }
+          return chat;
+        })
+        updateChats(setChats);
+      }
     }
   }
   

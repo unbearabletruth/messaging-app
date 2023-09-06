@@ -7,7 +7,12 @@ const ChatSchema = new Schema({
   isGroupChat: { type: Boolean, required: true },
   users: [{ type: Schema.Types.ObjectId, ref: "User", required: true }],
   latestMessage: { type: Schema.Types.ObjectId, ref: "Message" },
-  lastSeenInChat: [{ id: String, timestamp: Date}]
+  lastSeenInChat: [{ id: String, timestamp: Date}],
+  groupPic: { 
+    type: String,
+    required: true,
+    default: "https://icon-library.com/images/group-of-people-icon-png/group-of-people-icon-png-13.jpg",
+  },
   }, 
   {
     timestamps: true

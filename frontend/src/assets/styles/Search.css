@@ -56,3 +56,12 @@
   filter: invert(51%) sepia(63%) saturate(1714%) hue-rotate(165deg) brightness(94%) contrast(94%);
 }
 
+/**/
+
+.searchTitle{
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: var(--main-font-color);
+  padding: 10px;
+}
+

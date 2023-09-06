@@ -68,8 +68,8 @@ exports.removeFromChat = async (req, res) => {
 
 exports.updateUserTimestamp = async (req, res) => {
     const newTimestamp = req.body.lastSeenInChat
-    let chat;
-    chat = await Chat.findByIdAndUpdate(req.params.id, { 
+
+    let chat = await Chat.findByIdAndUpdate(req.params.id, { 
         $pull: { 'lastSeenInChat': {'id': newTimestamp.id }}
     }, { new: true }
     )
@@ -77,7 +77,7 @@ exports.updateUserTimestamp = async (req, res) => {
     chat = await Chat.findByIdAndUpdate(req.params.id, { 
         $push: { lastSeenInChat: newTimestamp }
     }, { new: true }
-    ).populate('latestMessage').populate('users', 'username profilePic')
+    ).populate('latestMessage').populate('users', 'username profilePic lastSeen')
 
     if (chat){
         return res.status(200).json(chat)
@@ -96,7 +96,7 @@ exports.deleteChat = async (req, res) => {
 exports.searchChats = async (req, res) => {
     if (req.query.search) {
         const keyword = {name: {$regex: req.query.search, $options: 'i'}}
-        const chats = await Chat.find(keyword).exec()
+        const chats = await Chat.find(keyword).populate('latestMessage').exec()
         res.status(200).json(chats)
     }
 };

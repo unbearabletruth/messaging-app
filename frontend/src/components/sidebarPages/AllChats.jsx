@@ -23,16 +23,19 @@ function AllChats({chats, handleChat, handleSidebarContent, onlineUsers}) {
             className={`sidebarChat ${selected === chat._id ? 'selected' : ''}`}
           >
             <div className="sidebarChatContent">
+              <div className='sidebarPicWrapper'>
+                <img src={chat.groupPic} alt="group picture" className="sidebarPic"></img>
+              </div>
               <div className="sidebarChatMain">
-                <p className="sidebarChatUser">{chat.name}</p>
+                <p className={`sidebarChatName ${selected === chat._id ? 'selected' : ''}`}>{chat.name}</p>
                 {chat.latestMessage ?
-                  <p className="sidebarChatLatest">{chat.latestMessage.text}</p>
+                  <p className={`sidebarChatLatest ${selected === chat._id ? 'selected' : ''}`}>{chat.latestMessage.text}</p>
                   :
-                  <p className="sidebarChatLatest">Click to start a conversation!</p>
+                  <p className={`sidebarChatLatest ${selected === chat._id ? 'selected' : ''}`}>Click to start a conversation!</p>
                 }
               </div>
             </div>
-            <p className="sidebarChatUpdatedAt">{moment(chat.updatedAt).format('DD.MM.YYYY')}</p>
+            <p className={`sidebarChatUpdatedAt ${selected === chat._id ? 'selected' : ''}`}>{moment(chat.updatedAt).format('DD.MM.YYYY')}</p>
           </div>
         :
           !chat.isGroupChat && chat.users.map(u => {
@@ -51,7 +54,7 @@ function AllChats({chats, handleChat, handleSidebarContent, onlineUsers}) {
                       }
                     </div>
                     <div className="sidebarChatMain">
-                      <p className={`sidebarChatUser ${selected === chat._id ? 'selected' : ''}`}>{u.username}</p>
+                      <p className={`sidebarChatName ${selected === chat._id ? 'selected' : ''}`}>{u.username}</p>
                       {chat.latestMessage ?
                         <p className={`sidebarChatLatest ${selected === chat._id ? 'selected' : ''}`}>{chat.latestMessage.text}</p>
                         :
