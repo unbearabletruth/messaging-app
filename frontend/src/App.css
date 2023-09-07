@@ -139,6 +139,18 @@ a:active {
   flex-direction: column;
   gap: 20px;
   border-radius: 10px;
+  animation: slideIntoView 100ms ease-out;
+}
+
+@keyframes slideIntoView {
+  0% {
+    opacity: 0;
+    transform: translateY(-100%);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .wrongFileMessage{

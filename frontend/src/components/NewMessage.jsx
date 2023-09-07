@@ -150,8 +150,8 @@ function NewMessage({chat, addMessage, chats, updateChats}) {
       {uploadPopup &&
         <div className="popupBackground">
           <div className="popup" id="uploadMediaPopup">
-            <button onClick={onUploadPopupClose} className="closePopup">
-              <img src={closeIcon} alt="x" className="closeIcon"></img>
+            <button onClick={onUploadPopupClose} className="mainButton closePopup">
+              <img src={closeIcon} alt="x" className="mainButtonImg closeIcon"></img>
             </button>
             <img 
               src={URL.createObjectURL(newMessage.media)}

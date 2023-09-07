@@ -51,8 +51,8 @@ function Signup({closePopup}) {
   return (
     <div className="popupBackground">
       <div className="popup" id="signupPopup">
-        <button onClick={closePopup} className="closePopup">
-          <img src={closeIcon} alt="x" className="closeIcon"></img>
+        <button onClick={closePopup} className="mainButton closePopup">
+          <img src={closeIcon} alt="x" className="mainButtonImg closeIcon"></img>
         </button>
         <h1 id="signupTitle">Sign up</h1>
         <form id="signupForm" onSubmit={handleSignup}>

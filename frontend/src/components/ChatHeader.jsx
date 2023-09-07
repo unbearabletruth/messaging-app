@@ -104,10 +104,13 @@ function ChatHeader({chat, chats, onlineUsers, updateChats, handleChat}) {
             </button>
             <h1 className='sidebarTitle'>Profile</h1>
           </div>
-          <img src={user.profilePic} alt='profile picture' className='profilePicture'></img>
+          <div id='profilePictureWrapper'>
+            <img src={chat.users.find(u => u._id !== user._id).profilePic} alt='profile picture' className='profilePicture'></img>
+            <div className='profilePicCaption'>last seen {moment(chat.users.find(u => u._id !== user._id).lastSeen).fromNow()}</div>
+          </div>
           <div className='profileInfoBlock'>
             <p className='profileInfoTitle'>Username</p>
-            <p className='profileInfo'>{user.username}</p>
+            <p className='profileInfo'>{chat.users.find(u => u._id !== user._id).username}</p>
           </div>
         </div>
       </div>
