@@ -4,16 +4,16 @@
   align-items: center;
 }
 
-#profileHeader{
+.profileHeader{
   display: flex;
   justify-content: space-between;
-  height: 70px;
+  height: 60px;
   width: 100%;
   align-items: center;
   padding: 10px;
 }
 
-#profilePicture{
+.profilePicture{
   width: 100%;
   height: auto;
 }

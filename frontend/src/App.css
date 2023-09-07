@@ -70,31 +70,6 @@ a:active {
   align-items: center;
 }
 
-.closePopup{
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: absolute;
-  left: 10px;
-  top: 10px;
-  background-color: white;
-  border-radius: 50%;
-  width: 34px;
-  height: 34px;
-  border: 0px;
-  transition: background-color 0.2s ease-out;
-}
-
-.closePopup:hover{
-  background-color: #e4e4e7;
-  cursor: pointer;
-}
-
-.closeIcon{
-  width: 12px;
-  height: auto;
-}
-
 .mainButton{
   width: 40px;
   height: 40px;
@@ -116,6 +91,19 @@ a:active {
   width: 20px;
   height: auto;
   filter: invert(24%) sepia(0%) saturate(5%) hue-rotate(205deg) brightness(98%) contrast(95%);
+}
+
+.mainButton.closePopup{
+  width: 34px;
+  height: 34px;
+  position: absolute;
+  left: 10px;
+  top: 10px;
+}
+
+.mainButtonImg.closeIcon{
+  width: 12px;
+  height: auto;
 }
 
 .mainButtonImg.dotsMenu{

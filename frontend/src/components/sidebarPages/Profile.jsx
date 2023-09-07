@@ -80,7 +80,7 @@ function Profile({handleSidebarContent}) {
     <>
     {!form ?
       <div id='profileInfo'>
-        <div id='profileHeader'>
+        <div className='profileHeader'>
           <button onClick={() => handleSidebarContent('')} className="mainButton">
             <img src={backIcon} alt="back" className="mainButtonImg"></img>
           </button>
@@ -89,7 +89,7 @@ function Profile({handleSidebarContent}) {
             <img src={editIcon} alt='edit' className='mainButtonImg'></img>
           </button>
         </div>
-        <img src={user.profilePic} alt='profile picture' id='profilePicture'></img>
+        <img src={user.profilePic} alt='profile picture' className='profilePicture'></img>
         <div className='profileInfoBlock'>
           <p className='profileInfoTitle'>Username</p>
           <p className='profileInfo'>{user.username}</p>

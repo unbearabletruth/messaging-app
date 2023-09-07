@@ -78,8 +78,8 @@ function Menu({handleChat, chats, updateChats, handleSidebarContent}) {
       {newGroupPopup &&
         <div className="popupBackground">
           <div className='popup' id="newGroupPopup">
-            <button onClick={() => setNewGroupPopup(false)} className="closePopup">
-              <img src={closeIcon} alt="x" className="closeIcon"></img>
+            <button onClick={() => setNewGroupPopup(false)} className="mainButton closePopup">
+              <img src={closeIcon} alt="x" className="mainButtonImg closeIcon"></img>
             </button>
             <form id="newGroupForm" onSubmit={newGroupChat}>
               <input 

@@ -96,15 +96,21 @@ function ChatHeader({chat, chats, onlineUsers, updateChats, handleChat}) {
           }
         </>
       }
-      {drawer &&
-        <div id='drawerWrapper'>
-          <button onClick={() => setDrawer(false)} className="closePopup">
-            <img src={closeIcon} alt="x" className="closeIcon"></img>
-          </button>
-          <div id='drawerContent'>
+      <div id='drawerWrapper'>
+        <div id='drawer' className={drawer ? 'active' : ''}>
+          <div className='profileHeader'>
+            <button onClick={() => setDrawer(false)} className="mainButton">
+              <img src={closeIcon} alt="x" className="mainButtonImg closeIcon"></img>
+            </button>
+            <h1 className='sidebarTitle'>Profile</h1>
+          </div>
+          <img src={user.profilePic} alt='profile picture' className='profilePicture'></img>
+          <div className='profileInfoBlock'>
+            <p className='profileInfoTitle'>Username</p>
+            <p className='profileInfo'>{user.username}</p>
           </div>
         </div>
-      }
+      </div>
     </div>
   )
 }

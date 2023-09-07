@@ -1,5 +1,5 @@
 #chatHeader{
-  height: 70px;
+  height: 60px;
   width: 100%;
   display: flex;
   align-items: center;
@@ -55,7 +55,7 @@
   display: flex;
   flex-direction: column-reverse;
   width: 100%;
-  height: calc(100vh - 130px);
+  height: calc(100vh - 120px);
   background-image: url('/src/assets/images/background.jpg');
   background-position: center;
   padding: 20px 100px 20px 100px;
@@ -218,25 +218,32 @@
 }
 
 #drawerWrapper{
-  display: flex;
-	height: 100vh;
-  width: 500px;
   top: 0px;
   right: 0px;
   position: absolute;
-  background-color: rgba(255, 255, 255, 0.9);
+  overflow: hidden;
+  visibility: hidden;
   z-index: 1;
-  animation: expandDrawer 250ms ease-in-out;
-  transform-origin: right;
+  padding-left: 5px;
 }
 
-@keyframes expandDrawer {
-  0% {
-    transform: scaleX(0);
-  }
-
-  100% {
-    transform: scaleX(1);
-  }
+#drawer{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100vh;
+  width: 500px;
+  background-color: rgba(255, 255, 255, 0.9);
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+  transform: translateX(100%);
+  transition: transform 0.3s ease-out;
+  visibility: visible;
 }
+
+#drawer.active{
+  transform: translateX(0);
+  transition: transform 0.3s ease-out;
+}
+
+
 
