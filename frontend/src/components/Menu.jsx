@@ -63,15 +63,15 @@ function Menu({handleChat, chats, updateChats, handleSidebarContent}) {
           <p id="menuTitle">Logged in as {user.username}</p>
           <div className="menuOption" onClick={() => setNewGroupPopup(true)}>
             <img src={groupIcon} alt="new group" className="menuOptionIcon"></img>
-            <p>New group chat</p>
+            <p className="menuText">New group chat</p>
           </div>
           <div className="menuOption" onClick={() => handleSidebarContent('profile')}>
             <img src={profileIcon} alt="profile" className="menuOptionIcon"></img>
-            <p>Profile</p>
+            <p className="menuText">Profile</p>
           </div>
           <div className="menuOption" onClick={handleLogout}>
-            <img src={logoutIcon} alt="log out" className="menuOptionIcon"></img>
-            <p className="menuOptionText">Log out</p>
+            <img src={logoutIcon} alt="log out" className="menuOptionIcon leaveIcon"></img>
+            <p className="menuLeaveText">Log out</p>
           </div>
         </div>
       }

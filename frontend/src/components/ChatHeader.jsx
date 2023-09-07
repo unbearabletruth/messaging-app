@@ -3,11 +3,14 @@ import { useAuthContext } from '../hooks/UseAuthContext';
 import moment from 'moment';
 import { useState, useEffect, useRef } from 'react';
 import profileIcon from '../assets/images/profile.png'
+import leaveIcon from '../assets/images/logout-icon.svg'
+import closeIcon from '../assets/images/close-icon.svg'
 
 function ChatHeader({chat, chats, onlineUsers, updateChats, handleChat}) {
   const {user} = useAuthContext()
   const [menu, setMenu] = useState(false)
   const menuPopupRef = useRef(null);
+  const [drawer, setDrawer] = useState(false)
 
   const leaveGroupChat = async () => {
     const userId = {user: user._id}
@@ -43,10 +46,10 @@ function ChatHeader({chat, chats, onlineUsers, updateChats, handleChat}) {
           return (
             u.username !== user.username &&
               <>
-                <div id='chatHeaderUser' key={u._id}>
+                <div className='chatHeaderInfo' key={u._id}>
                   <img src={u.profilePic} alt="profile picture" id="chatHeaderPic"></img>
-                  <div id='chatUserInfo'>
-                    <p id="chatUsername">{u.username}</p>
+                  <div className='chatInfoText'>
+                    <p className="chatName">{u.username}</p>
                     {onlineUsers.includes(u._id) ? 
                       <p id='chatUserStatus'>online</p>
                       : u.lastSeen &&
@@ -59,9 +62,9 @@ function ChatHeader({chat, chats, onlineUsers, updateChats, handleChat}) {
                 </button>
                 {menu &&
                   <div id="chatMenu" className='menu'>
-                    <div className="menuOption">
+                    <div className="menuOption" onClick={() => {setDrawer(true)}}>
                       <img src={profileIcon} alt="profile" className="menuOptionIcon"></img>
-                      <p>Profile</p>
+                      <p className='menuText'>Profile</p>
                     </div>
                   </div>
                 }
@@ -71,7 +74,13 @@ function ChatHeader({chat, chats, onlineUsers, updateChats, handleChat}) {
       }
       {chat && chat.isGroupChat && 
         <>
-          <p> Welcome to {chat.name}!</p>
+          <div className='chatHeaderInfo' key={chat._id}>
+            <img src={chat.groupPic} alt="group picture" id="chatHeaderPic"></img>
+            <div className='chatInfoText'>
+              <p className='chatName'>{chat.name}</p>
+              <p id='chatSubscribers'>{chat.users.length} {chat.users.length === 1 ? 'subscriber' : 'subscribers'} </p>
+            </div>
+          </div>
           <button className="mainButton" onClick={() => setMenu(!menu)} ref={menuPopupRef}>
             <img src={dotsMenuIcon} alt="menu" className="mainButtonImg dotsMenu"></img>
           </button>
@@ -79,13 +88,22 @@ function ChatHeader({chat, chats, onlineUsers, updateChats, handleChat}) {
             <div id="chatMenu" className='menu'>
               {chat.users.some(u => u._id === user._id) &&
                 <div className="menuOption" onClick={leaveGroupChat}>
-                  <img src={profileIcon} alt="profile" className="menuOptionIcon"></img>
-                  <p>Leave group</p>
+                  <img src={leaveIcon} alt="profile" className="menuOptionIcon leaveIcon"></img>
+                  <p className='menuLeaveText'>Leave group</p>
                 </div>
               }
             </div>
           }
         </>
+      }
+      {drawer &&
+        <div id='drawerWrapper'>
+          <button onClick={() => setDrawer(false)} className="closePopup">
+            <img src={closeIcon} alt="x" className="closeIcon"></img>
+          </button>
+          <div id='drawerContent'>
+          </div>
+        </div>
       }
     </div>
   )

@@ -9,7 +9,7 @@
   border-bottom: 1px solid var(--light-border);
 }
 
-#chatHeaderUser{
+.chatHeaderInfo{
   display: flex;
   gap: 15px;
 }
@@ -20,13 +20,13 @@
   border-radius: 50%;
 }
 
-#chatUserInfo{
+.chatInfoText{
   display: flex;
   flex-direction: column;
   justify-content: space-between;
 }
 
-#chatUsername{
+.chatName{
   font-weight: bold;
   color: var(--main-font-color);
 }
@@ -36,7 +36,8 @@
   font-size: 0.9rem;
 }
 
-#chatLastSeen{
+#chatLastSeen,
+#chatSubscribers{
   color: var(--light-font-color);
   font-size: 0.9rem;
 }
@@ -215,3 +216,27 @@
   outline: none;
   border: 2px solid var(--main-color);
 }
+
+#drawerWrapper{
+  display: flex;
+	height: 100vh;
+  width: 500px;
+  top: 0px;
+  right: 0px;
+  position: absolute;
+  background-color: rgba(255, 255, 255, 0.9);
+  z-index: 1;
+  animation: expandDrawer 250ms ease-in-out;
+  transform-origin: right;
+}
+
+@keyframes expandDrawer {
+  0% {
+    transform: scaleX(0);
+  }
+
+  100% {
+    transform: scaleX(1);
+  }
+}
+
