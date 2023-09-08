@@ -1,7 +1,7 @@
 #searchBar{
   display: flex;
   position: relative;
-  width: 350px;
+  width: 100%;
 }
 
 #searchIconWrapper{

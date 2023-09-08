@@ -103,7 +103,7 @@ function Profile({handleSidebarContent}) {
       </div>
     :
       <>
-        <div id='profileHeader'>
+        <div className='profileHeader'>
           <button onClick={() => setForm(false)} className="mainButton">
             <img src={backIcon} alt="back" className="mainButtonImg"></img>
           </button>

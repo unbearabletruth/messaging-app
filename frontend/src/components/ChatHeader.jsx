@@ -5,8 +5,9 @@ import { useState, useEffect, useRef } from 'react';
 import profileIcon from '../assets/images/profile.png'
 import leaveIcon from '../assets/images/logout-icon.svg'
 import closeIcon from '../assets/images/close-icon.svg'
+import backIcon from '../assets/images/back-icon.svg'
 
-function ChatHeader({chat, chats, onlineUsers, updateChats, handleChat}) {
+function ChatHeader({chat, chats, onlineUsers, updateChats, handleChat, screenWidth}) {
   const {user} = useAuthContext()
   const [menu, setMenu] = useState(false)
   const menuPopupRef = useRef(null);
@@ -47,6 +48,11 @@ function ChatHeader({chat, chats, onlineUsers, updateChats, handleChat}) {
             u.username !== user.username &&
               <>
                 <div className='chatHeaderInfo' key={u._id}>
+                  {screenWidth < 768 &&
+                    <button onClick={() => handleChat(null)} className="mainButton">
+                      <img src={backIcon} alt="back" className="mainButtonImg"></img>
+                    </button>
+                  }
                   <img src={u.profilePic} alt="profile picture" id="chatHeaderPic"></img>
                   <div className='chatInfoText'>
                     <p className="chatName">{u.username}</p>
@@ -75,6 +81,11 @@ function ChatHeader({chat, chats, onlineUsers, updateChats, handleChat}) {
       {chat && chat.isGroupChat && 
         <>
           <div className='chatHeaderInfo' key={chat._id}>
+            {screenWidth < 768 &&
+              <button onClick={() => handleChat(null)} className="mainButton">
+                <img src={backIcon} alt="back" className="mainButtonImg"></img>
+              </button>
+            }
             <img src={chat.groupPic} alt="group picture" id="chatHeaderPic"></img>
             <div className='chatInfoText'>
               <p className='chatName'>{chat.name}</p>
@@ -96,24 +107,37 @@ function ChatHeader({chat, chats, onlineUsers, updateChats, handleChat}) {
           }
         </>
       }
-      <div id='drawerWrapper'>
-        <div id='drawer' className={drawer ? 'active' : ''}>
-          <div className='profileHeader'>
-            <button onClick={() => setDrawer(false)} className="mainButton">
-              <img src={closeIcon} alt="x" className="mainButtonImg closeIcon"></img>
-            </button>
-            <h1 className='sidebarTitle'>Profile</h1>
-          </div>
-          <div id='profilePictureWrapper'>
-            <img src={chat.users.find(u => u._id !== user._id).profilePic} alt='profile picture' className='profilePicture'></img>
-            <div className='profilePicCaption'>last seen {moment(chat.users.find(u => u._id !== user._id).lastSeen).fromNow()}</div>
-          </div>
-          <div className='profileInfoBlock'>
-            <p className='profileInfoTitle'>Username</p>
-            <p className='profileInfo'>{chat.users.find(u => u._id !== user._id).username}</p>
+      {chat &&
+        <div id='drawerWrapper'>
+          <div id='drawer' className={drawer ? 'active' : ''}>
+            <div className='profileHeader'>
+              <button onClick={() => setDrawer(false)} className="mainButton">
+                <img src={closeIcon} alt="x" className="mainButtonImg closeIcon"></img>
+              </button>
+              <h1 className='sidebarTitle'>Profile</h1>
+            </div>
+            <div id='profilePictureWrapper'>
+              {chat.isGroupChat ?
+                <>
+                  <img src={chat.groupPic} alt='group picture' className='profilePicture'></img>
+                  <div className='profilePicCaption'>{chat.users.length} {chat.users.length === 1 ? 'subscriber' : 'subscribers'}</div>
+                </>
+                :
+                <>
+                  <img src={chat.users.find(u => u._id !== user._id).profilePic} alt='profile picture' className='profilePicture'></img>
+                  <div className='profilePicCaption'>last seen {moment(chat.users.find(u => u._id !== user._id).lastSeen).fromNow()}</div>
+                </>
+              }
+            </div>
+            {!chat.isGroupChat &&
+              <div className='profileInfoBlock'>
+                <p className='profileInfoTitle'>Username</p>
+                <p className='profileInfo'>{chat.users.find(u => u._id !== user._id).username}</p>
+              </div>
+            }
           </div>
         </div>
-      </div>
+      }
     </div>
   )
 }

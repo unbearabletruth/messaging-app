@@ -9,7 +9,7 @@ import sentIcon from '../assets/images/sent-check.svg'
 import ChatHeader from './ChatHeader';
 import NewMessage from './NewMessage';
 
-function Chat({chat, handleChat, chats, updateChats, refetchChats, onlineUsers}) {
+function Chat({chat, handleChat, chats, updateChats, refetchChats, onlineUsers, screenWidth}) {
   const [mediaPopup, setMediaPopup] = useState(false)
   const [bigImage, setBigImage] = useState(null)
   const [messages, setMessages] = useState([])
@@ -116,7 +116,7 @@ function Chat({chat, handleChat, chats, updateChats, refetchChats, onlineUsers})
     <div id='content'>
       {chat ?
       <>
-        <ChatHeader chat={chat} chats={chats} onlineUsers={onlineUsers} updateChats={updateChats} handleChat={handleChat}/>
+        <ChatHeader chat={chat} chats={chats} onlineUsers={onlineUsers} updateChats={updateChats} handleChat={handleChat} screenWidth={screenWidth}/>
         <div className="chatField">
           {chat && messages && messages.toReversed().map(message => {
             return (

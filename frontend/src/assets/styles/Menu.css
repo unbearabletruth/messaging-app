@@ -6,13 +6,13 @@
   border-radius: 10px;
   width: 250px;
   padding: 15px 0px;
-  background-color: rgba(255, 255, 255, 0.95);
+  background-color: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
   position: absolute;
   top: 50px;
   z-index: 1;
   box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
   animation: popupShow 150ms ease-out;
-  transform-origin: top;
 }
 
 @keyframes popupShow {
@@ -31,6 +31,10 @@
   font-weight: bold;
   color: var(--light-font-color);
   font-size: 0.8rem;
+}
+
+.menuOption{
+  transition: background-color .2s ease-out;
 }
 
 .menuOption:hover{

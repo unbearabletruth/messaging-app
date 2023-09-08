@@ -82,6 +82,10 @@
 
 .sidebarChatLatest{
   color: var(--light-font-color);
+  max-width: 150px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .sidebarChatLatest.selected{
@@ -132,7 +136,13 @@
 }
 
 .bigButton.write{
-  position: fixed;
+  position: absolute;
   bottom: 50px;
-  left: 350px;
+  right: 50px;
+}
+
+@media (max-width: 768px) {
+  #sidebar{
+      width: 100%;
+  }
 }
