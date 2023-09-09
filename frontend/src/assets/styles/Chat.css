@@ -58,7 +58,7 @@
   height: calc(100vh - 100px);
   background-image: url('/src/assets/images/background.jpg');
   background-position: center;
-  padding: 20px 100px 20px 100px;
+  padding: 20px 20%;
   align-items: flex-end;
   gap: 5px;
   overflow-y: auto;
@@ -88,83 +88,7 @@
   background-color: var(--main-color);
 }
 
-.message,
-.myMessage{
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-  padding: 8px 12px;
-  background-color: white;
-  border-radius: 10px;
-  width: fit-content;
-  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
-}
-
-.message{
-  margin-right: auto;
-}
-
-.messageMedia{
-  width: 200px;
-  height: auto;
-  border-radius: 10px;
-  margin-bottom: 10px;
-  border: 1px solid var(--light-border);
-}
-
-.messageMedia:hover{
-  cursor: pointer;
-}
-
-.popupBackground.media{
-  background: rgba(0, 0, 0, .85);
-}
-
-#messageMediaBig{
-  height: 80%;
-  width: auto;
-  border-radius: 25px;
-}
-
-.messageContent{
-  display: flex;
-  gap: 12px;
-  align-items: flex-end;
-  justify-content: space-between;
-}
-
-.messageAuthor{
-  color: var(--light-font-color);
-  font-weight: bold;
-  font-size: 0.9rem;
-}
-
-.messageText{
-  color: var(--main-font-color);
-}
-
-.messageSideInfo{
-  display: flex;
-  gap: 4px;
-  align-items: flex-end;
-}
-
-.messageTime{
-  color: var(--light-font-color);
-  font-size: 0.7rem;
-}
-
-.messageSent{
-  height: auto;
-  width: 15px;
-  filter: invert(10%) sepia(0%) saturate(458%) hue-rotate(135deg) brightness(93%) contrast(87%);
-}
-
-.messageRead{
-  height: auto;
-  width: 15px;
-  filter: invert(58%) sepia(96%) saturate(2561%) hue-rotate(166deg) brightness(92%) contrast(98%);
-}
+/*new message*/
 
 #messageForm{
   height: 50px;
@@ -244,6 +168,24 @@
   transition: transform 0.3s ease-out;
 }
 
+@media (max-width: 1200px) {
+  .chatField{
+    padding: 20px 5%;
+  }
+}
 
+@media (max-width: 768px) {
+  #drawer{
+    width: 100vw;
+  }
+
+  #uploadMediaPopup{
+    width: 90%;
+  }
+
+  #newGroupInput{
+    width: 100%;
+  }
+}
 
 

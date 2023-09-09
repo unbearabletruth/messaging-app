@@ -1,0 +1,85 @@
+.message,
+.myMessage{
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 8px 12px;
+  background-color: white;
+  border-radius: 10px;
+  width: fit-content;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+  max-width: 450px;
+  background-color: #f0fdf4;
+}
+
+.message{
+  margin-right: auto;
+  background-color: white;
+}
+
+.messageMedia{
+  width: 200px;
+  height: auto;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  border: 1px solid var(--light-border);
+}
+
+.messageMedia:hover{
+  cursor: pointer;
+}
+
+.popupBackground.media{
+  background: rgba(0, 0, 0, .85);
+}
+
+#messageMediaBig{
+  height: 80%;
+  width: auto;
+  border-radius: 25px;
+}
+
+.messageContent{
+  color: var(--main-font-color);
+  word-break: break-word;
+}
+
+.messageAuthor{
+  color: var(--light-font-color);
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+
+.messageSideInfo{
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  float: right;
+  padding-left: 10px;
+  position: relative;
+  top: 5px;
+}
+
+.messageTime{
+  color: var(--light-font-color);
+  font-size: 0.7rem;
+}
+
+.messageSent{
+  height: auto;
+  width: 15px;
+  filter: invert(10%) sepia(0%) saturate(458%) hue-rotate(135deg) brightness(93%) contrast(87%);
+}
+
+.messageRead{
+  height: auto;
+  width: 15px;
+  filter: invert(58%) sepia(96%) saturate(2561%) hue-rotate(166deg) brightness(92%) contrast(98%);
+}
+
+@media (max-width: 1024px) {
+  .message,
+  .myMessage{
+    max-width: 80%;
+  }
+}

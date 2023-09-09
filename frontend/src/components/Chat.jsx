@@ -1,4 +1,5 @@
 import '../assets/styles/Chat.css'
+import '../assets/styles/Message.css'
 import { useState, useEffect } from 'react';
 import moment from 'moment';
 import { useAuthContext } from '../hooks/UseAuthContext';
@@ -128,8 +129,8 @@ function Chat({chat, handleChat, chats, updateChats, refetchChats, onlineUsers, 
                   <span className='messageAuthor'>{message.author.username}</span>
                 }
                 <div className='messageContent'>
-                  <span className='messageText'>{message.text}</span>
-                  <div className='messageSideInfo'>
+                  {message.text}
+                  <span className='messageSideInfo'>
                     <span className='messageTime'>{moment(message.createdAt).format('hh:mm')}</span>
                     {!chat.lastSeenInChat.some(lastSeen => lastSeen.id !== user._id &&
                     lastSeen.timestamp < message.createdAt) && 
@@ -140,7 +141,7 @@ function Chat({chat, handleChat, chats, updateChats, refetchChats, onlineUsers, 
                       :
                       null
                     }
-                  </div>
+                  </span>
                 </div>
               </div>
             )

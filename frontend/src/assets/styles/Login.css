@@ -16,7 +16,8 @@
   gap: 20px;
 }
 
-.loginInput{
+.loginInput,
+.signupInput{
   width: 300px;
   height: 35px;
   border-radius: 5px;
@@ -24,7 +25,8 @@
   border: 1px solid var(--border)
 }
 
-.loginInput:focus{
+.loginInput:focus,
+.signupInput:focus{
   outline: none;
   border: 2px solid var(--main-color);
 }
@@ -50,4 +52,14 @@
 #signupPopup{
   width: 350px;
   height: 300px;
+}
+
+@media (max-width: 768px) {
+  #signupPopup{
+    width: 90%;
+  }
+
+  .signupInput{
+    width: 100%;
+  }
 }

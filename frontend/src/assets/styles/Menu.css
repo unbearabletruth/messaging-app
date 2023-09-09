@@ -64,3 +64,13 @@
   outline: none;
   border: 2px solid var(--main-color);
 }
+
+@media (max-width: 768px) {
+  #newGroupPopup{
+    width: 90%;
+  }
+
+  #newGroupInput{
+    width: 100%;
+  }
+}

@@ -3,6 +3,7 @@
   display: flex;
   flex-direction: column;
   width: 420px;
+  min-width: 250px;
   border-right: 1px solid var(--light-border);
   position: relative;
 }
@@ -13,6 +14,7 @@
   padding: 10px;
   justify-content: space-between;
   height: 60px;
+  gap: 5px;
 }
 
 .sidebarTitle{
@@ -24,6 +26,7 @@
   width: 100%;
   display: flex;
   justify-content: space-between;
+  gap: 5px;
   padding: 10px;
   transition: background-color 0.2s ease-out;
 }
@@ -40,12 +43,14 @@
 .sidebarChatContent{
   display: flex;
   gap: 15px;
+  width: calc(100% - 70px)
 }
 
 .sidebarChatMain{
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
+  width: calc(100% - 75px);
 }
 
 .sidebarPicWrapper{
@@ -74,6 +79,9 @@
 .sidebarChatName{
   font-weight: bold;
   color: var(--main-font-color);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .sidebarChatName.selected{
@@ -82,7 +90,6 @@
 
 .sidebarChatLatest{
   color: var(--light-font-color);
-  max-width: 150px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -141,8 +148,14 @@
   right: 50px;
 }
 
+@media (max-width: 1200px) {
+  #sidebar{
+    width: 35%
+  }
+}
+
 @media (max-width: 768px) {
   #sidebar{
-      width: 100%;
+    width: 100%;
   }
 }

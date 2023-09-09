@@ -57,7 +57,7 @@ function Signup({closePopup}) {
         <h1 id="signupTitle">Sign up</h1>
         <form id="signupForm" onSubmit={handleSignup}>
           <input 
-            className="loginInput" 
+            className="signupInput" 
             name="username" 
             onChange={handleInput}
             aria-label="username"
@@ -65,7 +65,7 @@ function Signup({closePopup}) {
           >
           </input>
           <input 
-            className="loginInput" 
+            className="signupInput" 
             name="password" 
             onChange={handleInput}
             aria-label="password"
