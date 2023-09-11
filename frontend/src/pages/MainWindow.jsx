@@ -105,7 +105,7 @@ function MainWindow() {
   const refetchChats = () => {
     setRefetch(!refetch)
   }
-  console.log(messages, chats)
+
   return (
     screenWidth >= 768 ?
       <>

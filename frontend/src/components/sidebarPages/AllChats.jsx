@@ -11,7 +11,14 @@ function AllChats({chats, handleChat, handleSidebarContent, onlineUsers, allMess
     setSelected(chat._id)
     handleChat(chat)
   }
-  console.log(allMessages)
+  
+  const calculateUnread = (chat) => {
+    const chatMes = allMessages.find(mess => mess.id === chat._id).messages
+    const yourTimestamp = chat.lastSeenInChat.find(ls => ls.id === user._id).timestamp
+    const unread = chatMes.filter(mes => mes.author._id !== user._id && mes.updatedAt > yourTimestamp)
+    return unread.length
+  }
+
   return (
     <>
     {chats && chats.map(chat => {
@@ -27,15 +34,22 @@ function AllChats({chats, handleChat, handleSidebarContent, onlineUsers, allMess
                 <img src={chat.groupPic} alt="group picture" className="sidebarPic"></img>
               </div>
               <div className="sidebarChatMain">
-                <p className={`sidebarChatName ${selected === chat._id ? 'selected' : ''}`}>{chat.name}</p>
-                {chat.latestMessage ?
-                  <p className={`sidebarChatLatest ${selected === chat._id ? 'selected' : ''}`}>{chat.latestMessage.text}</p>
-                  :
-                  <p className={`sidebarChatLatest ${selected === chat._id ? 'selected' : ''}`}>Click to start a conversation!</p>
-                }
+                <div className='sidebarChatNameAndDate'>
+                  <p className={`sidebarChatName ${selected === chat._id ? 'selected' : ''}`}>{chat.name}</p>
+                  <p className={`sidebarChatUpdatedAt ${selected === chat._id ? 'selected' : ''}`}>{moment(chat.updatedAt).format('DD.MM.YYYY')}</p>
+                </div>
+                <div className='sidebarChatMessageAndUnread'>
+                  <p className={`sidebarChatLatest ${selected === chat._id ? 'selected' : ''}`}>
+                    {chat.latestMessage ? chat.latestMessage.text : 'Click to start a conversation!'}
+                  </p>
+                  {allMessages.length > 0 && calculateUnread(chat) > 0 &&
+                    <div className={`sidebarUnread ${selected === chat._id ? 'selected' : ''}`}>
+                      {calculateUnread(chat)}
+                    </div>
+                  }
+                </div>
               </div>
             </div>
-            <p className={`sidebarChatUpdatedAt ${selected === chat._id ? 'selected' : ''}`}>{moment(chat.updatedAt).format('DD.MM.YYYY')}</p>
           </div>
         :
           !chat.isGroupChat && chat.users.map(u => {
@@ -54,19 +68,20 @@ function AllChats({chats, handleChat, handleSidebarContent, onlineUsers, allMess
                       }
                     </div>
                     <div className="sidebarChatMain">
-                      <p className={`sidebarChatName ${selected === chat._id ? 'selected' : ''}`}>{u.username}</p>
-                      {chat.latestMessage ?
-                        <p className={`sidebarChatLatest ${selected === chat._id ? 'selected' : ''}`}>{chat.latestMessage.text}</p>
-                        :
-                        <p className={`sidebarChatLatest ${selected === chat._id ? 'selected' : ''}`}>Click to start a conversation!</p>
-                      }
-                    </div>
-                  </div>
-                  <div className='sidebarChatSub'>
-                    <p className={`sidebarChatUpdatedAt ${selected === chat._id ? 'selected' : ''}`}>{moment(chat.updatedAt).format('DD.MM.YYYY')}</p>
-                    <div className={`sidebarUnread ${selected === chat._id ? 'selected' : ''}`}>
-                      {allMessages.length > 0 && allMessages.find(mess => mess.id === chat._id)
-                        .messages.filter(mes => mes.author._id !== user._id && mes.updatedAt > chat.lastSeenInChat.find(ls => ls.id === user._id).timestamp).length}
+                      <div className='sidebarChatNameAndDate'>
+                        <p className={`sidebarChatName ${selected === chat._id ? 'selected' : ''}`}>{u.username}</p>
+                        <p className={`sidebarChatUpdatedAt ${selected === chat._id ? 'selected' : ''}`}>{moment(chat.updatedAt).format('DD.MM.YYYY')}</p>
+                      </div>
+                      <div className='sidebarChatMessageAndUnread'>
+                        <p className={`sidebarChatLatest ${selected === chat._id ? 'selected' : ''}`}>
+                          {chat.latestMessage ? chat.latestMessage.text : 'Click to start a conversation!'}
+                        </p>
+                        {allMessages.length > 0 && calculateUnread(chat) > 0 &&
+                          <div className={`sidebarUnread ${selected === chat._id ? 'selected' : ''}`}>
+                            {calculateUnread(chat)}
+                          </div>
+                        }
+                      </div>
                     </div>
                   </div>
                 </div>
