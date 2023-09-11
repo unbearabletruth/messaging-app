@@ -3,7 +3,7 @@ import { useAuthContext } from '../../hooks/UseAuthContext';
 import { useState } from 'react';
 import moment from 'moment';
 
-function AllChats({chats, handleChat, handleSidebarContent, onlineUsers}) {
+function AllChats({chats, handleChat, handleSidebarContent, onlineUsers, allMessages}) {
   const { user } = useAuthContext()
   const [selected, setSelected] = useState(null)
 
@@ -11,7 +11,7 @@ function AllChats({chats, handleChat, handleSidebarContent, onlineUsers}) {
     setSelected(chat._id)
     handleChat(chat)
   }
-
+  console.log(allMessages)
   return (
     <>
     {chats && chats.map(chat => {
@@ -62,7 +62,13 @@ function AllChats({chats, handleChat, handleSidebarContent, onlineUsers}) {
                       }
                     </div>
                   </div>
-                  <p className={`sidebarChatUpdatedAt ${selected === chat._id ? 'selected' : ''}`}>{moment(chat.updatedAt).format('DD.MM.YYYY')}</p>
+                  <div className='sidebarChatSub'>
+                    <p className={`sidebarChatUpdatedAt ${selected === chat._id ? 'selected' : ''}`}>{moment(chat.updatedAt).format('DD.MM.YYYY')}</p>
+                    <div className={`sidebarUnread ${selected === chat._id ? 'selected' : ''}`}>
+                      {allMessages.length > 0 && allMessages.find(mess => mess.id === chat._id)
+                        .messages.filter(mes => mes.author._id !== user._id && mes.updatedAt > chat.lastSeenInChat.find(ls => ls.id === user._id).timestamp).length}
+                    </div>
+                  </div>
                 </div>
                 :
                 null
@@ -79,3 +85,5 @@ function AllChats({chats, handleChat, handleSidebarContent, onlineUsers}) {
 }
 
 export default AllChats
+
+//messages.messages.filter(mes => mes.updatedAt > chat.lastSeenInChat.find(ls => ls.id === user._id).timestamp).length}

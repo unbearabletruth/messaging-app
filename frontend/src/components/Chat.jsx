@@ -11,9 +11,9 @@ import ChatHeader from './ChatHeader';
 import NewMessage from './NewMessage';
 
 function Chat({chat, handleChat, chats, updateChats, refetchChats, onlineUsers, screenWidth}) {
+  const [messages, setMessages] = useState([])
   const [mediaPopup, setMediaPopup] = useState(false)
   const [bigImage, setBigImage] = useState(null)
-  const [messages, setMessages] = useState([])
   const {user} = useAuthContext()
 
   useEffect(() => {
@@ -74,7 +74,7 @@ function Chat({chat, handleChat, chats, updateChats, refetchChats, onlineUsers, 
       }
     }
   }
-  
+
   useEffect(() => {
     const fetchMessages = async () => {
       const response = await fetch(`http://localhost:3000/chats/${chat._id}/messages`)
@@ -117,7 +117,14 @@ function Chat({chat, handleChat, chats, updateChats, refetchChats, onlineUsers, 
     <div id='content'>
       {chat ?
       <>
-        <ChatHeader chat={chat} chats={chats} onlineUsers={onlineUsers} updateChats={updateChats} handleChat={handleChat} screenWidth={screenWidth}/>
+        <ChatHeader 
+          chat={chat} 
+          chats={chats} 
+          onlineUsers={onlineUsers} 
+          updateChats={updateChats} 
+          handleChat={handleChat} 
+          screenWidth={screenWidth}
+        />
         <div className="chatField">
           {chat && messages && messages.toReversed().map(message => {
             return (
@@ -157,8 +164,8 @@ function Chat({chat, handleChat, chats, updateChats, refetchChats, onlineUsers, 
       }
       {mediaPopup &&
         <div className="popupBackground media">
-          <button onClick={() => setMediaPopup(false)} className="closePopup">
-              <img src={closeIcon} alt="x" className="closeIcon"></img>
+          <button onClick={() => setMediaPopup(false)} className="mainButton closePopup">
+              <img src={closeIcon} alt="x" className="mainButtonImg closeIcon"></img>
           </button>
           <img src={bigImage} alt='media big' id='messageMediaBig'></img>
         </div>

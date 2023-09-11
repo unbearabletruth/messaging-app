@@ -8,7 +8,7 @@ import Profile from "./sidebarPages/Profile";
 import { useAuthContext } from '../hooks/UseAuthContext';
 import moment from 'moment';
 
-function Sidebar({chats, handleChat, updateChats, onlineUsers})  {
+function Sidebar({chats, allMessages, handleChat, updateChats, onlineUsers})  {
   const { user } = useAuthContext()
   const [users, setUsers] = useState(null)
   const [sidebarContent, setSidebarContent] = useState('')
@@ -106,6 +106,7 @@ function Sidebar({chats, handleChat, updateChats, onlineUsers})  {
           handleChat={handleChat} 
           handleSidebarContent={handleSidebarContent}
           onlineUsers={onlineUsers}
+          allMessages={allMessages}
         />
       }
       {sidebarContent === 'write' &&

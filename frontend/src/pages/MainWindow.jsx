@@ -9,6 +9,7 @@ import { socket } from '../socket';
 function MainWindow() {
   const {user, dispatch} = useAuthContext()
   const [chats, setChats] = useState(null)
+  const [messages, setMessages] = useState([])
   const [currentChat, setCurrentChat] = useState(null)
   const [refetch, setRefetch] = useState(false)
   const [onlineUsers, setOnlineUsers] = useState([])
@@ -38,6 +39,24 @@ function MainWindow() {
 
     fetchChats()
   }, [refetch])
+
+  useEffect(() => {
+    const fetchMessages = async () => {
+      const response = await Promise.all(chats.map(chat => 
+        fetch(`http://localhost:3000/chats/${chat._id}/messages`)
+          .then(res => res.json())
+          .then(json => {
+            return {id: chat._id, messages: json}
+          })
+      ))
+      if (response) {
+        setMessages(response)
+      }
+    }
+    if (chats) {
+      fetchMessages()
+    }
+  }, [chats])
 
   useEffect(() => {
     socket.emit('setup', user)
@@ -86,7 +105,7 @@ function MainWindow() {
   const refetchChats = () => {
     setRefetch(!refetch)
   }
-
+  console.log(messages, chats)
   return (
     screenWidth >= 768 ?
       <>
@@ -94,7 +113,8 @@ function MainWindow() {
           chats={chats}
           handleChat={handleChat}
           updateChats={updateChats}
-          onlineUsers={onlineUsers} 
+          onlineUsers={onlineUsers}
+          allMessages={messages} 
         />
         <Chat 
           chat={currentChat}
@@ -102,7 +122,7 @@ function MainWindow() {
           chats={chats} 
           updateChats={updateChats}
           refetchChats={refetchChats}
-          onlineUsers={onlineUsers} 
+          onlineUsers={onlineUsers}
         />
       </>
       : currentChat !== null ?
@@ -121,6 +141,7 @@ function MainWindow() {
           handleChat={handleChat}
           updateChats={updateChats}
           onlineUsers={onlineUsers} 
+          allMessages={messages}
         />
   )
 }
