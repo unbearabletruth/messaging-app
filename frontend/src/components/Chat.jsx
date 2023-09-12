@@ -109,6 +109,20 @@ function Chat({chat, handleChat, chats, updateChats, refetchChats, onlineUsers, 
       handleChat(json)
     }
   }
+
+  const addRequest = async () => {
+    const userId = {request: user._id}
+    const response = await fetch(`http://localhost:3000/chats/${chat._id}/addRequest`, {
+      method: 'PATCH',
+      body: JSON.stringify(userId),
+      headers: {
+        'Content-type': 'application/json'
+      }
+    })
+    if (response.ok) {
+      //respond with joined message
+    }
+  }
   
   const showBigImage = (media) => {
     setBigImage(media)
@@ -167,8 +181,13 @@ function Chat({chat, handleChat, chats, updateChats, refetchChats, onlineUsers, 
           <div id='joinPrivateWrapper'>
             <img src={chat.groupPic} alt='group image' id='joinPrivateImage'></img>
             <p id='joinPrivateName'>{chat.name}</p>
+            <p id='joinPrivateSubscribers'>{chat.users.length} {chat.users.length === 1 ? 'subscriber' : 'subscribers'}</p>
             <p id='joinPrivateInfo'>This is a private group</p>
-            <button className='formButton' id='joinPrivateButton'>Request to join</button>
+            {!chat.requests.includes(user._id) ?
+              <button className='formButton' id='joinPrivateButton' onClick={addRequest}>Request to join</button>
+              :
+              <p id='joinPrivateSent'>Request has been sent</p>
+            }
           </div>
         }
         <NewMessage chat={chat} addMessage={addMessage} chats={chats} updateChats={updateChats}/>

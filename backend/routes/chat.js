@@ -1,7 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const messageRouter = require('./message');
-const { getChat, getChats, createChat, updateChat, deleteChat, searchChats, addToChat, removeFromChat, updateUserTimestamp } = require('../controllers/chat_controller');
+const { 
+  getChat, getChats, createChat, updateChat, deleteChat, 
+  searchChats, addToChat, removeFromChat, updateUserTimestamp,
+  addRequest, removeRequest 
+} = require('../controllers/chat_controller');
 
 
 router.get("/users/:id", getChats);
@@ -19,6 +23,10 @@ router.patch("/:id/add", addToChat);
 router.patch("/:id/remove", removeFromChat);
 
 router.patch("/:id/timestamp", updateUserTimestamp);
+
+router.patch("/:id/addRequest", addRequest)
+
+router.patch("/:id/removeRequest", removeRequest)
 
 router.delete("/:id", deleteChat);
 

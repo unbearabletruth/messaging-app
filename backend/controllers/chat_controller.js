@@ -111,3 +111,27 @@ exports.searchChats = async (req, res) => {
         res.status(200).json(chats)
     }
 };
+
+exports.addRequest = async (req, res) => {
+    const chat = await Chat.findByIdAndUpdate(req.params.id, { 
+        $push: { requests: req.body.request }
+    }, { new: true }
+    ).populate('latestMessage').populate('users', 'username profilePic')
+
+    if (chat){
+        return res.status(200).json(chat)
+    }
+    res.status(400).json({error: 'No such chat'})
+}
+
+exports.removeRequest = async (req, res) => {
+    const chat = await Chat.findByIdAndUpdate(req.params.id, { 
+        $pull: { requests: req.body.request }
+    }, { new: true }
+    ).populate('latestMessage').populate('users', 'username profilePic')
+
+    if (chat){
+        return res.status(200).json(chat)
+    }
+    res.status(400).json({error: 'No such chat'})
+}

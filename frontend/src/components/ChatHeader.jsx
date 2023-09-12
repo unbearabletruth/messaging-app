@@ -89,7 +89,7 @@ function ChatHeader({chat, chats, onlineUsers, updateChats, handleChat, screenWi
             <img src={chat.groupPic} alt="group picture" id="chatHeaderPic"></img>
             <div className='chatInfoText'>
               <p className='chatName'>{chat.name}</p>
-              <p id='chatSubscribers'>{chat.users.length} {chat.users.length === 1 ? 'subscriber' : 'subscribers'} </p>
+              <p id='chatSubscribers'>{chat.users.length} {chat.users.length === 1 ? 'subscriber' : 'subscribers'}</p>
             </div>
           </div>
           <button className="mainButton" onClick={() => setMenu(!menu)} ref={menuPopupRef}>
