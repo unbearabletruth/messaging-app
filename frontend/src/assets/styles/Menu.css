@@ -52,7 +52,7 @@
   gap: 20px;
 }
 
-#newGroupInput{
+#newGroupName{
   width: 300px;
   height: 35px;
   border-radius: 5px;
@@ -60,9 +60,19 @@
   border: 1px solid var(--border)
 }
 
-#newGroupInput:focus{
+#newGroupName:focus{
   outline: none;
   border: 2px solid var(--main-color);
+}
+
+#newGroupCheckboxWrapper{
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+#newGroupCheckboxLabel{
+  color: var(--main-font-color);
 }
 
 @media (max-width: 768px) {
@@ -70,7 +80,7 @@
     width: 90%;
   }
 
-  #newGroupInput{
+  #newGroupName{
     width: 100%;
   }
 }

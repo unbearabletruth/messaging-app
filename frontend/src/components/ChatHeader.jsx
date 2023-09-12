@@ -40,7 +40,7 @@ function ChatHeader({chat, chats, onlineUsers, updateChats, handleChat, screenWi
       document.removeEventListener("click", handleClickOutside);
     };
   }, [menuPopupRef]);
-  console.log(chat.users)
+
   return(
     <div id="chatHeader">
       {chat && !chat.isGroupChat && chat.users.map(u => {

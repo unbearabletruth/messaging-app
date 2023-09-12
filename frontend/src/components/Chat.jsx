@@ -85,8 +85,12 @@ function Chat({chat, handleChat, chats, updateChats, refetchChats, onlineUsers, 
       }
     }
     
-    if (chat && chat.users.some(u => u._id === user._id)) {
+    if (chat && !chat.privateGroup || chat &&
+      chat.privateGroup && chat.users.some(u => u._id === user._id)) {
+        console.log(chat.users)
       fetchMessages()
+    } else {
+      setMessages([])
     }
   }, [chat])
 
@@ -114,7 +118,7 @@ function Chat({chat, handleChat, chats, updateChats, refetchChats, onlineUsers, 
   const addMessage = (newMessage) => {
     setMessages(prevState => [...prevState, newMessage])
   }
-  console.log(chat)
+
   return (
     <div id='content'>
       {chat ?
@@ -156,8 +160,16 @@ function Chat({chat, handleChat, chats, updateChats, refetchChats, onlineUsers, 
             )
           })}
         </div>
-        {chat && !chat.users.some(u => u._id === user._id) &&
+        {chat && !chat.privateGroup && !chat.users.some(u => u._id === user._id) &&
           <button className='joinChatButton' onClick={joinGroupChat}>Join group</button>
+        }
+        {chat && chat.privateGroup && !chat.users.some(u => u._id === user._id) &&
+          <div id='joinPrivateWrapper'>
+            <img src={chat.groupPic} alt='group image' id='joinPrivateImage'></img>
+            <p id='joinPrivateName'>{chat.name}</p>
+            <p id='joinPrivateInfo'>This is a private group</p>
+            <button className='formButton' id='joinPrivateButton'>Request to join</button>
+          </div>
         }
         <NewMessage chat={chat} addMessage={addMessage} chats={chats} updateChats={updateChats}/>
       </>

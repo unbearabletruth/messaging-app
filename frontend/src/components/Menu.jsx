@@ -13,6 +13,7 @@ function Menu({handleChat, chats, updateChats, handleSidebarContent}) {
   const menuPopupRef = useRef(null);
   const [newGroupPopup, setNewGroupPopup] = useState(false)
   const [groupName, setGroupName] = useState('')
+  const [isPrivate, setIsPrivate] = useState(false)
 
   useEffect(() => {
     function handleClickOutside(e) {
@@ -31,7 +32,8 @@ function Menu({handleChat, chats, updateChats, handleSidebarContent}) {
     const newGroup = {
       name: groupName,
       isGroupChat: true,
-      users: [user._id]
+      users: [user._id],
+      privateGroup: isPrivate
     }
     const response = await fetch(`http://localhost:3000/chats`, {
       method: 'POST',
@@ -83,13 +85,24 @@ function Menu({handleChat, chats, updateChats, handleSidebarContent}) {
             </button>
             <form id="newGroupForm" onSubmit={newGroupChat}>
               <input 
-                id="newGroupInput" 
+                id="newGroupName" 
                 name="name" 
                 onChange={(e) => setGroupName(e.target.value)}
                 aria-label="group name"
                 placeholder="Name"
               >
               </input>
+              <div id="newGroupCheckboxWrapper">
+                <input 
+                  type="checkbox" 
+                  id="newGroupIsPrivate" 
+                  name="isPrivate" 
+                  checked={isPrivate}
+                  onChange={() => setIsPrivate(!isPrivate)}
+                >
+                </input>
+                <label htmlFor="newGroupIsPrivate" id="newGroupCheckboxLabel">Private</label>
+              </div>
               <button className="formButton">Create</button>
             </form>
           </div>

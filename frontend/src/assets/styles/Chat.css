@@ -88,6 +88,45 @@
   background-color: var(--main-color);
 }
 
+#joinPrivateWrapper{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  gap: 20px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%,-50%);
+  background-color: white;
+  width: 300px;
+  height: 350px;
+  border-radius: 10px;
+  padding: 25px;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+}
+
+#joinPrivateImage{
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  border: 3px solid var(--main-color);
+}
+
+#joinPrivateName{
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: var(--main-font-color)
+}
+
+#joinPrivateInfo{
+  color: var(--light-font-color)
+}
+
+#joinPrivateButton{
+  width: 200px;
+}
+
 /*new message*/
 
 #messageForm{

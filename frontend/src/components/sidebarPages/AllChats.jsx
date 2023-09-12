@@ -42,7 +42,7 @@ function AllChats({chats, handleChat, handleSidebarContent, onlineUsers, allMess
                   <p className={`sidebarChatLatest ${selected === chat._id ? 'selected' : ''}`}>
                     {chat.latestMessage ? chat.latestMessage.text : 'Click to start a conversation!'}
                   </p>
-                  {allMessages.length > 0 && calculateUnread(chat) > 0 &&
+                  {allMessages.find(mes => mes.id === chat._id) && calculateUnread(chat) > 0 &&
                     <div className={`sidebarUnread ${selected === chat._id ? 'selected' : ''}`}>
                       {calculateUnread(chat)}
                     </div>
