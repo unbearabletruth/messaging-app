@@ -4,7 +4,7 @@ exports.getChats = async (req, res) => {
     const chats = await Chat.find({users: { $in: [req.params.id] }})
         .populate('latestMessage')
         .populate('users', 'username profilePic bio lastSeen')
-        .sort({updatedAt: -1}).exec()
+        .sort({latestMessage: -1}).exec()
     res.status(200).json(chats)
 };
 
@@ -17,11 +17,17 @@ exports.getChat = async (req, res) => {
 };
 
 exports.createChat = async (req, res) => {
+    const lastSeenInChat = [];
+    for (let user of req.body.users) {
+        let obj = {id: user, timestamp: Date.now()}
+        lastSeenInChat.push(obj)
+    }
     const newChat = new Chat({
         name: req.body.name,
         isGroupChat: req.body.isGroupChat,
         users: req.body.users,
-        latestMessage: null
+        latestMessage: null,
+        lastSeenInChat: lastSeenInChat
     })
     try{
         const chat = await newChat.save()
@@ -96,7 +102,10 @@ exports.deleteChat = async (req, res) => {
 exports.searchChats = async (req, res) => {
     if (req.query.search) {
         const keyword = {name: {$regex: req.query.search, $options: 'i'}}
-        const chats = await Chat.find(keyword).populate('latestMessage').exec()
+        const chats = await Chat.find(keyword)
+            .populate('latestMessage')
+            .populate('users', 'username profilePic bio lastSeen')
+            .exec()
         res.status(200).json(chats)
     }
 };

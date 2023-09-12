@@ -18,6 +18,7 @@ function Chat({chat, handleChat, chats, updateChats, refetchChats, onlineUsers, 
 
   useEffect(() => {
     socket.on('receive message', (newMessage) => {
+      console.log('received')
       if (chat && chat._id === newMessage.chat._id) {
         setMessages(prevState => [...prevState, newMessage])
         if (onlineUsers.includes(user._id)){
@@ -45,7 +46,7 @@ function Chat({chat, handleChat, chats, updateChats, refetchChats, onlineUsers, 
     if (onlineUsers.includes(user._id)) {
       updateUserTimestampInChat()
     }
-  }, [onlineUsers])
+  }, [onlineUsers, chat && chat._id])
 
   const updateUserTimestampInChat = async () => {
     if (chat) {
@@ -83,7 +84,8 @@ function Chat({chat, handleChat, chats, updateChats, refetchChats, onlineUsers, 
         setMessages(json)
       }
     }
-    if (chat) {
+    
+    if (chat && chat.users.some(u => u._id === user._id)) {
       fetchMessages()
     }
   }, [chat])
@@ -112,7 +114,7 @@ function Chat({chat, handleChat, chats, updateChats, refetchChats, onlineUsers, 
   const addMessage = (newMessage) => {
     setMessages(prevState => [...prevState, newMessage])
   }
-
+  console.log(chat)
   return (
     <div id='content'>
       {chat ?
