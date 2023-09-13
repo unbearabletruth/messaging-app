@@ -4,6 +4,7 @@ exports.getChats = async (req, res) => {
     const chats = await Chat.find({users: { $in: [req.params.id] }})
         .populate('latestMessage')
         .populate('users', 'username profilePic bio lastSeen')
+        .populate('requests', 'username profilePic lastSeen')
         .sort({latestMessage: -1}).exec()
     res.status(200).json(chats)
 };

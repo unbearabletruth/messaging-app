@@ -119,8 +119,9 @@ function Chat({chat, handleChat, chats, updateChats, refetchChats, onlineUsers, 
         'Content-type': 'application/json'
       }
     })
+    const json = await response.json()
     if (response.ok) {
-      //respond with joined message
+      handleChat(json)
     }
   }
   

@@ -149,7 +149,7 @@
   justify-content: space-evenly;
 }
 
-.writeUsername{
+.writeName{
   font-weight: bold;
   color: var(--main-font-color);
 }
