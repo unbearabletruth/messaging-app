@@ -85,11 +85,9 @@ io.on("connection", (socket) => {
     });
   })
 
-  socket.on('new timestamp', (chat, timestamp) => {
+  socket.on('update chat', (chat) => {
     chat.users.forEach(user => {
-      if (user._id !== timestamp.id) {
-        socket.in(user._id).emit('receive timestamp', chat)
-      }
+        socket.in(user._id).emit('receive chat', chat)
     });
   })
 

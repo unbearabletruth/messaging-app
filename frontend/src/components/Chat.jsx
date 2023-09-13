@@ -18,7 +18,6 @@ function Chat({chat, handleChat, chats, updateChats, refetchChats, onlineUsers, 
 
   useEffect(() => {
     socket.on('receive message', (newMessage) => {
-      console.log('received')
       if (chat && chat._id === newMessage.chat._id) {
         setMessages(prevState => [...prevState, newMessage])
         if (onlineUsers.includes(user._id)){
@@ -29,18 +28,21 @@ function Chat({chat, handleChat, chats, updateChats, refetchChats, onlineUsers, 
       }
     })
     return () => socket.off('receive message')
-  }, [chat])
+  }, [chat && chat._id, onlineUsers])
 
   useEffect(() => {
-    socket.on('receive timestamp', (updatedChat) => {
+    socket.on('receive chat', (updatedChat) => {
+      console.log(chat && chat._id)
       if (chat && chat._id === updatedChat._id) {
         console.log('received chat with new ts')
-        console.log(updatedChat)
         handleChat(updatedChat)
+        if (!chats.some(chat => chat._id === updatedChat._id)) {
+          updateChats([updatedChat, ...chats])
+        }
       }
     })
-    return () => socket.off('receive timestamp')
-  }, [chat])
+    return () => socket.off('receive chat')
+  }, [chat && chat._id])
 
   useEffect(() => {
     if (onlineUsers.includes(user._id)) {
@@ -61,7 +63,7 @@ function Chat({chat, handleChat, chats, updateChats, refetchChats, onlineUsers, 
       const json = await response.json()
       if (response.ok) {
         socket.emit('joined chat', chat._id)
-        socket.emit('new timestamp', json, lastSeenInChat)
+        socket.emit('update chat', json)
         const setChats = chats.map(chat => {
           if (chat._id === json._id) {
             return {
@@ -86,13 +88,12 @@ function Chat({chat, handleChat, chats, updateChats, refetchChats, onlineUsers, 
     }
     
     if (chat && !chat.privateGroup || chat &&
-      chat.privateGroup && chat.users.some(u => u._id === user._id)) {
-        console.log(chat.users)
+    chat.privateGroup && chat.users.some(u => u._id === user._id)) {
       fetchMessages()
     } else {
       setMessages([])
     }
-  }, [chat])
+  }, [chat && chat._id])
 
   const joinGroupChat = async () => {
     const userId = {user: user._id}
@@ -121,7 +122,9 @@ function Chat({chat, handleChat, chats, updateChats, refetchChats, onlineUsers, 
     })
     const json = await response.json()
     if (response.ok) {
+      console.log(json)
       handleChat(json)
+      socket.emit('update chat', json)
     }
   }
   
@@ -184,7 +187,7 @@ function Chat({chat, handleChat, chats, updateChats, refetchChats, onlineUsers, 
             <p id='joinPrivateName'>{chat.name}</p>
             <p id='joinPrivateSubscribers'>{chat.users.length} {chat.users.length === 1 ? 'subscriber' : 'subscribers'}</p>
             <p id='joinPrivateInfo'>This is a private group</p>
-            {!chat.requests.includes(user._id) ?
+            {!chat.requests.some(u => u._id === user._id) ?
               <button className='formButton' id='joinPrivateButton' onClick={addRequest}>Request to join</button>
               :
               <p id='joinPrivateSent'>Request has been sent</p>

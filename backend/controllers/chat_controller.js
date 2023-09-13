@@ -117,7 +117,9 @@ exports.addRequest = async (req, res) => {
     const chat = await Chat.findByIdAndUpdate(req.params.id, { 
         $push: { requests: req.body.request }
     }, { new: true }
-    ).populate('latestMessage').populate('users', 'username profilePic')
+    ).populate('latestMessage')
+    .populate('users', 'username profilePic')
+    .populate('requests', 'username profilePic lastSeen')
 
     if (chat){
         return res.status(200).json(chat)
@@ -129,7 +131,9 @@ exports.removeRequest = async (req, res) => {
     const chat = await Chat.findByIdAndUpdate(req.params.id, { 
         $pull: { requests: req.body.request }
     }, { new: true }
-    ).populate('latestMessage').populate('users', 'username profilePic')
+    ).populate('latestMessage')
+    .populate('users', 'username profilePic')
+    .populate('requests', 'username profilePic lastSeen')
 
     if (chat){
         return res.status(200).json(chat)

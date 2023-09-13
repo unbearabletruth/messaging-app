@@ -7,6 +7,7 @@ import leaveIcon from '../assets/images/logout-icon.svg'
 import closeIcon from '../assets/images/close-icon.svg'
 import backIcon from '../assets/images/back-icon.svg'
 import requestIcon from '../assets/images/request.svg'
+import { socket } from '../socket';
 import acceptIcon from '../assets/images/submit.svg'
 
 function ChatHeader({chat, chats, onlineUsers, updateChats, handleChat, screenWidth}) {
@@ -53,6 +54,7 @@ function ChatHeader({chat, chats, onlineUsers, updateChats, handleChat, screenWi
     const json = await response.json()
     if (response.ok) {
       handleChat(json)
+      socket.emit('update chat', json)
     }
   }
 
@@ -67,7 +69,7 @@ function ChatHeader({chat, chats, onlineUsers, updateChats, handleChat, screenWi
       document.removeEventListener("click", handleClickOutside);
     };
   }, [menuPopupRef]);
-  console.log(chats)
+
   return(
     <div id="chatHeader">
       {chat && !chat.isGroupChat && chat.users.map(u => {
