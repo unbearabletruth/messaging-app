@@ -32,17 +32,18 @@ function Chat({chat, handleChat, chats, updateChats, refetchChats, onlineUsers, 
 
   useEffect(() => {
     socket.on('receive chat', (updatedChat) => {
-      console.log(chat && chat._id)
       if (chat && chat._id === updatedChat._id) {
         console.log('received chat with new ts')
         handleChat(updatedChat)
         if (!chats.some(chat => chat._id === updatedChat._id)) {
           updateChats([updatedChat, ...chats])
         }
+      } else {
+        updateChats(chats.map(c => c._id === updatedChat._id ? updatedChat : c))
       }
     })
     return () => socket.off('receive chat')
-  }, [chat && chat._id])
+  }, [chat && chat._id, chats])
 
   useEffect(() => {
     if (onlineUsers.includes(user._id)) {

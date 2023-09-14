@@ -52,6 +52,21 @@
 }
 
 /* requests popup */
+#requestsPopup{
+  max-height: 60vh;
+  overflow-y: auto;
+  position: relative;
+}
+
+#requestsPopup::-webkit-scrollbar {
+  width: 5px;
+}
+
+#requestsPopup::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 20px;
+}
+
 .requestsTitle{
   color: var(--main-font-color);
   font-size: 1.2rem;
@@ -114,8 +129,47 @@
   font-size: 0.9rem;
 }
 
-.mainButton.decline:hover{
-  background-color: #f87171;
+.requestButtons{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 5px;
+}
+
+.acceptButton,
+.declineButton{
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 0px;
+  background-color: var(--main-darker);
+  transition: background-color 0.2s ease-out;
+  margin-left: auto;
+}
+
+.declineButton{
+  background-color: inherit;
+}
+
+.acceptButton:hover{
+  background-color: var(--main-color);
+  cursor: pointer;
+}
+
+.declineButton:hover{
+  background-color: #fee2e2;
+  cursor: pointer;
+}
+
+.acceptButtonImg,
+.declineButtonImg{
+  width: 14px;
+  height: auto;
+  filter: invert(98%) sepia(0%) saturate(6037%) hue-rotate(226deg) brightness(123%) contrast(100%);
+}
+
+.declineButtonImg{
+  filter: invert(29%) sepia(69%) saturate(5529%) hue-rotate(347deg) brightness(88%) contrast(96%);
 }
 
 /**/

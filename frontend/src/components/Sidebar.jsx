@@ -12,6 +12,7 @@ function Sidebar({chats, allMessages, handleChat, updateChats, onlineUsers})  {
   const { user } = useAuthContext()
   const [users, setUsers] = useState(null)
   const [sidebarContent, setSidebarContent] = useState('')
+  const [searchInput, setSearchInput] = useState('')
   const [searchUserResults, setSearchUserResults] = useState([])
   const [searchChatResults, setSearchChatResults] = useState([])
 
@@ -47,6 +48,10 @@ function Sidebar({chats, allMessages, handleChat, updateChats, onlineUsers})  {
     fetchUsers()
   }, [])
 
+  const handleSearchInput = (value) => {
+    setSearchInput(value)
+  }
+
   const handleSidebarContent = (content) => {
     setSidebarContent(content)
   }
@@ -70,17 +75,24 @@ function Sidebar({chats, allMessages, handleChat, updateChats, onlineUsers})  {
     newChat(e, userId)
   }
 
+  const backToMain = () => {
+    handleSidebarContent('')
+    setSearchInput('')
+  }
+
   return (
     <div id="sidebar">
         {sidebarContent === 'write' || sidebarContent === 'search' ?
           <div id="sidebarHeader">
-            <button onClick={() => handleSidebarContent('')} className="mainButton">
+            <button onClick={backToMain} className="mainButton">
               <img src={backIcon} alt="back" className="mainButtonImg"></img>
             </button>
             <Search 
               handleSidebarContent={handleSidebarContent} 
               handleUserResults={handleUserResults}
               handleChatResults={handleChatResults}
+              searchInput={searchInput}
+              handleSearchInput={handleSearchInput}
             />
           </div>
         : !sidebarContent ?
@@ -95,6 +107,8 @@ function Sidebar({chats, allMessages, handleChat, updateChats, onlineUsers})  {
               handleSidebarContent={handleSidebarContent} 
               handleUserResults={handleUserResults}
               handleChatResults={handleChatResults}
+              searchInput={searchInput}
+              handleSearchInput={handleSearchInput}
             />
           </div>
         :

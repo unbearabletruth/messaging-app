@@ -2,16 +2,15 @@ import { useState, useEffect, useRef } from "react";
 import '../assets/styles/Search.css'
 import searchIcon from '../assets/images/search-icon.svg'
 
-function Search({handleSidebarContent, handleUserResults, handleChatResults}){
-  const [input, setInput] = useState('')
+function Search({handleSidebarContent, handleUserResults, handleChatResults, searchInput, handleSearchInput}){
   const [searchActive, setSearchActive] = useState(false)
   const searchRef = useRef(null)
 
   useEffect(() => {
     const fetchSearch = async () => {
       const [resUsers, resChats] = await Promise.all([
-        fetch(`http://localhost:3000/users/search?search=${input}`),
-        fetch(`http://localhost:3000/chats/search?search=${input}`)
+        fetch(`http://localhost:3000/users/search?search=${searchInput}`),
+        fetch(`http://localhost:3000/chats/search?search=${searchInput}`)
       ])
       const jsonUsers = await resUsers.json()
       const jsonChats = await resChats.json()
@@ -23,13 +22,13 @@ function Search({handleSidebarContent, handleUserResults, handleChatResults}){
       }
     }
 
-    if (input.length > 0) {
+    if (searchInput.length > 0) {
       fetchSearch()
     } else {
       handleUserResults([])
       handleChatResults([])
     }
-  }, [input])
+  }, [searchInput])
 
   useEffect(() => {
     function handleClickOutside(e) {
@@ -42,10 +41,6 @@ function Search({handleSidebarContent, handleUserResults, handleChatResults}){
       document.removeEventListener("click", handleClickOutside);
     };
   }, [searchRef]);
-
-  const handleInput = (e) => {
-    setInput(e.target.value)
-  }
 
   const handleClick = () => {
     setSearchActive(true)
@@ -61,10 +56,10 @@ function Search({handleSidebarContent, handleUserResults, handleChatResults}){
         type='search' 
         id='search' 
         placeholder='Search'
-        onChange={handleInput}
+        onChange={(e) => handleSearchInput(e.target.value)}
         autoComplete="off"
         className={searchActive ? 'active' : ''}
-        value={input}
+        value={searchInput}
       >
       </input>
     </div>

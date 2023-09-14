@@ -1,7 +1,7 @@
 import dotsMenuIcon from '../assets/images/dots-menu.svg'
 import { useAuthContext } from '../hooks/UseAuthContext';
 import moment from 'moment';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, Fragment } from 'react';
 import profileIcon from '../assets/images/profile.png'
 import leaveIcon from '../assets/images/logout-icon.svg'
 import closeIcon from '../assets/images/close-icon.svg'
@@ -33,7 +33,7 @@ function ChatHeader({chat, chats, onlineUsers, updateChats, handleChat, screenWi
     }
   }
 
-  const admitToChat = async (req) => {
+  const admitRequest = async (req) => {
     const userId = {user: req._id}
     await fetch(`http://localhost:3000/chats/${chat._id}/add`, {
       method: 'PATCH',
@@ -42,7 +42,11 @@ function ChatHeader({chat, chats, onlineUsers, updateChats, handleChat, screenWi
         'Content-type': 'application/json'
       }
     })
-    //remove from requests
+    
+    removeRequest(req)
+  }
+
+  const removeRequest = async (req) => {
     const reqId = {request: req._id}
     const response = await fetch(`http://localhost:3000/chats/${chat._id}/removeRequest`, {
       method: 'PATCH',
@@ -75,8 +79,8 @@ function ChatHeader({chat, chats, onlineUsers, updateChats, handleChat, screenWi
       {chat && !chat.isGroupChat && chat.users.map(u => {
           return (
             u.username !== user.username &&
-              <>
-                <div className='chatHeaderInfo' key={u._id}>
+              <Fragment key={u._id}>
+                <div className='chatHeaderInfo'>
                   {screenWidth < 768 &&
                     <button onClick={() => handleChat(null)} className="mainButton">
                       <img src={backIcon} alt="back" className="mainButtonImg"></img>
@@ -103,7 +107,7 @@ function ChatHeader({chat, chats, onlineUsers, updateChats, handleChat, screenWi
                     </div>
                   </div>
                 }
-              </>
+              </Fragment>
           )}
         )
       }
@@ -148,10 +152,9 @@ function ChatHeader({chat, chats, onlineUsers, updateChats, handleChat, screenWi
                 </button>
                 {chat.requests.length > 0 ?
                   <>
-                    <h1 className='requestsTitle'>Click on user to accept</h1>
                     {chat.requests && chat.requests.map(req => {
                       return (
-                        <div className="userCard" key={req._id} onClick={() => admitToChat(req)}>
+                        <div className="userCard" key={req._id}>
                           <div className='userCardPicWrapper'>
                             <img src={req.profilePic} alt="profile picture" className="userCardPic"></img>
                             {onlineUsers.includes(req._id) && 
@@ -167,8 +170,11 @@ function ChatHeader({chat, chats, onlineUsers, updateChats, handleChat, screenWi
                             }
                           </div>
                           <div className='requestButtons'>
-                            <button className="mainButton decline">
-                              <img src={closeIcon} alt="x" className="mainButtonImg closeIcon"></img>
+                            <button className="acceptButton" onClick={() => admitRequest(req)}>
+                              <img src={acceptIcon} alt="accept" className="acceptButtonImg"></img>
+                            </button>
+                            <button className="declineButton" onClick={() => removeRequest(req)}>
+                              <img src={closeIcon} alt="x" className="declineButtonImg"></img>
                             </button>
                           </div>
                         </div>
