@@ -42,7 +42,7 @@ function ChatHeader({chat, chats, onlineUsers, updateChats, handleChat, screenWi
         'Content-type': 'application/json'
       }
     })
-    
+
     removeRequest(req)
   }
 

@@ -22,6 +22,36 @@
   color: var(--main-font-color);
 }
 
+#sidebarMain{
+  animation: sidebarGrow 200ms ease-in-out;
+}
+
+@keyframes sidebarGrow {
+  from {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+#sidebarWrite,
+.sidebarSearchContent{
+  animation: sidebarDrop 100ms ease-out;
+  transform-origin: top;
+}
+
+@keyframes sidebarDrop {
+  from {
+    transform: scaleY(0.6);
+  }
+  to {
+    transform: scaleY(1);
+  }
+}
+
 .sidebarChat{
   width: 100%;
   display: flex;

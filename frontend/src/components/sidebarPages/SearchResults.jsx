@@ -5,7 +5,7 @@ function SearchResults({searchUserResults, searchChatResults, onlineUsers, openC
   return (
     <>
     {searchUserResults.length > 0 && 
-      <>
+      <div className='sidebarSearchContent'>
         <h1 className='searchTitle'>Users</h1> 
         {searchUserResults.map(user => {
           return (
@@ -22,10 +22,10 @@ function SearchResults({searchUserResults, searchChatResults, onlineUsers, openC
             </div>
           )
         })}
-      </>
+      </div>
     }
     {searchChatResults.length > 0 && 
-      <>
+      <div className='sidebarSearchContent'>
         <h1 className='searchTitle'>Groups</h1> 
         {searchChatResults.map(chat => {
           return (
@@ -47,7 +47,7 @@ function SearchResults({searchUserResults, searchChatResults, onlineUsers, openC
             </div>
           )
         })}
-      </>
+      </div>
     }
   </>
   )

@@ -7,7 +7,7 @@ import logoutIcon from '../assets/images/logout-icon.svg'
 import closeIcon from '../assets/images/close-icon.svg'
 import '../assets/styles/Menu.css'
 
-function Menu({handleChat, chats, updateChats, handleSidebarContent}) {
+function Menu({handleChat, chats, updateChats, handleSidebarContent, handleDrawer}) {
   const {user, dispatch} = useAuthContext()
   const [menu, setMenu] = useState(false)
   const menuPopupRef = useRef(null);
@@ -50,6 +50,11 @@ function Menu({handleChat, chats, updateChats, handleSidebarContent}) {
     }
   }
 
+  const handleProfile = () => {
+    handleSidebarContent('')
+    handleDrawer(true)
+  }
+
   const handleLogout = () => {
     localStorage.removeItem('user')
     dispatch({type: 'logout'})
@@ -67,7 +72,7 @@ function Menu({handleChat, chats, updateChats, handleSidebarContent}) {
             <img src={groupIcon} alt="new group" className="menuOptionIcon"></img>
             <p className="menuText">New group chat</p>
           </div>
-          <div className="menuOption" onClick={() => handleSidebarContent('profile')}>
+          <div className="menuOption" onClick={handleProfile}>
             <img src={profileIcon} alt="profile" className="menuOptionIcon"></img>
             <p className="menuText">Profile</p>
           </div>

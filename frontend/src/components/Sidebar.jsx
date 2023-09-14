@@ -11,10 +11,11 @@ import moment from 'moment';
 function Sidebar({chats, allMessages, handleChat, updateChats, onlineUsers})  {
   const { user } = useAuthContext()
   const [users, setUsers] = useState(null)
-  const [sidebarContent, setSidebarContent] = useState('')
+  const [sidebarContent, setSidebarContent] = useState('main')
   const [searchInput, setSearchInput] = useState('')
   const [searchUserResults, setSearchUserResults] = useState([])
   const [searchChatResults, setSearchChatResults] = useState([])
+  const [drawer, setDrawer] = useState(false)
 
   const newChat = async (e, partnerId) => {
     e.preventDefault()
@@ -76,8 +77,12 @@ function Sidebar({chats, allMessages, handleChat, updateChats, onlineUsers})  {
   }
 
   const backToMain = () => {
-    handleSidebarContent('')
+    handleSidebarContent('main')
     setSearchInput('')
+  }
+
+  const handleDrawer = (value) => {
+    setDrawer(value)
   }
 
   return (
@@ -95,13 +100,14 @@ function Sidebar({chats, allMessages, handleChat, updateChats, onlineUsers})  {
               handleSearchInput={handleSearchInput}
             />
           </div>
-        : !sidebarContent ?
+        : !sidebarContent || sidebarContent === 'main' ?
           <div id="sidebarHeader">
             <Menu 
               handleChat={handleChat} 
               chats={chats} 
               updateChats={updateChats}
               handleSidebarContent={handleSidebarContent}
+              handleDrawer={handleDrawer}
             />
             <Search 
               handleSidebarContent={handleSidebarContent} 
@@ -114,53 +120,56 @@ function Sidebar({chats, allMessages, handleChat, updateChats, onlineUsers})  {
         :
           null
         }
-      {!sidebarContent &&
-        <AllChats 
-          chats={chats} 
-          handleChat={handleChat} 
-          handleSidebarContent={handleSidebarContent}
-          onlineUsers={onlineUsers}
-          allMessages={allMessages}
-        />
-      }
-      {sidebarContent === 'write' &&
-        <>
-          {users && users.map(u => {
-            return (
-              u._id !== user._id &&
-              <div className="sidebarUser" key={u._id} onClick={(e) => openChat(e, u._id)}>
-                <div className='sidebarPicWrapper'>
-                  <img src={u.profilePic} alt="profile picture" className="sidebarPic"></img>
-                  {onlineUsers.includes(u._id) && 
-                    <div className='sidebarUserStatus'></div>
-                  }
+        {!sidebarContent && null}
+        {sidebarContent === 'main' &&
+          <AllChats 
+            chats={chats} 
+            handleChat={handleChat} 
+            handleSidebarContent={handleSidebarContent}
+            onlineUsers={onlineUsers}
+            allMessages={allMessages}
+          />
+        }
+        {sidebarContent === 'write' &&
+          <div id="sidebarWrite">
+            {users && users.map(u => {
+              return (
+                u._id !== user._id &&
+                <div className="sidebarUser" key={u._id} onClick={(e) => openChat(e, u._id)}>
+                  <div className='sidebarPicWrapper'>
+                    <img src={u.profilePic} alt="profile picture" className="sidebarPic"></img>
+                    {onlineUsers.includes(u._id) && 
+                      <div className='sidebarUserStatus'></div>
+                    }
+                  </div>
+                  <div className="writeUserInfo">
+                    <p className="writeName">{u.username}</p>
+                    {onlineUsers.includes(u._id) ? 
+                      <p className='writeUserStatus'>online</p>
+                      : u.lastSeen &&
+                      <p className='writeLastSeen'>last seen {moment(u.lastSeen).fromNow()}</p>
+                    }
+                  </div>
                 </div>
-                <div className="writeUserInfo">
-                  <p className="writeName">{u.username}</p>
-                  {onlineUsers.includes(u._id) ? 
-                    <p className='writeUserStatus'>online</p>
-                    : u.lastSeen &&
-                    <p className='writeLastSeen'>last seen {moment(u.lastSeen).fromNow()}</p>
-                  }
-                </div>
-              </div>
-            )
-          })}
-        </>
-      }
-      {sidebarContent === 'search' &&
-        <SearchResults 
-          handleSidebarContent={handleSidebarContent}
-          searchUserResults={searchUserResults}
-          searchChatResults={searchChatResults}
-          onlineUsers={onlineUsers}
-          openChat={openChat}
-          handleChat={handleChat}
+              )
+            })}
+          </div>
+        }
+        {sidebarContent === 'search' &&
+          <SearchResults 
+            handleSidebarContent={handleSidebarContent}
+            searchUserResults={searchUserResults}
+            searchChatResults={searchChatResults}
+            onlineUsers={onlineUsers}
+            openChat={openChat}
+            handleChat={handleChat}
+          />
+        }
+        <Profile 
+          handleSidebarContent={handleSidebarContent} 
+          drawer={drawer}
+          handleDrawer={handleDrawer}
         />
-      }
-      {sidebarContent === 'profile' &&
-        <Profile handleSidebarContent={handleSidebarContent}/>
-      }
     </div>
   )
 }

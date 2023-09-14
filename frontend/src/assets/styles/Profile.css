@@ -13,6 +13,21 @@
   padding: 10px;
 }
 
+#profileContent{
+  animation: sidebarShrink 200ms ease-in-out;      
+}
+
+@keyframes sidebarShrink {
+  from {
+    transform: scale(1.1);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
 .profilePicture{
   width: 100%;
   height: auto;
@@ -83,11 +98,13 @@
 }
 
 #profileEditForm{
+  width: 100%;
   padding: 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 50px;
+  animation: sidebarShrink 200ms ease-in-out;
 }
 
 .changeProfilePicture{
