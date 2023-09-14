@@ -119,7 +119,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  width: calc(100% - 70px)
+  width: calc(100% - 75px)
 }
 
 .sidebarChatName.selected{
@@ -128,7 +128,7 @@
 
 .sidebarChatUpdatedAt{
   color: var(--light-font-color);
-  font-size: 0.8rem;
+  font-size: 0.75rem;
 }
 
 .sidebarChatUpdatedAt.selected{
@@ -140,7 +140,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  width: calc(100% - 70px)
+  width: calc(100% - 75px)
 }
 
 .sidebarChatLatest.selected{

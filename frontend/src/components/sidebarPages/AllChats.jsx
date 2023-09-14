@@ -1,7 +1,7 @@
 import pencilIcon from '../../assets/images/pencil-icon.svg'
 import { useAuthContext } from '../../hooks/UseAuthContext';
 import { useState } from 'react';
-import moment from 'moment';
+import formatDate from '../../formatDate';
 
 function AllChats({chats, handleChat, handleSidebarContent, onlineUsers, allMessages}) {
   const { user } = useAuthContext()
@@ -37,7 +37,7 @@ function AllChats({chats, handleChat, handleSidebarContent, onlineUsers, allMess
                   <div className="sidebarChatMain">
                     <div className='sidebarChatNameAndDate'>
                       <p className={`sidebarChatName ${selected === chat._id ? 'selected' : ''}`}>{chat.name}</p>
-                      <p className={`sidebarChatUpdatedAt ${selected === chat._id ? 'selected' : ''}`}>{moment(chat.updatedAt).format('DD.MM.YYYY')}</p>
+                      <p className={`sidebarChatUpdatedAt ${selected === chat._id ? 'selected' : ''}`}>{formatDate(chat.latestMessage.updatedAt)}</p>
                     </div>
                     <div className='sidebarChatMessageAndUnread'>
                       <p className={`sidebarChatLatest ${selected === chat._id ? 'selected' : ''}`}>
@@ -71,7 +71,7 @@ function AllChats({chats, handleChat, handleSidebarContent, onlineUsers, allMess
                         <div className="sidebarChatMain">
                           <div className='sidebarChatNameAndDate'>
                             <p className={`sidebarChatName ${selected === chat._id ? 'selected' : ''}`}>{u.username}</p>
-                            <p className={`sidebarChatUpdatedAt ${selected === chat._id ? 'selected' : ''}`}>{moment(chat.updatedAt).format('DD.MM.YYYY')}</p>
+                            <p className={`sidebarChatUpdatedAt ${selected === chat._id ? 'selected' : ''}`}>{formatDate(chat.latestMessage.updatedAt)}</p>
                           </div>
                           <div className='sidebarChatMessageAndUnread'>
                             <p className={`sidebarChatLatest ${selected === chat._id ? 'selected' : ''}`}>

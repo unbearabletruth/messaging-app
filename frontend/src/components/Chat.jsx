@@ -165,7 +165,7 @@ function Chat({chat, handleChat, chats, updateChats, refetchChats, onlineUsers, 
                   <span className='messageSideInfo'>
                     <span className='messageTime'>{moment(message.createdAt).format('hh:mm')}</span>
                     {!chat.lastSeenInChat.some(lastSeen => lastSeen.id !== user._id &&
-                    lastSeen.timestamp < message.createdAt) && 
+                    lastSeen.timestamp < message.updatedAt) && 
                     message.author._id === user._id ?
                       <img src={readIcon} alt='read' className='messageRead'></img> 
                       : message.author._id === user._id ?
