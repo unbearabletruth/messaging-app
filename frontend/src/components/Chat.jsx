@@ -1,12 +1,13 @@
 import '../assets/styles/Chat.css'
 import '../assets/styles/Message.css'
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import moment from 'moment';
 import { useAuthContext } from '../hooks/UseAuthContext';
 import { socket } from '../socket';
 import closeIcon from '../assets/images/close-icon.svg'
 import readIcon from '../assets/images/read.svg'
 import sentIcon from '../assets/images/sent-check.svg'
+import toBottomIcon from '../assets/images/to-bottom.svg'
 import ChatHeader from './ChatHeader';
 import NewMessage from './NewMessage';
 
@@ -15,6 +16,8 @@ function Chat({chat, handleChat, chats, updateChats, refetchChats, onlineUsers, 
   const [mediaPopup, setMediaPopup] = useState(false)
   const [bigImage, setBigImage] = useState(null)
   const {user} = useAuthContext()
+  const [scrollButton, setScrollButton] = useState(false)
+  const chatBottom = useRef(null);
 
   useEffect(() => {
     socket.on('receive message', (newMessage) => {
@@ -138,6 +141,20 @@ function Chat({chat, handleChat, chats, updateChats, refetchChats, onlineUsers, 
     setMessages(prevState => [...prevState, newMessage])
   }
 
+  const scrollBottom = () => {
+    chatBottom.current.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  const handleScroll = (e) => {
+    //chat is reversed, so is scrollTop
+    const buttonAppearHeight = e.target.clientHeight / 3
+    if (buttonAppearHeight > Math.abs(e.target.scrollTop)) {
+      setScrollButton(false)
+    } else {
+      setScrollButton(true)
+    }
+  }
+
   return (
     <div id='content'>
       {chat ?
@@ -151,7 +168,8 @@ function Chat({chat, handleChat, chats, updateChats, refetchChats, onlineUsers, 
           screenWidth={screenWidth}
           openChat={openChat}
         />
-        <div className="chatField">
+        <div className="chatField" onScroll={handleScroll}>
+          <div ref={chatBottom}/>
           {chat && messages && messages.toReversed().map(message => {
             return (
               <div className={message.author._id === user._id ? 'myMessage' : 'message'} key={message._id}>
@@ -179,6 +197,9 @@ function Chat({chat, handleChat, chats, updateChats, refetchChats, onlineUsers, 
               </div>
             )
           })}
+          <button className={`bigButton toBottom ${scrollButton ? 'visible' : ''}`} onClick={scrollBottom}>
+            <img src={toBottomIcon} alt="scroll bottom" className="bigButtonImg"></img>
+          </button>
         </div>
         {chat && !chat.privateGroup && !chat.users.some(u => u._id === user._id) &&
           <button className='joinChatButton' onClick={joinGroupChat}>Join group</button>

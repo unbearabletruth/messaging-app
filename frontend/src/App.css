@@ -105,6 +105,9 @@ a:active {
   border: 0px;
   background-color: var(--main-darker);
   transition: background-color 0.2s ease-out;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .bigButton:hover{

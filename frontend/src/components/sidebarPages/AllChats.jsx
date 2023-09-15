@@ -17,7 +17,7 @@ function AllChats({chats, handleChat, handleSidebarContent, onlineUsers, allMess
     const unread = chatMes.filter(mes => mes.author._id !== user._id && mes.updatedAt > yourTimestamp)
     return unread.length
   }
-  console.log(selected)
+
   return (
     <>
       <div id='sidebarMain'>
