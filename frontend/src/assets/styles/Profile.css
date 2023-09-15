@@ -57,7 +57,7 @@
   color: var(--main-darker);
 }
 
-/*drawer*/
+/*in drawer*/
 
 #profilePictureWrapper{
   position: relative;
@@ -74,6 +74,11 @@
   color: #f5f5f5;
   font-size: 0.8rem;
   background: linear-gradient(0deg, rgba(18,18,18,0.75) 0%, rgba(0,0,0,0) 100%);
+}
+
+.profileInfoBlock.clickable:hover{
+  cursor: pointer;
+  background-color: var(--hover);
 }
 
 /*form*/
