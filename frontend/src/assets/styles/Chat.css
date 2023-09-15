@@ -42,15 +42,6 @@
   font-size: 0.9rem;
 }
 
-#verticalMenu{
-  font-size: 1.5rem;
-}
-
-.menu#chatMenu{
-  top: 55px;
-  right: 20px;
-}
-
 /* requests popup */
 #requestsPopup{
   max-height: 60vh;
@@ -255,103 +246,6 @@
   font-weight: bold;
 }
 
-/*new message*/
-
-#messageForm{
-  height: 50px;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: white;
-  border-top: 1px solid var(--light-border);
-  padding-right: 5px;
-}
-
-#messageInput{
-  width: 100%;
-  height: 100%;
-  border: 0px;
-  padding: 0px 8px;
-}
-
-#messageInput:focus{
-  outline: none;
-}
-
-#uploadMediaPopup{
-  width: 400px;
-  min-height: 250px;
-}
-
-#uploadImagePreview{
-  border-radius: 10px;
-}
-
-#uploadForm{
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-#uploadCaptionInput{
-  width: 100%;
-  height: 35px;
-  border-radius: 5px;
-  padding: 0px 8px;
-  border: 1px solid var(--border)
-}
-
-#uploadCaptionInput:focus{
-  outline: none;
-  border: 2px solid var(--main-color);
-}
-
-#drawerWrapper,
-#sidebarDrawerWrapper{
-  top: 0px;
-  right: 0px;
-  position: absolute;
-  overflow: hidden;
-  visibility: hidden;
-  z-index: 1;
-  padding-left: 5px;
-}
-
-#sidebarDrawerWrapper{
-  width: 100%;
-  padding-left: 0;
-}
-
-#drawer,
-#sidebarDrawer{
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  height: 100vh;
-  width: 500px;
-  background-color: rgba(255, 255, 255, 0.9);
-  box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
-  transform: translateX(110%);
-  transition: transform 0.3s ease-out;
-  visibility: visible;
-}
-
-#sidebarDrawer{
-  width: 100%;
-  box-shadow: none;
-  transform: translateX(100%);
-  transition: transform 0.15s ease-out;
-  background-color: white;
-}
-
-#drawer.active,
-#sidebarDrawer.active{
-  transform: translateX(0%);
-  transition: transform 0.3s ease-out;
-}
-
-
 @media (max-width: 1200px) {
   .chatField{
     padding: 20px 5%;
@@ -359,10 +253,6 @@
 }
 
 @media (max-width: 768px) {
-  #drawer{
-    width: 100vw;
-  }
-
   #uploadMediaPopup{
     width: 90%;
   }

@@ -102,5 +102,3 @@ function AllChats({chats, handleChat, handleSidebarContent, onlineUsers, allMess
 }
 
 export default AllChats
-
-//messages.messages.filter(mes => mes.updatedAt > chat.lastSeenInChat.find(ls => ls.id === user._id).timestamp).length}

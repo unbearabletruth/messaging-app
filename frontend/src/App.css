@@ -77,7 +77,7 @@ a:active {
 .mainButtonImg{
   width: 20px;
   height: auto;
-  filter: invert(24%) sepia(0%) saturate(5%) hue-rotate(205deg) brightness(98%) contrast(95%);
+  filter: invert(39%) sepia(0%) saturate(0%) hue-rotate(146deg) brightness(111%) contrast(79%);
 }
 
 .mainButton.closePopup{
@@ -172,31 +172,52 @@ a:active {
   font-weight: bold;
 }
 
-.menuOption{
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 0px 15px;
+#drawerWrapper,
+#sidebarDrawerWrapper{
+  top: 0px;
+  right: 0px;
+  position: absolute;
+  overflow: hidden;
+  visibility: hidden;
+  z-index: 1;
+  padding-left: 5px;
+}
+
+#sidebarDrawerWrapper{
   width: 100%;
-  height: 30px;
-  color: var(--main-font-color)
+  padding-left: 0;
 }
 
-.menuOptionIcon{
-  width: 20px;
-  height: auto;
+#drawer,
+#sidebarDrawer{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100vh;
+  width: 500px;
+  background-color: rgba(255, 255, 255, 0.9);
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+  transform: translateX(110%);
+  transition: transform 0.3s ease-out;
+  visibility: visible;
 }
 
-.menuText{
-  color: var(--main-font-color);
-  font-weight: bold;
+#sidebarDrawer{
+  width: 100%;
+  box-shadow: none;
+  transform: translateX(100%);
+  transition: transform 0.15s ease-out;
+  background-color: white;
 }
 
-.leaveIcon{
-  filter: invert(14%) sepia(53%) saturate(6949%) hue-rotate(354deg) brightness(109%) contrast(83%);
+#drawer.active,
+#sidebarDrawer.active{
+  transform: translateX(0%);
+  transition: transform 0.3s ease-out;
 }
 
-.menuLeaveText{
-  color: #dc2626;
-  font-weight: bold;
+@media (max-width: 768px) {
+  #drawer{
+    width: 100vw;
+  }
 }
