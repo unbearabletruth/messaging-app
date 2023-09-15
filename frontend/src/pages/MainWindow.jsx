@@ -11,6 +11,7 @@ function MainWindow() {
   const [chats, setChats] = useState(null)
   const [messages, setMessages] = useState([])
   const [currentChat, setCurrentChat] = useState(null)
+  const [selected, setSelected] = useState(null)
   const [refetch, setRefetch] = useState(false)
   const [onlineUsers, setOnlineUsers] = useState([])
   const [screenWidth, setScreenWidth] = useState(window.innerWidth)
@@ -39,6 +40,40 @@ function MainWindow() {
 
     fetchChats()
   }, [refetch])
+
+  const newChat = async (e, partnerId) => {
+    e.preventDefault()
+    const newChat = {
+      isGroupChat: false,
+      users: [user._id, partnerId]
+    }
+    const response = await fetch(`http://localhost:3000/chats`, {
+      method: 'POST',
+      body: JSON.stringify(newChat),
+      headers: {
+        'Content-type': 'application/json'
+      }
+    })
+    const json = await response.json()
+    if (response.ok) {
+      updateChats([json, ...chats])
+      handleChat(json)
+    }
+  }
+
+  const openChat = (e, userId) => {
+    if (userId === user._id) return
+    
+    for (let chat of chats) {
+      const chatExists = chat.users.find(u => u._id === userId)
+      if (chatExists && !chat.isGroupChat) {
+        setCurrentChat(chat)
+        setSelected(chat._id)
+        return
+      }
+    };
+    newChat(e, userId)
+  }
 
   useEffect(() => {
     const fetchMessages = async () => {
@@ -102,6 +137,10 @@ function MainWindow() {
     setCurrentChat(chat)
   }
 
+  const handleSelected = (chatId) => {
+    setSelected(chatId)
+  }
+
   const refetchChats = () => {
     setRefetch(!refetch)
   }
@@ -114,7 +153,10 @@ function MainWindow() {
           handleChat={handleChat}
           updateChats={updateChats}
           onlineUsers={onlineUsers}
-          allMessages={messages} 
+          allMessages={messages}
+          openChat={openChat}
+          selected={selected}
+          handleSelected={handleSelected} 
         />
         <Chat 
           chat={currentChat}
@@ -123,6 +165,7 @@ function MainWindow() {
           updateChats={updateChats}
           refetchChats={refetchChats}
           onlineUsers={onlineUsers}
+          openChat={openChat} 
         />
       </>
       : currentChat !== null ?
@@ -134,6 +177,7 @@ function MainWindow() {
           refetchChats={refetchChats}
           onlineUsers={onlineUsers} 
           screenWidth={screenWidth}
+          openChat={openChat} 
         />
       :
         <Sidebar
@@ -142,6 +186,9 @@ function MainWindow() {
           updateChats={updateChats}
           onlineUsers={onlineUsers} 
           allMessages={messages}
+          openChat={openChat} 
+          selected={selected}
+          handleSelected={handleSelected} 
         />
   )
 }

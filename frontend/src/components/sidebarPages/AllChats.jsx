@@ -3,12 +3,11 @@ import { useAuthContext } from '../../hooks/UseAuthContext';
 import { useState } from 'react';
 import formatDate from '../../formatDate';
 
-function AllChats({chats, handleChat, handleSidebarContent, onlineUsers, allMessages}) {
+function AllChats({chats, handleChat, handleSidebarContent, onlineUsers, allMessages, selected, handleSelected}) {
   const { user } = useAuthContext()
-  const [selected, setSelected] = useState(null)
 
   const setChat = (chat) => {
-    setSelected(chat._id)
+    handleSelected(chat._id)
     handleChat(chat)
   }
   
@@ -18,7 +17,7 @@ function AllChats({chats, handleChat, handleSidebarContent, onlineUsers, allMess
     const unread = chatMes.filter(mes => mes.author._id !== user._id && mes.updatedAt > yourTimestamp)
     return unread.length
   }
-
+  console.log(selected)
   return (
     <>
       <div id='sidebarMain'>

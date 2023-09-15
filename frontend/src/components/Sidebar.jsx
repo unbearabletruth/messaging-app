@@ -8,7 +8,7 @@ import Profile from "./sidebarPages/Profile";
 import { useAuthContext } from '../hooks/UseAuthContext';
 import moment from 'moment';
 
-function Sidebar({chats, allMessages, handleChat, updateChats, onlineUsers})  {
+function Sidebar({chats, allMessages, handleChat, updateChats, onlineUsers, openChat, selected, handleSelected})  {
   const { user } = useAuthContext()
   const [users, setUsers] = useState(null)
   const [sidebarContent, setSidebarContent] = useState('main')
@@ -16,26 +16,6 @@ function Sidebar({chats, allMessages, handleChat, updateChats, onlineUsers})  {
   const [searchUserResults, setSearchUserResults] = useState([])
   const [searchChatResults, setSearchChatResults] = useState([])
   const [drawer, setDrawer] = useState(false)
-
-  const newChat = async (e, partnerId) => {
-    e.preventDefault()
-    const newChat = {
-      isGroupChat: false,
-      users: [user._id, partnerId]
-    }
-    const response = await fetch(`http://localhost:3000/chats`, {
-      method: 'POST',
-      body: JSON.stringify(newChat),
-      headers: {
-        'Content-type': 'application/json'
-      }
-    })
-    const json = await response.json()
-    if (response.ok) {
-      updateChats([json, ...chats])
-      handleChat(json)
-    }
-  }
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -63,17 +43,6 @@ function Sidebar({chats, allMessages, handleChat, updateChats, onlineUsers})  {
 
   const handleChatResults = (results) => {
     setSearchChatResults(results)
-  }
-
-  const openChat = (e, userId) => {
-    for (let chat of chats) {
-      const chatExists = chat.users.find(u => u._id === userId)
-      if (chatExists && !chat.isGroupChat) {
-        handleChat(chat)
-        return
-      }
-    };
-    newChat(e, userId)
   }
 
   const backToMain = () => {
@@ -128,6 +97,8 @@ function Sidebar({chats, allMessages, handleChat, updateChats, onlineUsers})  {
             handleSidebarContent={handleSidebarContent}
             onlineUsers={onlineUsers}
             allMessages={allMessages}
+            selected={selected}
+            handleSelected={handleSelected}
           />
         }
         {sidebarContent === 'write' &&

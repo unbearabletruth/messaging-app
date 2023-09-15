@@ -11,7 +11,7 @@ import requestIcon from '../assets/images/request.svg'
 import { socket } from '../socket';
 import acceptIcon from '../assets/images/submit.svg'
 
-function ChatHeader({chat, chats, onlineUsers, updateChats, handleChat, screenWidth}) {
+function ChatHeader({chat, chats, onlineUsers, updateChats, handleChat, screenWidth, openChat}) {
   const {user} = useAuthContext()
   const [menu, setMenu] = useState(false)
   const menuPopupRef = useRef(null);
@@ -82,7 +82,7 @@ function ChatHeader({chat, chats, onlineUsers, updateChats, handleChat, screenWi
           return (
             u.username !== user.username &&
               <Fragment key={u._id}>
-                <div className='chatHeaderInfo'>
+                <div className='chatHeaderInfo' onClick={() => {setDrawer(!drawer)}}>
                   {screenWidth < 768 &&
                     <button onClick={() => handleChat(null)} className="mainButton">
                       <img src={backIcon} alt="back" className="mainButtonImg"></img>
@@ -115,7 +115,7 @@ function ChatHeader({chat, chats, onlineUsers, updateChats, handleChat, screenWi
       }
       {chat && chat.isGroupChat && 
         <>
-          <div className='chatHeaderInfo' key={chat._id}>
+          <div className='chatHeaderInfo' key={chat._id} onClick={() => {setDrawer(!drawer)}}>
             {screenWidth < 768 &&
               <button onClick={() => handleChat(null)} className="mainButton">
                 <img src={backIcon} alt="back" className="mainButtonImg"></img>
@@ -250,7 +250,7 @@ function ChatHeader({chat, chats, onlineUsers, updateChats, handleChat, screenWi
               <>
                 {chat.users && chat.users.map(u => {
                   return (
-                    <div className="userCard" key={u._id}>
+                    <div className="userCard" key={u._id} onClick={(e) => openChat(e, u._id)}>
                       <div className='userCardPicWrapper'>
                         <img src={u.profilePic} alt="profile picture" className="userCardPic"></img>
                         {onlineUsers.includes(u._id) && 
