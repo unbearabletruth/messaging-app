@@ -17,7 +17,7 @@ function Chat({chat, handleChat, chats, updateChats, refetchChats, onlineUsers, 
   const [bigImage, setBigImage] = useState(null)
   const {user} = useAuthContext()
   const [scrollButton, setScrollButton] = useState(false)
-  const chatBottom = useRef(null);
+  const chatWindow = useRef(null);
 
   useEffect(() => {
     socket.on('receive message', (newMessage) => {
@@ -142,10 +142,10 @@ function Chat({chat, handleChat, chats, updateChats, refetchChats, onlineUsers, 
   }
 
   const scrollBottom = () => {
-    chatBottom.current.scrollIntoView({ behavior: 'smooth' });
+    chatWindow.current.scrollTo({ behavior: 'smooth', top: 0 });
   };
 
-  const handleScroll = (e) => {
+  const handleScrollButton = (e) => {
     //chat is reversed, so is scrollTop
     const buttonAppearHeight = e.target.clientHeight / 3
     if (buttonAppearHeight > Math.abs(e.target.scrollTop)) {
@@ -168,8 +168,7 @@ function Chat({chat, handleChat, chats, updateChats, refetchChats, onlineUsers, 
           screenWidth={screenWidth}
           openChat={openChat}
         />
-        <div className="chatField" onScroll={handleScroll}>
-          <div ref={chatBottom}/>
+        <div className="chatField" onScroll={handleScrollButton} ref={chatWindow}>
           {chat && messages && messages.toReversed().map(message => {
             return (
               <div className={message.author._id === user._id ? 'myMessage' : 'message'} key={message._id}>

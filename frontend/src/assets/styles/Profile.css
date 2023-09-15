@@ -35,24 +35,39 @@
 }
 
 .profileInfoBlock{
-  display: flex;
-  justify-content: space-between;
-  flex-direction: column;
-  padding: 20px;
-  height: 100px;
   width: 100%;
-  background-color: #fafafa;
-  margin-bottom: 10px;
-  border-bottom: 1px solid var(--light-border);
+  padding: 8px 0px;
+}
+
+.profileInfoSection{
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  padding: 0px 20px;
+  height: 60px;
+  width: 100%;
+  background-color: white;
+  transition: background-color 0.3s ease-out;
+}
+
+.profileInfoIcon{
+  width: 24px;
+  height: auto;
+  filter: invert(39%) sepia(0%) saturate(0%) hue-rotate(146deg) brightness(111%) contrast(79%);
+}
+
+.profileInfoMain{
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
 }
 
 .profileInfoTitle{
   font-size: 0.8rem;
-  color: var(--main-font-color);
+  color: var(--light-font-color);
 }
 
 .profileInfo{
-  font-size: 1.3rem;
   font-weight: bold;
   color: var(--main-darker);
 }
@@ -67,7 +82,7 @@
   display: flex;
   align-items: center;
   height: 60px;
-  padding: 10px;
+  padding: 0px 20px;
   width: 100%;
   position: absolute;
   bottom: 0px;
@@ -76,7 +91,7 @@
   background: linear-gradient(0deg, rgba(18,18,18,0.75) 0%, rgba(0,0,0,0) 100%);
 }
 
-.profileInfoBlock.clickable:hover{
+.profileInfoSection.clickable:hover{
   cursor: pointer;
   background-color: var(--hover);
 }

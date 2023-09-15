@@ -5,7 +5,8 @@ import addPhoto from '../../assets/images/add-photo.png'
 import editIcon from '../../assets/images/edit.svg'
 import backIcon from '../../assets/images/back-icon.svg'
 import submitIcon from '../../assets/images/submit.svg'
-
+import usernameIcon from '../../assets/images/at.svg'
+import bioIcon from '../../assets/images/info.svg'
 
 function Profile({handleSidebarContent, drawer, handleDrawer}) {
   const isImage = ['gif','jpg','jpeg','png'];
@@ -98,15 +99,23 @@ function Profile({handleSidebarContent, drawer, handleDrawer}) {
             <div id='profileContent'>
               <img src={user.profilePic} alt='profile picture' className='profilePicture'></img>
               <div className='profileInfoBlock'>
-                <p className='profileInfoTitle'>Username</p>
-                <p className='profileInfo'>{user.username}</p>
-              </div>
-              {user.bio &&
-                <div className='profileInfoBlock'>
-                  <p className='profileInfoTitle'>Bio</p>
-                  <p className='profileInfo'>{user.bio}</p>
+                <div className='profileInfoSection'>
+                  <img src={usernameIcon} alt='username icon' className='profileInfoIcon'></img>
+                  <div className='profileInfoMain'>
+                    <p className='profileInfo'>{user.username}</p>
+                    <p className='profileInfoTitle'>Username</p>
+                  </div>
                 </div>
-              }
+                {user.bio &&
+                  <div className='profileInfoSection'>
+                    <img src={bioIcon} alt='bio icon' className='profileInfoIcon'></img>
+                    <div className='profileInfoMain'>
+                      <p className='profileInfo'>{user.bio}</p>
+                      <p className='profileInfoTitle'>Bio</p>
+                    </div>
+                  </div>
+                }
+              </div>
             </div>
           </>
         :

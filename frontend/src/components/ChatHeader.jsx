@@ -10,6 +10,8 @@ import backIcon from '../assets/images/back-icon.svg'
 import requestIcon from '../assets/images/request.svg'
 import { socket } from '../socket';
 import acceptIcon from '../assets/images/submit.svg'
+import usernameIcon from '../assets/images/at.svg'
+import bioIcon from '../assets/images/info.svg'
 
 function ChatHeader({chat, chats, onlineUsers, updateChats, handleChat, screenWidth, openChat}) {
   const {user} = useAuthContext()
@@ -218,23 +220,34 @@ function ChatHeader({chat, chats, onlineUsers, updateChats, handleChat, screenWi
               }
             </div>
             {!chat.isGroupChat &&
-              <>
-                <div className='profileInfoBlock'>
-                  <p className='profileInfoTitle'>Username</p>
-                  <p className='profileInfo'>{chat.users.find(u => u._id !== user._id).username}</p>
+              <div className='profileInfoBlock'>
+                <div className='profileInfoSection'>
+                  <img src={usernameIcon} alt='username icon' className='profileInfoIcon'></img>
+                  <div className='profileInfoMain'>
+                    <p className='profileInfo'>{chat.users.find(u => u._id !== user._id).username}</p>
+                    <p className='profileInfoTitle'>Username</p>
+                  </div>
                 </div>
                 {chat.users.find(u => u._id !== user._id).bio &&
-                  <div className='profileInfoBlock'>
-                    <p className='profileInfoTitle'>Bio</p>
-                    <p className='profileInfo'>{chat.users.find(u => u._id !== user._id).bio}</p>
+                  <div className='profileInfoSection'>
+                    <img src={bioIcon} alt='bio icon' className='profileInfoIcon'></img>
+                    <div className='profileInfoMain'>
+                      <p className='profileInfo'>{chat.users.find(u => u._id !== user._id).bio}</p>
+                      <p className='profileInfoTitle'>Bio</p>
+                    </div>
                   </div>
                 }
-              </>
+              </div>
             }
             {chat.isGroupChat &&
-              <div className='profileInfoBlock  clickable' onClick={() => setSubsPopup(true)}>
-                <p className='profileInfoTitle'>Subscribers</p>
-                <p className='profileInfo'>{chat.users.length} {chat.users.length === 1 ? 'subscriber' : 'subscribers'}</p>
+              <div className='profileInfoBlock'>
+                <div className='profileInfoSection  clickable' onClick={() => setSubsPopup(true)}>
+                  <img src={groupIcon} alt='subs icon' className='profileInfoIcon'></img>
+                  <div className='profileInfoMain'>
+                    <p className='profileInfoTitle'>Click to see details</p>
+                    <p className='profileInfo'>{chat.users.length} {chat.users.length === 1 ? 'subscriber' : 'subscribers'}</p>
+                  </div>
+                </div>
               </div>
             }
           </div>
