@@ -1,15 +1,11 @@
 import pencilIcon from '../../assets/images/pencil-icon.svg'
 import { useAuthContext } from '../../hooks/UseAuthContext';
-import { useState } from 'react';
+import { useCurrentChatContext } from "../../hooks/UseCurrentChatContext";
 import formatDate from '../../formatDate';
 
-function AllChats({chats, handleChat, handleSidebarContent, onlineUsers, allMessages, selected, handleSelected}) {
+function AllChats({chats, handleSidebarContent, onlineUsers, allMessages}) {
   const { user } = useAuthContext()
-
-  const setChat = (chat) => {
-    handleSelected(chat._id)
-    handleChat(chat)
-  }
+  const {currentChat, handleCurrentChat} = useCurrentChatContext()
   
   const calculateUnread = (chat) => {
     const chatMes = allMessages.find(mess => mess.id === chat._id).messages
@@ -25,9 +21,9 @@ function AllChats({chats, handleChat, handleSidebarContent, onlineUsers, allMess
           return (
             chat.isGroupChat ?
               <div 
-                onClick={() => setChat(chat)} 
+                onClick={() => handleCurrentChat(chat)} 
                 key={chat._id} 
-                className={`sidebarChat ${selected === chat._id ? 'selected' : ''}`}
+                className={`sidebarChat ${currentChat?._id === chat._id ? 'selected' : ''}`}
               >
                 <div className="sidebarChatContent">
                   <div className='sidebarPicWrapper'>
@@ -35,15 +31,17 @@ function AllChats({chats, handleChat, handleSidebarContent, onlineUsers, allMess
                   </div>
                   <div className="sidebarChatMain">
                     <div className='sidebarChatNameAndDate'>
-                      <p className={`sidebarChatName ${selected === chat._id ? 'selected' : ''}`}>{chat.name}</p>
-                      <p className={`sidebarChatUpdatedAt ${selected === chat._id ? 'selected' : ''}`}>{formatDate(chat.latestMessage.updatedAt)}</p>
+                      <p className={`sidebarChatName ${currentChat?._id === chat._id ? 'selected' : ''}`}>{chat.name}</p>
+                      {chat.latestMessage &&
+                        <p className={`sidebarChatUpdatedAt ${currentChat?._id === chat._id ? 'selected' : ''}`}>{formatDate(chat.latestMessage.updatedAt)}</p>
+                      }
                     </div>
                     <div className='sidebarChatMessageAndUnread'>
-                      <p className={`sidebarChatLatest ${selected === chat._id ? 'selected' : ''}`}>
+                      <p className={`sidebarChatLatest ${currentChat?._id === chat._id ? 'selected' : ''}`}>
                         {chat.latestMessage ? chat.latestMessage.text : 'Click to start a conversation!'}
                       </p>
                       {allMessages.find(mes => mes.id === chat._id) && calculateUnread(chat) > 0 &&
-                        <div className={`sidebarUnread ${selected === chat._id ? 'selected' : ''}`}>
+                        <div className={`sidebarUnread ${currentChat?._id === chat._id ? 'selected' : ''}`}>
                           {calculateUnread(chat)}
                         </div>
                       }
@@ -56,9 +54,9 @@ function AllChats({chats, handleChat, handleSidebarContent, onlineUsers, allMess
                 return (
                   u.username !== user.username ?
                     <div 
-                      onClick={() => setChat(chat)} 
+                      onClick={() => handleCurrentChat(chat)} 
                       key={chat._id} 
-                      className={`sidebarChat ${selected === chat._id ? 'selected' : ''}`}
+                      className={`sidebarChat ${currentChat?._id === chat._id ? 'selected' : ''}`}
                     >
                       <div className="sidebarChatContent">
                         <div className='sidebarPicWrapper'>
@@ -69,15 +67,17 @@ function AllChats({chats, handleChat, handleSidebarContent, onlineUsers, allMess
                         </div>
                         <div className="sidebarChatMain">
                           <div className='sidebarChatNameAndDate'>
-                            <p className={`sidebarChatName ${selected === chat._id ? 'selected' : ''}`}>{u.username}</p>
-                            <p className={`sidebarChatUpdatedAt ${selected === chat._id ? 'selected' : ''}`}>{formatDate(chat.latestMessage.updatedAt)}</p>
+                            <p className={`sidebarChatName ${currentChat?._id === chat._id ? 'selected' : ''}`}>{u.username}</p>
+                            {chat.latestMessage &&
+                              <p className={`sidebarChatUpdatedAt ${currentChat?._id === chat._id ? 'selected' : ''}`}>{formatDate(chat.latestMessage.updatedAt)}</p>
+                            }
                           </div>
                           <div className='sidebarChatMessageAndUnread'>
-                            <p className={`sidebarChatLatest ${selected === chat._id ? 'selected' : ''}`}>
+                            <p className={`sidebarChatLatest ${currentChat?._id === chat._id ? 'selected' : ''}`}>
                               {chat.latestMessage ? chat.latestMessage.text : 'Click to start a conversation!'}
                             </p>
                             {allMessages.find(mes => mes.id === chat._id) && calculateUnread(chat) > 0 &&
-                              <div className={`sidebarUnread ${selected === chat._id ? 'selected' : ''}`}>
+                              <div className={`sidebarUnread ${currentChat?._id === chat._id ? 'selected' : ''}`}>
                                 {calculateUnread(chat)}
                               </div>
                             }

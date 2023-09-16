@@ -12,9 +12,11 @@ import { socket } from '../socket';
 import acceptIcon from '../assets/images/submit.svg'
 import usernameIcon from '../assets/images/at.svg'
 import bioIcon from '../assets/images/info.svg'
+import { useCurrentChatContext } from "../hooks/UseCurrentChatContext";
 
-function ChatHeader({chat, chats, onlineUsers, updateChats, handleChat, screenWidth, openChat}) {
+function ChatHeader({chats, onlineUsers, updateChats, screenWidth, openChat}) {
   const {user} = useAuthContext()
+  const {currentChat, handleCurrentChat} = useCurrentChatContext()
   const [menu, setMenu] = useState(false)
   const menuPopupRef = useRef(null);
   const [drawer, setDrawer] = useState(false)
@@ -23,7 +25,7 @@ function ChatHeader({chat, chats, onlineUsers, updateChats, handleChat, screenWi
 
   const leaveGroupChat = async () => {
     const userId = {user: user._id}
-    const response = await fetch(`http://localhost:3000/chats/${chat._id}/remove`, {
+    const response = await fetch(`http://localhost:3000/chats/${currentChat._id}/remove`, {
       method: 'PATCH',
       body: JSON.stringify(userId),
       headers: {
@@ -32,14 +34,14 @@ function ChatHeader({chat, chats, onlineUsers, updateChats, handleChat, screenWi
     })
     const json = await response.json()
     if (response.ok) {
-      updateChats(chats.filter(c => c._id !== chat._id))
-      handleChat(json)
+      updateChats(chats.filter(c => c._id !== currentChat._id))
+      handleCurrentChat(json)
     }
   }
 
   const admitRequest = async (req) => {
     const userId = {user: req._id}
-    await fetch(`http://localhost:3000/chats/${chat._id}/add`, {
+    await fetch(`http://localhost:3000/chats/${currentChat._id}/add`, {
       method: 'PATCH',
       body: JSON.stringify(userId),
       headers: {
@@ -52,7 +54,7 @@ function ChatHeader({chat, chats, onlineUsers, updateChats, handleChat, screenWi
 
   const removeRequest = async (req) => {
     const reqId = {request: req._id}
-    const response = await fetch(`http://localhost:3000/chats/${chat._id}/removeRequest`, {
+    const response = await fetch(`http://localhost:3000/chats/${currentChat._id}/removeRequest`, {
       method: 'PATCH',
       body: JSON.stringify(reqId),
       headers: {
@@ -61,7 +63,7 @@ function ChatHeader({chat, chats, onlineUsers, updateChats, handleChat, screenWi
     })
     const json = await response.json()
     if (response.ok) {
-      handleChat(json)
+      handleCurrentChat(json)
       socket.emit('update chat', json)
     }
   }
@@ -80,13 +82,13 @@ function ChatHeader({chat, chats, onlineUsers, updateChats, handleChat, screenWi
 
   return(
     <div id="chatHeader">
-      {chat && !chat.isGroupChat && chat.users.map(u => {
+      {currentChat && !currentChat.isGroupChat && currentChat.users.map(u => {
           return (
             u.username !== user.username &&
               <Fragment key={u._id}>
                 <div className='chatHeaderInfo' onClick={() => {setDrawer(!drawer)}}>
                   {screenWidth < 768 &&
-                    <button onClick={() => handleChat(null)} className="mainButton">
+                    <button onClick={() => handleCurrentChat(null)} className="mainButton">
                       <img src={backIcon} alt="back" className="mainButtonImg"></img>
                     </button>
                   }
@@ -115,18 +117,18 @@ function ChatHeader({chat, chats, onlineUsers, updateChats, handleChat, screenWi
           )}
         )
       }
-      {chat && chat.isGroupChat && 
+      {currentChat && currentChat.isGroupChat && 
         <>
-          <div className='chatHeaderInfo' key={chat._id} onClick={() => {setDrawer(!drawer)}}>
+          <div className='chatHeaderInfo' key={currentChat._id} onClick={() => {setDrawer(!drawer)}}>
             {screenWidth < 768 &&
-              <button onClick={() => handleChat(null)} className="mainButton">
+              <button onClick={() => handleCurrentChat(null)} className="mainButton">
                 <img src={backIcon} alt="back" className="mainButtonImg"></img>
               </button>
             }
-            <img src={chat.groupPic} alt="group picture" id="chatHeaderPic"></img>
+            <img src={currentChat.groupPic} alt="group picture" id="chatHeaderPic"></img>
             <div className='chatInfoText'>
-              <p className='chatName'>{chat.name}</p>
-              <p id='chatSubscribers'>{chat.users.length} {chat.users.length === 1 ? 'subscriber' : 'subscribers'}</p>
+              <p className='chatName'>{currentChat.name}</p>
+              <p id='chatSubscribers'>{currentChat.users.length} {currentChat.users.length === 1 ? 'subscriber' : 'subscribers'}</p>
             </div>
           </div>
           <button className="mainButton" onClick={() => setMenu(!menu)} ref={menuPopupRef}>
@@ -138,13 +140,13 @@ function ChatHeader({chat, chats, onlineUsers, updateChats, handleChat, screenWi
                 <img src={groupIcon} alt="group" className="menuOptionIcon"></img>
                 <p className='menuText'>Group info</p>
               </div>
-              {chat.admins.includes(user._id) &&
+              {currentChat.admins.includes(user._id) &&
                 <div className="menuOption" onClick={() => setRequestsPopup(true)}>
                   <img src={requestIcon} alt="profile" className="menuOptionIcon"></img>
                   <p className='menuText'>Requests</p>
                 </div>
               }
-              {chat.users.some(u => u._id === user._id) &&
+              {currentChat.users.some(u => u._id === user._id) &&
                 <div className="menuOption" onClick={leaveGroupChat}>
                   <img src={leaveIcon} alt="profile" className="menuOptionIcon leaveIcon"></img>
                   <p className='menuLeaveText'>Leave group</p>
@@ -158,9 +160,9 @@ function ChatHeader({chat, chats, onlineUsers, updateChats, handleChat, screenWi
                 <button onClick={() => setRequestsPopup(false)} className="mainButton closePopup">
                   <img src={closeIcon} alt="x" className="mainButtonImg closeIcon"></img>
                 </button>
-                {chat.requests.length > 0 ?
+                {currentChat.requests.length > 0 ?
                   <>
-                    {chat.requests && chat.requests.map(req => {
+                    {currentChat.requests && currentChat.requests.map(req => {
                       return (
                         <div className="userCard" key={req._id}>
                           <div className='userCardPicWrapper'>
@@ -197,7 +199,7 @@ function ChatHeader({chat, chats, onlineUsers, updateChats, handleChat, screenWi
           }
         </>
       }
-      {chat &&
+      {currentChat &&
         <div id='drawerWrapper'>
           <div id='drawer' className={drawer ? 'active' : ''}>
             <div className='profileHeader'>
@@ -207,45 +209,45 @@ function ChatHeader({chat, chats, onlineUsers, updateChats, handleChat, screenWi
               <h1 className='sidebarTitle'>Profile</h1>
             </div>
             <div id='profilePictureWrapper'>
-              {chat.isGroupChat ?
+              {currentChat.isGroupChat ?
                 <>
-                  <img src={chat.groupPic} alt='group picture' className='profilePicture'></img>
-                  <div className='profilePicCaption'>{chat.name}</div>
+                  <img src={currentChat.groupPic} alt='group picture' className='profilePicture'></img>
+                  <div className='profilePicCaption'>{currentChat.name}</div>
                 </>
                 :
                 <>
-                  <img src={chat.users.find(u => u._id !== user._id).profilePic} alt='profile picture' className='profilePicture'></img>
-                  <div className='profilePicCaption'>last seen {moment(chat.users.find(u => u._id !== user._id).lastSeen).fromNow()}</div>
+                  <img src={currentChat.users.find(u => u._id !== user._id).profilePic} alt='profile picture' className='profilePicture'></img>
+                  <div className='profilePicCaption'>last seen {moment(currentChat.users.find(u => u._id !== user._id).lastSeen).fromNow()}</div>
                 </>
               }
             </div>
-            {!chat.isGroupChat &&
+            {!currentChat.isGroupChat &&
               <div className='profileInfoBlock'>
                 <div className='profileInfoSection'>
                   <img src={usernameIcon} alt='username icon' className='profileInfoIcon'></img>
                   <div className='profileInfoMain'>
-                    <p className='profileInfo'>{chat.users.find(u => u._id !== user._id).username}</p>
+                    <p className='profileInfo'>{currentChat.users.find(u => u._id !== user._id).username}</p>
                     <p className='profileInfoTitle'>Username</p>
                   </div>
                 </div>
-                {chat.users.find(u => u._id !== user._id).bio &&
+                {currentChat.users.find(u => u._id !== user._id).bio &&
                   <div className='profileInfoSection'>
                     <img src={bioIcon} alt='bio icon' className='profileInfoIcon'></img>
                     <div className='profileInfoMain'>
-                      <p className='profileInfo'>{chat.users.find(u => u._id !== user._id).bio}</p>
+                      <p className='profileInfo'>{currentChat.users.find(u => u._id !== user._id).bio}</p>
                       <p className='profileInfoTitle'>Bio</p>
                     </div>
                   </div>
                 }
               </div>
             }
-            {chat.isGroupChat &&
+            {currentChat.isGroupChat &&
               <div className='profileInfoBlock'>
                 <div className='profileInfoSection  clickable' onClick={() => setSubsPopup(true)}>
                   <img src={groupIcon} alt='subs icon' className='profileInfoIcon'></img>
                   <div className='profileInfoMain'>
                     <p className='profileInfoTitle'>Click to see details</p>
-                    <p className='profileInfo'>{chat.users.length} {chat.users.length === 1 ? 'subscriber' : 'subscribers'}</p>
+                    <p className='profileInfo'>{currentChat.users.length} {currentChat.users.length === 1 ? 'subscriber' : 'subscribers'}</p>
                   </div>
                 </div>
               </div>
@@ -259,9 +261,9 @@ function ChatHeader({chat, chats, onlineUsers, updateChats, handleChat, screenWi
             <button onClick={() => setSubsPopup(false)} className="mainButton closePopup">
               <img src={closeIcon} alt="x" className="mainButtonImg closeIcon"></img>
             </button>
-            {chat.users.length > 0 ?
+            {currentChat.users.length > 0 ?
               <>
-                {chat.users && chat.users.map(u => {
+                {currentChat.users && currentChat.users.map(u => {
                   return (
                     <div className="userCard" key={u._id} onClick={(e) => openChat(e, u._id)}>
                       <div className='userCardPicWrapper'>

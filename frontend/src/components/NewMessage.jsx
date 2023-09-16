@@ -2,10 +2,12 @@ import attachIcon from '../assets/images/attach.svg'
 import closeIcon from '../assets/images/close-icon.svg'
 import { useState, useEffect, useRef } from 'react';
 import { useAuthContext } from '../hooks/UseAuthContext';
+import { useCurrentChatContext } from "../hooks/UseCurrentChatContext";
 import { socket } from '../socket';
 
-function NewMessage({chat, addMessage, chats, updateChats}) {
+function NewMessage({addMessage, chats, updateChats}) {
   const {user} = useAuthContext()
+  const {currentChat} = useCurrentChatContext()
   const isImage = ['gif','jpg','jpeg','png'];
   const [wrongFile, setWrongFile] = useState(false)
   const fileInputRef = useRef(null);
@@ -18,14 +20,14 @@ function NewMessage({chat, addMessage, chats, updateChats}) {
   })
 
   useEffect(() => {
-    if (chat) {
+    if (currentChat) {
       setNewMessage({
         author: user._id,
-        chat: chat._id,
+        chat: currentChat._id,
         text: ''
       })
     }
-  }, [chat])
+  }, [currentChat])
 
   const submitMessage = async (e) => {
     e.preventDefault()
@@ -36,7 +38,7 @@ function NewMessage({chat, addMessage, chats, updateChats}) {
       formData.append('chat', newMessage.chat);
       formData.append('author', newMessage.author);
   
-      const response = await fetch(`http://localhost:3000/chats/${chat._id}/messages`, {
+      const response = await fetch(`http://localhost:3000/chats/${currentChat._id}/messages`, {
         method: 'POST',
         body: formData
       })
@@ -48,7 +50,7 @@ function NewMessage({chat, addMessage, chats, updateChats}) {
         })
         updateChatLatestMessage(json)
         addMessage(json)
-        socket.emit('new message', json, chat)
+        socket.emit('new message', json, currentChat)
         if (uploadPopup) {setUploadPopup(false)}
       }
     }
@@ -56,7 +58,7 @@ function NewMessage({chat, addMessage, chats, updateChats}) {
 
   const updateChatLatestMessage = async (message) => {
     const latestMessage = {latestMessage: message._id}
-    const response = await fetch(`http://localhost:3000/chats/${chat._id}`, {
+    const response = await fetch(`http://localhost:3000/chats/${currentChat._id}`, {
       method: 'PATCH',
       body: JSON.stringify(latestMessage),
       headers: {

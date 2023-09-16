@@ -8,7 +8,7 @@ import Profile from "./sidebarPages/Profile";
 import { useAuthContext } from '../hooks/UseAuthContext';
 import moment from 'moment';
 
-function Sidebar({chats, allMessages, handleChat, updateChats, onlineUsers, openChat, selected, handleSelected})  {
+function Sidebar({chats, allMessages, updateChats, onlineUsers, openChat})  {
   const { user } = useAuthContext()
   const [users, setUsers] = useState(null)
   const [sidebarContent, setSidebarContent] = useState('main')
@@ -72,7 +72,6 @@ function Sidebar({chats, allMessages, handleChat, updateChats, onlineUsers, open
         : !sidebarContent || sidebarContent === 'main' ?
           <div id="sidebarHeader">
             <Menu 
-              handleChat={handleChat} 
               chats={chats} 
               updateChats={updateChats}
               handleSidebarContent={handleSidebarContent}
@@ -93,12 +92,9 @@ function Sidebar({chats, allMessages, handleChat, updateChats, onlineUsers, open
         {sidebarContent === 'main' &&
           <AllChats 
             chats={chats} 
-            handleChat={handleChat} 
             handleSidebarContent={handleSidebarContent}
             onlineUsers={onlineUsers}
             allMessages={allMessages}
-            selected={selected}
-            handleSelected={handleSelected}
           />
         }
         {sidebarContent === 'write' &&
@@ -133,7 +129,6 @@ function Sidebar({chats, allMessages, handleChat, updateChats, onlineUsers, open
             searchChatResults={searchChatResults}
             onlineUsers={onlineUsers}
             openChat={openChat}
-            handleChat={handleChat}
           />
         }
         <Profile 

@@ -1,6 +1,8 @@
 import moment from 'moment';
+import { useCurrentChatContext } from "../../hooks/UseCurrentChatContext";
 
-function SearchResults({searchUserResults, searchChatResults, onlineUsers, openChat, handleChat}) {
+function SearchResults({searchUserResults, searchChatResults, onlineUsers, openChat}) {
+  const { handleCurrentChat } = useCurrentChatContext()
 
   return (
     <>
@@ -29,7 +31,7 @@ function SearchResults({searchUserResults, searchChatResults, onlineUsers, openC
         <h1 className='searchTitle'>Groups</h1> 
         {searchChatResults.map(chat => {
           return (
-            <div onClick={() => handleChat(chat)} key={chat._id} className="sidebarChat">
+            <div onClick={() => handleCurrentChat(chat)} key={chat._id} className="sidebarChat">
               <div className="sidebarChatContent">
                 <div className='sidebarPicWrapper'>
                   <img src={chat.groupPic} alt="group picture" className="sidebarPic"></img>

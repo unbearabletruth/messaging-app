@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from "react"
 import { useAuthContext } from '../hooks/UseAuthContext';
+import { useCurrentChatContext } from "../hooks/UseCurrentChatContext";
 import menuIcon from '../assets/images/menu-icon.svg'
 import groupIcon from '../assets/images/group.svg'
 import profileIcon from '../assets/images/profile.png'
@@ -7,8 +8,9 @@ import logoutIcon from '../assets/images/logout-icon.svg'
 import closeIcon from '../assets/images/close-icon.svg'
 import '../assets/styles/Menu.css'
 
-function Menu({handleChat, chats, updateChats, handleSidebarContent, handleDrawer}) {
-  const {user, dispatch} = useAuthContext()
+function Menu({chats, updateChats, handleSidebarContent, handleDrawer}) {
+  const { user, dispatch } = useAuthContext()
+  const { handleCurrentChat } = useCurrentChatContext()
   const [menu, setMenu] = useState(false)
   const menuPopupRef = useRef(null);
   const [newGroupPopup, setNewGroupPopup] = useState(false)
@@ -46,7 +48,7 @@ function Menu({handleChat, chats, updateChats, handleSidebarContent, handleDrawe
     if (response.ok) {
       setNewGroupPopup(false)
       updateChats([json, ...chats])
-      handleChat(json)
+      handleCurrentChat(json)
     }
   }
 

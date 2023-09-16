@@ -3,6 +3,7 @@ import '../assets/styles/Message.css'
 import { useState, useEffect, useRef } from 'react';
 import moment from 'moment';
 import { useAuthContext } from '../hooks/UseAuthContext';
+import { useCurrentChatContext } from "../hooks/UseCurrentChatContext";
 import { socket } from '../socket';
 import closeIcon from '../assets/images/close-icon.svg'
 import readIcon from '../assets/images/read.svg'
@@ -11,7 +12,8 @@ import toBottomIcon from '../assets/images/to-bottom.svg'
 import ChatHeader from './ChatHeader';
 import NewMessage from './NewMessage';
 
-function Chat({chat, handleChat, chats, updateChats, refetchChats, onlineUsers, screenWidth, openChat}) {
+function Chat({chats, updateChats, refetchChats, onlineUsers, screenWidth, openChat}) {
+  const {currentChat, handleCurrentChat} = useCurrentChatContext()
   const [messages, setMessages] = useState([])
   const [mediaPopup, setMediaPopup] = useState(false)
   const [bigImage, setBigImage] = useState(null)
@@ -21,7 +23,7 @@ function Chat({chat, handleChat, chats, updateChats, refetchChats, onlineUsers, 
 
   useEffect(() => {
     socket.on('receive message', (newMessage) => {
-      if (chat && chat._id === newMessage.chat._id) {
+      if (currentChat && currentChat._id === newMessage.chat._id) {
         setMessages(prevState => [...prevState, newMessage])
         if (onlineUsers.includes(user._id)){
           updateUserTimestampInChat()
@@ -31,13 +33,13 @@ function Chat({chat, handleChat, chats, updateChats, refetchChats, onlineUsers, 
       }
     })
     return () => socket.off('receive message')
-  }, [chat && chat._id, onlineUsers])
+  }, [currentChat && currentChat._id, onlineUsers])
 
   useEffect(() => {
     socket.on('receive chat', (updatedChat) => {
-      if (chat && chat._id === updatedChat._id) {
+      if (currentChat && currentChat._id === updatedChat._id) {
         console.log('received chat with new ts')
-        handleChat(updatedChat)
+        handleCurrentChat(updatedChat)
         if (!chats.some(chat => chat._id === updatedChat._id)) {
           updateChats([updatedChat, ...chats])
         }
@@ -46,18 +48,18 @@ function Chat({chat, handleChat, chats, updateChats, refetchChats, onlineUsers, 
       }
     })
     return () => socket.off('receive chat')
-  }, [chat && chat._id, chats])
+  }, [currentChat && currentChat._id, chats])
 
   useEffect(() => {
     if (onlineUsers.includes(user._id)) {
       updateUserTimestampInChat()
     }
-  }, [onlineUsers, chat && chat._id])
+  }, [onlineUsers, currentChat && currentChat._id])
 
   const updateUserTimestampInChat = async () => {
-    if (chat) {
+    if (currentChat) {
       const lastSeenInChat = {lastSeenInChat: {id: user._id, timestamp: Date.now()}}
-      const response = await fetch(`http://localhost:3000/chats/${chat._id}/timestamp`, {
+      const response = await fetch(`http://localhost:3000/chats/${currentChat._id}/timestamp`, {
         method: 'PATCH',
         body: JSON.stringify(lastSeenInChat),
         headers: {
@@ -66,7 +68,7 @@ function Chat({chat, handleChat, chats, updateChats, refetchChats, onlineUsers, 
       })
       const json = await response.json()
       if (response.ok) {
-        socket.emit('joined chat', chat._id)
+        socket.emit('joined chat', currentChat._id)
         socket.emit('update chat', json)
         const setChats = chats.map(chat => {
           if (chat._id === json._id) {
@@ -84,20 +86,20 @@ function Chat({chat, handleChat, chats, updateChats, refetchChats, onlineUsers, 
 
   useEffect(() => {
     const fetchMessages = async () => {
-      const response = await fetch(`http://localhost:3000/chats/${chat._id}/messages`)
+      const response = await fetch(`http://localhost:3000/chats/${currentChat._id}/messages`)
       const json = await response.json()
       if (response.ok) {
         setMessages(json)
       }
     }
     
-    if (chat && !chat.privateGroup || chat &&
-    chat.privateGroup && chat.users.some(u => u._id === user._id)) {
+    if (currentChat && !currentChat.privateGroup || currentChat &&
+      currentChat.privateGroup && currentChat.users.some(u => u._id === user._id)) {
       fetchMessages()
     } else {
       setMessages([])
     }
-  }, [chat && chat._id])
+  }, [currentChat && currentChat._id])
 
   const joinGroupChat = async () => {
     const userId = {user: user._id}
@@ -111,13 +113,13 @@ function Chat({chat, handleChat, chats, updateChats, refetchChats, onlineUsers, 
     const json = await response.json()
     if (response.ok) {
       updateChats([json, ...chats])
-      handleChat(json)
+      handleCurrentChat(json)
     }
   }
 
   const addRequest = async () => {
     const userId = {request: user._id}
-    const response = await fetch(`http://localhost:3000/chats/${chat._id}/addRequest`, {
+    const response = await fetch(`http://localhost:3000/chats/${currentChat._id}/addRequest`, {
       method: 'PATCH',
       body: JSON.stringify(userId),
       headers: {
@@ -127,7 +129,7 @@ function Chat({chat, handleChat, chats, updateChats, refetchChats, onlineUsers, 
     const json = await response.json()
     if (response.ok) {
       console.log(json)
-      handleChat(json)
+      handleCurrentChat(json)
       socket.emit('update chat', json)
     }
   }
@@ -157,32 +159,30 @@ function Chat({chat, handleChat, chats, updateChats, refetchChats, onlineUsers, 
 
   return (
     <div id='content'>
-      {chat ?
+      {currentChat ?
       <>
         <ChatHeader 
-          chat={chat} 
           chats={chats} 
           onlineUsers={onlineUsers} 
           updateChats={updateChats} 
-          handleChat={handleChat} 
           screenWidth={screenWidth}
           openChat={openChat}
         />
         <div className="chatField" onScroll={handleScrollButton} ref={chatWindow}>
-          {chat && messages && messages.toReversed().map(message => {
+          {currentChat && messages && messages.toReversed().map(message => {
             return (
               <div className={message.author._id === user._id ? 'myMessage' : 'message'} key={message._id}>
                 {message.media &&
                   <img src={message.media} alt='message media' className='messageMedia' onClick={() => showBigImage(message.media)}></img>
                 }
-                {chat.isGroupChat && message.author._id !== user._id &&
+                {currentChat.isGroupChat && message.author._id !== user._id &&
                   <span className='messageAuthor'>{message.author.username}</span>
                 }
                 <div className='messageContent'>
                   {message.text}
                   <span className='messageSideInfo'>
                     <span className='messageTime'>{moment(message.createdAt).format('hh:mm')}</span>
-                    {!chat.lastSeenInChat.some(lastSeen => lastSeen.id !== user._id &&
+                    {!currentChat.lastSeenInChat.some(lastSeen => lastSeen.id !== user._id &&
                     lastSeen.timestamp < message.updatedAt) && 
                     message.author._id === user._id ?
                       <img src={readIcon} alt='read' className='messageRead'></img> 
@@ -200,23 +200,23 @@ function Chat({chat, handleChat, chats, updateChats, refetchChats, onlineUsers, 
             <img src={toBottomIcon} alt="scroll bottom" className="bigButtonImg"></img>
           </button>
         </div>
-        {chat && !chat.privateGroup && !chat.users.some(u => u._id === user._id) &&
+        {currentChat && !currentChat.privateGroup && !currentChat.users.some(u => u._id === user._id) &&
           <button className='joinChatButton' onClick={joinGroupChat}>Join group</button>
         }
-        {chat && chat.privateGroup && !chat.users.some(u => u._id === user._id) &&
+        {currentChat && currentChat.privateGroup && !currentChat.users.some(u => u._id === user._id) &&
           <div id='joinPrivateWrapper'>
-            <img src={chat.groupPic} alt='group image' id='joinPrivateImage'></img>
-            <p id='joinPrivateName'>{chat.name}</p>
-            <p id='joinPrivateSubscribers'>{chat.users.length} {chat.users.length === 1 ? 'subscriber' : 'subscribers'}</p>
+            <img src={currentChat.groupPic} alt='group image' id='joinPrivateImage'></img>
+            <p id='joinPrivateName'>{currentChat.name}</p>
+            <p id='joinPrivateSubscribers'>{currentChat.users.length} {currentChat.users.length === 1 ? 'subscriber' : 'subscribers'}</p>
             <p id='joinPrivateInfo'>This is a private group</p>
-            {!chat.requests.some(u => u._id === user._id) ?
+            {!currentChat.requests.some(u => u._id === user._id) ?
               <button className='formButton' id='joinPrivateButton' onClick={addRequest}>Request to join</button>
               :
               <p id='joinPrivateSent'>Request has been sent</p>
             }
           </div>
         }
-        <NewMessage chat={chat} addMessage={addMessage} chats={chats} updateChats={updateChats}/>
+        <NewMessage addMessage={addMessage} chats={chats} updateChats={updateChats}/>
       </>
       :
       <div className="homeField"></div>

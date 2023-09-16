@@ -4,14 +4,14 @@ import '../assets/styles/Content.css'
 import Sidebar from "../components/Sidebar";
 import Chat from '../components/Chat';
 import { useAuthContext } from '../hooks/UseAuthContext';
+import { useCurrentChatContext } from "../hooks/UseCurrentChatContext";
 import { socket } from '../socket';
 
 function MainWindow() {
   const {user, dispatch} = useAuthContext()
+  const {currentChat, handleCurrentChat} = useCurrentChatContext()
   const [chats, setChats] = useState(null)
   const [messages, setMessages] = useState([])
-  const [currentChat, setCurrentChat] = useState(null)
-  const [selected, setSelected] = useState(null)
   const [refetch, setRefetch] = useState(false)
   const [onlineUsers, setOnlineUsers] = useState([])
   const [screenWidth, setScreenWidth] = useState(window.innerWidth)
@@ -57,7 +57,7 @@ function MainWindow() {
     const json = await response.json()
     if (response.ok) {
       updateChats([json, ...chats])
-      handleChat(json)
+      handleCurrentChat(json)
     }
   }
 
@@ -67,7 +67,7 @@ function MainWindow() {
     for (let chat of chats) {
       const chatExists = chat.users.find(u => u._id === userId)
       if (chatExists && !chat.isGroupChat) {
-        setCurrentChat(chat)
+        handleCurrentChat(chat)
         setSelected(chat._id)
         return
       }
@@ -133,14 +133,6 @@ function MainWindow() {
     setChats(chats)
   }
 
-  const handleChat = (chat) => {
-    setCurrentChat(chat)
-  }
-
-  const handleSelected = (chatId) => {
-    setSelected(chatId)
-  }
-
   const refetchChats = () => {
     setRefetch(!refetch)
   }
@@ -150,17 +142,12 @@ function MainWindow() {
       <>
         <Sidebar
           chats={chats}
-          handleChat={handleChat}
           updateChats={updateChats}
           onlineUsers={onlineUsers}
           allMessages={messages}
           openChat={openChat}
-          selected={selected}
-          handleSelected={handleSelected} 
         />
         <Chat 
-          chat={currentChat}
-          handleChat={handleChat}
           chats={chats} 
           updateChats={updateChats}
           refetchChats={refetchChats}
@@ -170,8 +157,6 @@ function MainWindow() {
       </>
       : currentChat !== null ?
         <Chat 
-          chat={currentChat}
-          handleChat={handleChat}
           chats={chats} 
           updateChats={updateChats}
           refetchChats={refetchChats}
@@ -182,13 +167,10 @@ function MainWindow() {
       :
         <Sidebar
           chats={chats}
-          handleChat={handleChat}
           updateChats={updateChats}
           onlineUsers={onlineUsers} 
           allMessages={messages}
           openChat={openChat} 
-          selected={selected}
-          handleSelected={handleSelected} 
         />
   )
 }

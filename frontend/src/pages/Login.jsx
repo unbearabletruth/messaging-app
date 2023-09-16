@@ -56,7 +56,7 @@ function Login() {
 
   return (
       <div id="loginPage">
-        <h1 id="loginTitle">Sign in to Messanger</h1>
+        <h1 id="loginTitle">Sign in to Messenger</h1>
         <form id="loginForm" onSubmit={handleLogin}>
           <input 
             type="text"
