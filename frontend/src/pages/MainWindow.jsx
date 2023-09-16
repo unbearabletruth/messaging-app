@@ -68,7 +68,6 @@ function MainWindow() {
       const chatExists = chat.users.find(u => u._id === userId)
       if (chatExists && !chat.isGroupChat) {
         handleCurrentChat(chat)
-        setSelected(chat._id)
         return
       }
     };

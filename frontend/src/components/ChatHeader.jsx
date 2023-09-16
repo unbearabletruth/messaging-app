@@ -10,12 +10,11 @@ import backIcon from '../assets/images/back-icon.svg'
 import requestIcon from '../assets/images/request.svg'
 import { socket } from '../socket';
 import acceptIcon from '../assets/images/submit.svg'
-import usernameIcon from '../assets/images/at.svg'
-import bioIcon from '../assets/images/info.svg'
 import { useCurrentChatContext } from "../hooks/UseCurrentChatContext";
+import ChatDrawer from './ChatDrawer';
 
 function ChatHeader({chats, onlineUsers, updateChats, screenWidth, openChat}) {
-  const {user} = useAuthContext()
+  const { user } = useAuthContext()
   const {currentChat, handleCurrentChat} = useCurrentChatContext()
   const [menu, setMenu] = useState(false)
   const menuPopupRef = useRef(null);
@@ -80,8 +79,17 @@ function ChatHeader({chats, onlineUsers, updateChats, screenWidth, openChat}) {
     };
   }, [menuPopupRef]);
 
+  const handleDrawer = (value) => {
+    setDrawer(value)
+  }
+
+  const handleSubsPopup = (value) => {
+    setSubsPopup(value)
+  }
+
   return(
     <div id="chatHeader">
+      <ChatDrawer drawer={drawer} handleDrawer={handleDrawer} handleSubsPopup={handleSubsPopup}/>
       {currentChat && !currentChat.isGroupChat && currentChat.users.map(u => {
           return (
             u.username !== user.username &&
@@ -197,98 +205,42 @@ function ChatHeader({chats, onlineUsers, updateChats, screenWidth, openChat}) {
               </div>
             </div>
           }
-        </>
-      }
-      {currentChat &&
-        <div id='drawerWrapper'>
-          <div id='drawer' className={drawer ? 'active' : ''}>
-            <div className='profileHeader'>
-              <button onClick={() => setDrawer(false)} className="mainButton">
-                <img src={closeIcon} alt="x" className="mainButtonImg closeIcon"></img>
-              </button>
-              <h1 className='sidebarTitle'>Profile</h1>
-            </div>
-            <div id='profilePictureWrapper'>
-              {currentChat.isGroupChat ?
-                <>
-                  <img src={currentChat.groupPic} alt='group picture' className='profilePicture'></img>
-                  <div className='profilePicCaption'>{currentChat.name}</div>
-                </>
-                :
-                <>
-                  <img src={currentChat.users.find(u => u._id !== user._id).profilePic} alt='profile picture' className='profilePicture'></img>
-                  <div className='profilePicCaption'>last seen {moment(currentChat.users.find(u => u._id !== user._id).lastSeen).fromNow()}</div>
-                </>
-              }
-            </div>
-            {!currentChat.isGroupChat &&
-              <div className='profileInfoBlock'>
-                <div className='profileInfoSection'>
-                  <img src={usernameIcon} alt='username icon' className='profileInfoIcon'></img>
-                  <div className='profileInfoMain'>
-                    <p className='profileInfo'>{currentChat.users.find(u => u._id !== user._id).username}</p>
-                    <p className='profileInfoTitle'>Username</p>
-                  </div>
-                </div>
-                {currentChat.users.find(u => u._id !== user._id).bio &&
-                  <div className='profileInfoSection'>
-                    <img src={bioIcon} alt='bio icon' className='profileInfoIcon'></img>
-                    <div className='profileInfoMain'>
-                      <p className='profileInfo'>{currentChat.users.find(u => u._id !== user._id).bio}</p>
-                      <p className='profileInfoTitle'>Bio</p>
-                    </div>
-                  </div>
+          {subsPopup &&
+            <div className="popupBackground">
+              <div className='popup' id="requestsPopup">
+                <button onClick={() => setSubsPopup(false)} className="mainButton closePopup">
+                  <img src={closeIcon} alt="x" className="mainButtonImg closeIcon"></img>
+                </button>
+                {currentChat.users.length > 0 ?
+                  <>
+                    {currentChat.users && currentChat.users.map(u => {
+                      return (
+                        <div className="userCard" key={u._id} onClick={(e) => openChat(e, u._id)}>
+                          <div className='userCardPicWrapper'>
+                            <img src={u.profilePic} alt="profile picture" className="userCardPic"></img>
+                            {onlineUsers.includes(u._id) && 
+                              <div className='userCardStatus'></div>
+                            }
+                          </div>
+                          <div className="userCardInfo">
+                            <p className="userCardName">{u.username}</p>
+                            {onlineUsers.includes(u._id) ? 
+                              <p className='userCardStatusText'>online</p>
+                              : u.lastSeen &&
+                              <p className='userCardLastSeen'>last seen {moment(u.lastSeen).fromNow()}</p>
+                            }
+                          </div>
+                        </div>
+                      )
+                    })}
+                  </>
+                  :
+                  <h1 className='requestsTitle'>No requests</h1>
                 }
               </div>
-            }
-            {currentChat.isGroupChat &&
-              <div className='profileInfoBlock'>
-                <div className='profileInfoSection  clickable' onClick={() => setSubsPopup(true)}>
-                  <img src={groupIcon} alt='subs icon' className='profileInfoIcon'></img>
-                  <div className='profileInfoMain'>
-                    <p className='profileInfoTitle'>Click to see details</p>
-                    <p className='profileInfo'>{currentChat.users.length} {currentChat.users.length === 1 ? 'subscriber' : 'subscribers'}</p>
-                  </div>
-                </div>
-              </div>
-            }
-          </div>
-        </div>
-      }
-      {subsPopup &&
-        <div className="popupBackground">
-          <div className='popup' id="requestsPopup">
-            <button onClick={() => setSubsPopup(false)} className="mainButton closePopup">
-              <img src={closeIcon} alt="x" className="mainButtonImg closeIcon"></img>
-            </button>
-            {currentChat.users.length > 0 ?
-              <>
-                {currentChat.users && currentChat.users.map(u => {
-                  return (
-                    <div className="userCard" key={u._id} onClick={(e) => openChat(e, u._id)}>
-                      <div className='userCardPicWrapper'>
-                        <img src={u.profilePic} alt="profile picture" className="userCardPic"></img>
-                        {onlineUsers.includes(u._id) && 
-                          <div className='userCardStatus'></div>
-                        }
-                      </div>
-                      <div className="userCardInfo">
-                        <p className="userCardName">{u.username}</p>
-                        {onlineUsers.includes(u._id) ? 
-                          <p className='userCardStatusText'>online</p>
-                          : u.lastSeen &&
-                          <p className='userCardLastSeen'>last seen {moment(u.lastSeen).fromNow()}</p>
-                        }
-                      </div>
-                    </div>
-                  )
-                })}
-              </>
-              :
-              <h1 className='requestsTitle'>No requests</h1>
-            }
-          </div>
-        </div>
+            </div>
+          }
+        </>
       }
     </div>
   )
