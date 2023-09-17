@@ -11,11 +11,13 @@ import requestIcon from '../assets/images/request.svg'
 import { socket } from '../socket';
 import acceptIcon from '../assets/images/submit.svg'
 import { useCurrentChatContext } from "../hooks/UseCurrentChatContext";
+import { useOnlineUsersContext } from "../hooks/UseOnlineUsersContext";
 import ChatDrawer from './ChatDrawer';
 
-function ChatHeader({chats, onlineUsers, updateChats, screenWidth, openChat}) {
+function ChatHeader({chats, updateChats, screenWidth, openChat}) {
   const { user } = useAuthContext()
-  const {currentChat, handleCurrentChat} = useCurrentChatContext()
+  const { onlineUsers } = useOnlineUsersContext()
+  const { currentChat, setCurrentChat } = useCurrentChatContext()
   const [menu, setMenu] = useState(false)
   const menuPopupRef = useRef(null);
   const [drawer, setDrawer] = useState(false)
@@ -34,7 +36,7 @@ function ChatHeader({chats, onlineUsers, updateChats, screenWidth, openChat}) {
     const json = await response.json()
     if (response.ok) {
       updateChats(chats.filter(c => c._id !== currentChat._id))
-      handleCurrentChat(json)
+      setCurrentChat(json)
     }
   }
 
@@ -62,7 +64,7 @@ function ChatHeader({chats, onlineUsers, updateChats, screenWidth, openChat}) {
     })
     const json = await response.json()
     if (response.ok) {
-      handleCurrentChat(json)
+      setCurrentChat(json)
       socket.emit('update chat', json)
     }
   }
@@ -96,7 +98,7 @@ function ChatHeader({chats, onlineUsers, updateChats, screenWidth, openChat}) {
               <Fragment key={u._id}>
                 <div className='chatHeaderInfo' onClick={() => {setDrawer(!drawer)}}>
                   {screenWidth < 768 &&
-                    <button onClick={() => handleCurrentChat(null)} className="mainButton">
+                    <button onClick={() => setCurrentChat(null)} className="mainButton">
                       <img src={backIcon} alt="back" className="mainButtonImg"></img>
                     </button>
                   }
@@ -129,7 +131,7 @@ function ChatHeader({chats, onlineUsers, updateChats, screenWidth, openChat}) {
         <>
           <div className='chatHeaderInfo' key={currentChat._id} onClick={() => {setDrawer(!drawer)}}>
             {screenWidth < 768 &&
-              <button onClick={() => handleCurrentChat(null)} className="mainButton">
+              <button onClick={() => setCurrentChat(null)} className="mainButton">
                 <img src={backIcon} alt="back" className="mainButtonImg"></img>
               </button>
             }

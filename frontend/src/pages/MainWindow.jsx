@@ -5,15 +5,16 @@ import Sidebar from "../components/Sidebar";
 import Chat from '../components/Chat';
 import { useAuthContext } from '../hooks/UseAuthContext';
 import { useCurrentChatContext } from "../hooks/UseCurrentChatContext";
+import { useOnlineUsersContext } from "../hooks/UseOnlineUsersContext";
 import { socket } from '../socket';
 
 function MainWindow() {
-  const {user, dispatch} = useAuthContext()
-  const {currentChat, handleCurrentChat} = useCurrentChatContext()
+  const { user, dispatch } = useAuthContext()
+  const { currentChat, setCurrentChat } = useCurrentChatContext()
+  const { setOnlineUsers } = useOnlineUsersContext()
   const [chats, setChats] = useState(null)
   const [messages, setMessages] = useState([])
   const [refetch, setRefetch] = useState(false)
-  const [onlineUsers, setOnlineUsers] = useState([])
   const [screenWidth, setScreenWidth] = useState(window.innerWidth)
 
   useEffect(() => {
@@ -57,7 +58,7 @@ function MainWindow() {
     const json = await response.json()
     if (response.ok) {
       updateChats([json, ...chats])
-      handleCurrentChat(json)
+      setCurrentChat(json)
     }
   }
 
@@ -67,7 +68,7 @@ function MainWindow() {
     for (let chat of chats) {
       const chatExists = chat.users.find(u => u._id === userId)
       if (chatExists && !chat.isGroupChat) {
-        handleCurrentChat(chat)
+        setCurrentChat(chat)
         return
       }
     };
@@ -142,7 +143,6 @@ function MainWindow() {
         <Sidebar
           chats={chats}
           updateChats={updateChats}
-          onlineUsers={onlineUsers}
           allMessages={messages}
           openChat={openChat}
         />
@@ -150,7 +150,6 @@ function MainWindow() {
           chats={chats} 
           updateChats={updateChats}
           refetchChats={refetchChats}
-          onlineUsers={onlineUsers}
           openChat={openChat} 
         />
       </>
@@ -159,15 +158,13 @@ function MainWindow() {
           chats={chats} 
           updateChats={updateChats}
           refetchChats={refetchChats}
-          onlineUsers={onlineUsers} 
           screenWidth={screenWidth}
           openChat={openChat} 
         />
       :
         <Sidebar
           chats={chats}
-          updateChats={updateChats}
-          onlineUsers={onlineUsers} 
+          updateChats={updateChats} 
           allMessages={messages}
           openChat={openChat} 
         />

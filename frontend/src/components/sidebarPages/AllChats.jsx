@@ -1,11 +1,13 @@
 import pencilIcon from '../../assets/images/pencil-icon.svg'
 import { useAuthContext } from '../../hooks/UseAuthContext';
 import { useCurrentChatContext } from "../../hooks/UseCurrentChatContext";
+import { useOnlineUsersContext } from "../../hooks/UseOnlineUsersContext";
 import formatDate from '../../formatDate';
 
-function AllChats({chats, handleSidebarContent, onlineUsers, allMessages}) {
+function AllChats({chats, handleSidebarContent, allMessages}) {
   const { user } = useAuthContext()
-  const {currentChat, handleCurrentChat} = useCurrentChatContext()
+  const { currentChat, setCurrentChat } = useCurrentChatContext()
+  const { onlineUsers } = useOnlineUsersContext()
   
   const calculateUnread = (chat) => {
     const chatMes = allMessages.find(mess => mess.id === chat._id).messages
@@ -21,7 +23,7 @@ function AllChats({chats, handleSidebarContent, onlineUsers, allMessages}) {
           return (
             chat.isGroupChat ?
               <div 
-                onClick={() => handleCurrentChat(chat)} 
+                onClick={() => setCurrentChat(chat)} 
                 key={chat._id} 
                 className={`sidebarChat ${currentChat?._id === chat._id ? 'selected' : ''}`}
               >
@@ -54,7 +56,7 @@ function AllChats({chats, handleSidebarContent, onlineUsers, allMessages}) {
                 return (
                   u.username !== user.username ?
                     <div 
-                      onClick={() => handleCurrentChat(chat)} 
+                      onClick={() => setCurrentChat(chat)} 
                       key={chat._id} 
                       className={`sidebarChat ${currentChat?._id === chat._id ? 'selected' : ''}`}
                     >

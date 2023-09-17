@@ -6,12 +6,8 @@ export const CurrentChatContext = createContext()
 export const CurrentChatContextProvider = ({children}) => {
   const [currentChat, setCurrentChat] = useState(null)
 
-  const handleCurrentChat = (chat) => {
-    setCurrentChat(chat)
-  }
-
   return (
-    <CurrentChatContext.Provider value={{ currentChat, handleCurrentChat }}>
+    <CurrentChatContext.Provider value={{ currentChat, setCurrentChat }}>
       {children}
     </CurrentChatContext.Provider>
   )

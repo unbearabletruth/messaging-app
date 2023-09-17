@@ -3,13 +3,16 @@ import ReactDOM from 'react-dom/client'
 import App from './App.jsx'
 import { AuthContextProvider } from './contexts/AuthContext.jsx'
 import { CurrentChatContextProvider } from './contexts/CurrentChatContext.jsx'
+import { OnlineUsersContextProvider } from './contexts/OnlineUsers.jsx'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <AuthContextProvider>
       <CurrentChatContextProvider>
-        <App />
+        <OnlineUsersContextProvider>
+          <App />
+        </OnlineUsersContextProvider>
       </CurrentChatContextProvider>
     </AuthContextProvider>
-  </React.StrictMode>,
+  </React.StrictMode>
 )

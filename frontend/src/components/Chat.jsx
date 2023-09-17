@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import moment from 'moment';
 import { useAuthContext } from '../hooks/UseAuthContext';
 import { useCurrentChatContext } from "../hooks/UseCurrentChatContext";
+import { useOnlineUsersContext } from "../hooks/UseOnlineUsersContext";
 import { socket } from '../socket';
 import closeIcon from '../assets/images/close-icon.svg'
 import readIcon from '../assets/images/read.svg'
@@ -12,12 +13,13 @@ import toBottomIcon from '../assets/images/to-bottom.svg'
 import ChatHeader from './ChatHeader';
 import NewMessage from './NewMessage';
 
-function Chat({chats, updateChats, refetchChats, onlineUsers, screenWidth, openChat}) {
-  const {currentChat, handleCurrentChat} = useCurrentChatContext()
+function Chat({chats, updateChats, refetchChats, screenWidth, openChat}) {
+  const { user } = useAuthContext()
+  const { currentChat, setCurrentChat } = useCurrentChatContext()
+  const { onlineUsers } = useOnlineUsersContext()
   const [messages, setMessages] = useState([])
   const [mediaPopup, setMediaPopup] = useState(false)
   const [bigImage, setBigImage] = useState(null)
-  const {user} = useAuthContext()
   const [scrollButton, setScrollButton] = useState(false)
   const chatWindow = useRef(null);
 
@@ -39,7 +41,7 @@ function Chat({chats, updateChats, refetchChats, onlineUsers, screenWidth, openC
     socket.on('receive chat', (updatedChat) => {
       if (currentChat && currentChat._id === updatedChat._id) {
         console.log('received chat with new ts')
-        handleCurrentChat(updatedChat)
+        setCurrentChat(updatedChat)
         if (!chats.some(chat => chat._id === updatedChat._id)) {
           updateChats([updatedChat, ...chats])
         }
@@ -113,7 +115,7 @@ function Chat({chats, updateChats, refetchChats, onlineUsers, screenWidth, openC
     const json = await response.json()
     if (response.ok) {
       updateChats([json, ...chats])
-      handleCurrentChat(json)
+      setCurrentChat(json)
     }
   }
 
@@ -129,7 +131,7 @@ function Chat({chats, updateChats, refetchChats, onlineUsers, screenWidth, openC
     const json = await response.json()
     if (response.ok) {
       console.log(json)
-      handleCurrentChat(json)
+      setCurrentChat(json)
       socket.emit('update chat', json)
     }
   }
@@ -163,7 +165,6 @@ function Chat({chats, updateChats, refetchChats, onlineUsers, screenWidth, openC
       <>
         <ChatHeader 
           chats={chats} 
-          onlineUsers={onlineUsers} 
           updateChats={updateChats} 
           screenWidth={screenWidth}
           openChat={openChat}

@@ -6,10 +6,12 @@ import AllChats from "./sidebarPages/AllChats";
 import SearchResults from "./sidebarPages/SearchResults";
 import Profile from "./sidebarPages/Profile";
 import { useAuthContext } from '../hooks/UseAuthContext';
+import { useOnlineUsersContext } from "../hooks/UseOnlineUsersContext";
 import moment from 'moment';
 
-function Sidebar({chats, allMessages, updateChats, onlineUsers, openChat})  {
+function Sidebar({chats, allMessages, updateChats, openChat})  {
   const { user } = useAuthContext()
+  const { onlineUsers } = useOnlineUsersContext()
   const [users, setUsers] = useState(null)
   const [sidebarContent, setSidebarContent] = useState('main')
   const [searchInput, setSearchInput] = useState('')
@@ -93,7 +95,6 @@ function Sidebar({chats, allMessages, updateChats, onlineUsers, openChat})  {
           <AllChats 
             chats={chats} 
             handleSidebarContent={handleSidebarContent}
-            onlineUsers={onlineUsers}
             allMessages={allMessages}
           />
         }
@@ -127,7 +128,6 @@ function Sidebar({chats, allMessages, updateChats, onlineUsers, openChat})  {
             handleSidebarContent={handleSidebarContent}
             searchUserResults={searchUserResults}
             searchChatResults={searchChatResults}
-            onlineUsers={onlineUsers}
             openChat={openChat}
           />
         }
