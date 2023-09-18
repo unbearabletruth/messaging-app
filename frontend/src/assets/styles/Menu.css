@@ -59,13 +59,14 @@
 }
 
 .menuOptionIcon{
-  width: 20px;
+  width: 15px;
   height: auto;
 }
 
 .menuText{
   color: var(--main-font-color);
   font-weight: bold;
+  font-size: 0.9rem;
 }
 
 .leaveIcon{
@@ -75,6 +76,7 @@
 .menuLeaveText{
   color: #dc2626;
   font-weight: bold;
+  font-size: 0.9rem;
 }
 
 #newGroupPopup{

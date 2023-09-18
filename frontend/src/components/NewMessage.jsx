@@ -4,6 +4,9 @@ import { useState, useEffect, useRef } from 'react';
 import { useAuthContext } from '../hooks/UseAuthContext';
 import { useCurrentChatContext } from "../hooks/UseCurrentChatContext";
 import { socket } from '../socket';
+import smileyIcon from '../assets/images/smiley-face.svg'
+import data from '@emoji-mart/data'
+import Picker from '@emoji-mart/react'
 
 function NewMessage({addMessage, chats, updateChats}) {
   const {user} = useAuthContext()
@@ -12,13 +15,16 @@ function NewMessage({addMessage, chats, updateChats}) {
   const [wrongFile, setWrongFile] = useState(false)
   const fileInputRef = useRef(null);
   const [uploadPopup, setUploadPopup] = useState(false)
+  const [emojiPicker, setEmojiPicker] = useState(false)
+  const emojiPickerRef = useRef(null)
+  const emojiPickerButtonRef = useRef(null)
   const [newMessage, setNewMessage] = useState({
     author: '',
     chat: '',
     text: '',
     media: null
   })
-
+  console.log(data)
   useEffect(() => {
     if (currentChat) {
       setNewMessage({
@@ -123,15 +129,46 @@ function NewMessage({addMessage, chats, updateChats}) {
     })
   }
 
+  const onEmojiSelect = (emoji) => {
+    console.log(emoji)
+    setNewMessage({
+      ...newMessage,
+      text: newMessage.text.concat(emoji.native)
+    })
+  }
+
+  useEffect(() => {
+    function handleClickOutside(e) {
+      if (emojiPickerRef.current && !emojiPickerRef.current.contains(e.target) &&
+      emojiPickerButtonRef.current && !emojiPickerButtonRef.current.contains(e.target)){
+        setEmojiPicker(false)
+      }
+    }
+    document.addEventListener("click", handleClickOutside);
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, [emojiPickerRef]);
+  console.log('hey red')
   return (
     <>
       <form onSubmit={submitMessage} id='messageForm'>
+        <button type='button' className='mainButton' onClick={() => setEmojiPicker(!emojiPicker)} ref={emojiPickerButtonRef}>
+          <img src={smileyIcon} alt='emoji picker' className="mainButtonImg"></img>
+        </button>
+        <div id='emojiPickerWrapper' className={emojiPicker ? 'visible' : ''} ref={emojiPickerRef}>
+          <Picker
+            data={data}
+            onEmojiSelect={onEmojiSelect} 
+          />
+        </div>
         <input 
           type='text' 
           onChange={handleMessage} 
           value={uploadPopup ? '' : newMessage.text} 
           id='messageInput' 
           placeholder='Message'
+          autoComplete="off"
           aria-label='new message'
         >
         </input>
@@ -190,3 +227,4 @@ function NewMessage({addMessage, chats, updateChats}) {
 }
 
 export default NewMessage
+

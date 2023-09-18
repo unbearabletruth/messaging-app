@@ -158,7 +158,6 @@ function Chat({chats, updateChats, refetchChats, screenWidth, openChat}) {
       setScrollButton(true)
     }
   }
-
   return (
     <div id='content'>
       {currentChat ?

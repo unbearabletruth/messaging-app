@@ -276,10 +276,6 @@
 }
 
 @media (max-width: 768px) {
-  #uploadMediaPopup{
-    width: 90%;
-  }
-
   #newGroupInput{
     width: 100%;
   }
