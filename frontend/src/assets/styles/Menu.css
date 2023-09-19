@@ -14,6 +14,7 @@
   box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
   animation: popupShow 150ms ease-out;
   transform-origin: top left;
+  background-color: var(--background);
 }
 
 @keyframes popupShow {
@@ -65,6 +66,7 @@
 .menuOptionIcon{
   width: 15px;
   height: auto;
+  filter: var(--main-filter)
 }
 
 .menuTextWithToggle{
@@ -81,11 +83,11 @@
 }
 
 .leaveIcon{
-  filter: invert(14%) sepia(53%) saturate(6949%) hue-rotate(354deg) brightness(109%) contrast(83%);
+  filter: invert(33%) sepia(34%) saturate(6535%) hue-rotate(342deg) brightness(102%) contrast(100%);
 }
 
 .menuLeaveText{
-  color: #dc2626;
+  color: #ff3737;
   font-weight: bold;
   font-size: 0.9rem;
 }

@@ -159,6 +159,7 @@ function Profile({handleSidebarContent, drawer, handleDrawer}) {
                 </label>
               </div>
               <input
+                type="text"
                 className='profileInput' 
                 onChange={handleEditChange} 
                 placeholder='Username'
@@ -167,6 +168,7 @@ function Profile({handleSidebarContent, drawer, handleDrawer}) {
               >
               </input>
               <input
+                type="text"
                 className='profileInput' 
                 onChange={handleEditChange} 
                 placeholder='Bio'

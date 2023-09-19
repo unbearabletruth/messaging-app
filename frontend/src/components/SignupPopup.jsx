@@ -57,6 +57,7 @@ function Signup({closePopup}) {
         <h1 id="signupTitle">Sign up</h1>
         <form id="signupForm" onSubmit={handleSignup}>
           <input 
+            type="text"
             className="signupInput" 
             name="username" 
             onChange={handleInput}
@@ -65,6 +66,7 @@ function Signup({closePopup}) {
           >
           </input>
           <input 
+            type="password"
             className="signupInput" 
             name="password" 
             onChange={handleInput}

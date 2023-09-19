@@ -7,6 +7,7 @@
   align-items: center;
   color: var(--main-font-color);
   gap: 35px;
+  background-color: var(--background);
 }
 
 #loginForm,
@@ -34,7 +35,7 @@
 .fontButton{
   appearance: none;
   border: 0px;
-  background: white;
+  background: var(--background);
   font-size: 1rem;
   color: var(--main-darker);
   font-weight: bold;

@@ -3,14 +3,16 @@ import closeIcon from '../assets/images/close-icon.svg'
 import { useState, useEffect, useRef } from 'react';
 import { useAuthContext } from '../hooks/UseAuthContext';
 import { useCurrentChatContext } from "../hooks/UseCurrentChatContext";
+import { useThemeContext } from "../hooks/UseThemeContext";
 import { socket } from '../socket';
 import smileyIcon from '../assets/images/smiley-face.svg'
 import data from '@emoji-mart/data'
 import Picker from '@emoji-mart/react'
 
 function NewMessage({addMessage, chats, updateChats}) {
-  const {user} = useAuthContext()
-  const {currentChat} = useCurrentChatContext()
+  const { user } = useAuthContext()
+  const { currentChat } = useCurrentChatContext()
+  const { isDark } = useThemeContext()
   const isImage = ['gif','jpg','jpeg','png'];
   const [wrongFile, setWrongFile] = useState(false)
   const fileInputRef = useRef(null);
@@ -149,7 +151,7 @@ function NewMessage({addMessage, chats, updateChats}) {
       document.removeEventListener("click", handleClickOutside);
     };
   }, [emojiPickerRef]);
-  console.log('hey red')
+
   return (
     <>
       <form onSubmit={submitMessage} id='messageForm'>
@@ -159,7 +161,8 @@ function NewMessage({addMessage, chats, updateChats}) {
         <div id='emojiPickerWrapper' className={emojiPicker ? 'visible' : ''} ref={emojiPickerRef}>
           <Picker
             data={data}
-            onEmojiSelect={onEmojiSelect} 
+            onEmojiSelect={onEmojiSelect}
+            theme={isDark && 'dark'}
           />
         </div>
         <input 

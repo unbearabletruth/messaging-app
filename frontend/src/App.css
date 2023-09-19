@@ -14,17 +14,19 @@ body {
   --light-border: #e5e5e5;
   --hover: #eeeeee;
   --background: #ffffff;
+  --main-filter: invert(39%) sepia(0%) saturate(0%) hue-rotate(146deg) brightness(111%) contrast(79%);
 }
 
 body.dark{
-  --main-color: #38bdf8;
-  --main-darker: #0ea5e9;
+  --main-color: #7d67c2;
+  --main-darker: #725ca7;
   --main-font-color: #f5f5f5;
-  --light-font-color: #737373;
+  --light-font-color: #d4d4d4;
   --border: #a3a3a3;
-  --light-border: #e5e5e5;
-  --hover: #eeeeee;
+  --light-border: #525252;
+  --hover: #404040;
   --background: #262626;
+  --main-filter: invert(98%) sepia(0%) saturate(6246%) hue-rotate(195deg) brightness(116%) contrast(66%);
 }
 
 #root{
@@ -48,6 +50,12 @@ a:active {
   text-decoration: none;
 }
 
+input[type=text],
+input[type=password]{
+  background-color: var(--background);
+  color: var(--main-font-color)
+}
+
 .formButton,
 .formButtonInactive{
   width: 100px;
@@ -58,6 +66,9 @@ a:active {
   border-radius: 5px;
   font-size: 1.1rem;
   transition: background-color 0.2s ease-out;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .formButtonInactive{
@@ -74,7 +85,7 @@ a:active {
   height: 40px;
   border-radius: 50%;
   border: 0px;
-  background-color: white;
+  background-color: var(--background);
   transition: background-color 0.2s ease-out;
   display: flex;
   justify-content: center;
@@ -89,7 +100,7 @@ a:active {
 .mainButtonImg{
   width: 20px;
   height: auto;
-  filter: invert(39%) sepia(0%) saturate(0%) hue-rotate(146deg) brightness(111%) contrast(79%);
+  filter: var(--main-filter);
 }
 
 .mainButton.closePopup{
@@ -148,7 +159,7 @@ a:active {
 
 .popup{
   position: relative;
-  background-color: white;
+  background-color: var(--background);
   padding: 50px 25px 25px 25px;
   display: flex;
   flex-direction: column;
@@ -210,11 +221,11 @@ a:active {
   align-items: center;
   height: 100vh;
   width: 500px;
-  background-color: rgba(255, 255, 255, 0.9);
   box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
   transform: translateX(110%);
   transition: transform 0.3s ease-out;
   visibility: visible;
+  background-color: var(--background);
 }
 
 #sidebarDrawer{
@@ -222,7 +233,6 @@ a:active {
   box-shadow: none;
   transform: translateX(100%);
   transition: transform 0.15s ease-out;
-  background-color: white;
 }
 
 #drawer.active,
@@ -236,7 +246,7 @@ a:active {
 .toggle {
   position: relative;
   display: inline-block;
-  width: 40px;
+  width: 35px;
   height: 14px;
 }
 
@@ -271,15 +281,15 @@ a:active {
 }
 
 .toggleInput:checked + .slider {
-  background-color: #2196F3;
+  background-color: var(--main-color);
 }
 
 .toggleInput:focus + .slider {
-  box-shadow: 0 0 1px #2196F3;
+  box-shadow: 0 0 1px var(--main-color);
 }
 
 input:checked + .slider:before {
-  transform: translateX(26px);
+  transform: translateX(17px);
 }
 
 @media (max-width: 768px) {

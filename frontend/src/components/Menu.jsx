@@ -16,13 +16,15 @@ function Menu({chats, updateChats, handleSidebarContent, handleDrawer}) {
   const { isDark, toggleTheme } = useThemeContext()
   const [menu, setMenu] = useState(false)
   const menuPopupRef = useRef(null);
+  const themeRef = useRef(null);
   const [newGroupPopup, setNewGroupPopup] = useState(false)
   const [groupName, setGroupName] = useState('')
   const [isPrivate, setIsPrivate] = useState(false)
 
   useEffect(() => {
     function handleClickOutside(e) {
-      if (menuPopupRef.current && !menuPopupRef.current.contains(e.target)){
+      if (menuPopupRef.current && !menuPopupRef.current.contains(e.target) &&
+      themeRef.current && !themeRef.current.contains(e.target)){
         setMenu(false)
       }
     }
@@ -81,12 +83,12 @@ function Menu({chats, updateChats, handleSidebarContent, handleDrawer}) {
             <img src={profileIcon} alt="profile" className="menuOptionIcon"></img>
             <p className="menuText">Profile</p>
           </div>
-          <div className="menuOption">
+          <div className="menuOption" ref={themeRef}>
             <img src={darkIcon} alt="dark mode" className="menuOptionIcon"></img>
             <div className="menuTextWithToggle">
               <p className="menuText">Dark mode</p>
-              <label className="toggle" onClick={toggleTheme}>
-                <input className="toggleInput" type="checkbox"></input>
+              <label className="toggle">
+                <input className="toggleInput" type="checkbox" onChange={toggleTheme} checked={isDark}></input>
                 <span className="slider"></span>
               </label>
             </div>
@@ -105,11 +107,13 @@ function Menu({chats, updateChats, handleSidebarContent, handleDrawer}) {
             </button>
             <form id="newGroupForm" onSubmit={newGroupChat}>
               <input 
+                type="text"
                 id="newGroupName" 
                 name="name" 
                 onChange={(e) => setGroupName(e.target.value)}
                 aria-label="group name"
                 placeholder="Name"
+                autocomplete="off"
               >
               </input>
               <div id="newGroupCheckboxWrapper">
