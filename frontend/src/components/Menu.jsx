@@ -1,16 +1,19 @@
 import { useState, useRef, useEffect } from "react"
 import { useAuthContext } from '../hooks/UseAuthContext';
 import { useCurrentChatContext } from "../hooks/UseCurrentChatContext";
+import { useThemeContext } from "../hooks/UseThemeContext";
 import menuIcon from '../assets/images/menu-icon.svg'
 import groupIcon from '../assets/images/group.svg'
 import profileIcon from '../assets/images/profile.png'
 import logoutIcon from '../assets/images/logout-icon.svg'
 import closeIcon from '../assets/images/close-icon.svg'
+import darkIcon from '../assets/images/dark-mode.svg'
 import '../assets/styles/Menu.css'
 
 function Menu({chats, updateChats, handleSidebarContent, handleDrawer}) {
   const { user, dispatch } = useAuthContext()
   const { setCurrentChat } = useCurrentChatContext()
+  const { isDark, toggleTheme } = useThemeContext()
   const [menu, setMenu] = useState(false)
   const menuPopupRef = useRef(null);
   const [newGroupPopup, setNewGroupPopup] = useState(false)
@@ -77,6 +80,16 @@ function Menu({chats, updateChats, handleSidebarContent, handleDrawer}) {
           <div className="menuOption" onClick={handleProfile}>
             <img src={profileIcon} alt="profile" className="menuOptionIcon"></img>
             <p className="menuText">Profile</p>
+          </div>
+          <div className="menuOption">
+            <img src={darkIcon} alt="dark mode" className="menuOptionIcon"></img>
+            <div className="menuTextWithToggle">
+              <p className="menuText">Dark mode</p>
+              <label className="toggle" onClick={toggleTheme}>
+                <input className="toggleInput" type="checkbox"></input>
+                <span className="slider"></span>
+              </label>
+            </div>
           </div>
           <div className="menuOption" onClick={handleLogout}>
             <img src={logoutIcon} alt="log out" className="menuOptionIcon leaveIcon"></img>

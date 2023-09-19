@@ -7,11 +7,13 @@ import SearchResults from "./sidebarPages/SearchResults";
 import Profile from "./sidebarPages/Profile";
 import { useAuthContext } from '../hooks/UseAuthContext';
 import { useOnlineUsersContext } from "../hooks/UseOnlineUsersContext";
+import { useThemeContext } from "../hooks/UseThemeContext";
 import moment from 'moment';
 
 function Sidebar({chats, allMessages, updateChats, openChat})  {
   const { user } = useAuthContext()
   const { onlineUsers } = useOnlineUsersContext()
+  const { isDark } = useThemeContext()
   const [users, setUsers] = useState(null)
   const [sidebarContent, setSidebarContent] = useState('main')
   const [searchInput, setSearchInput] = useState('')

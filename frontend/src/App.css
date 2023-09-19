@@ -5,7 +5,7 @@
   font-family: 'Roboto', sans-serif;
 }
 
-:root {
+body {
   --main-color: #38bdf8;
   --main-darker: #0ea5e9;
   --main-font-color: #262626;
@@ -13,6 +13,18 @@
   --border: #a3a3a3;
   --light-border: #e5e5e5;
   --hover: #eeeeee;
+  --background: #ffffff;
+}
+
+body.dark{
+  --main-color: #38bdf8;
+  --main-darker: #0ea5e9;
+  --main-font-color: #f5f5f5;
+  --light-font-color: #737373;
+  --border: #a3a3a3;
+  --light-border: #e5e5e5;
+  --hover: #eeeeee;
+  --background: #262626;
 }
 
 #root{
@@ -217,6 +229,57 @@ a:active {
 #sidebarDrawer.active{
   transform: translateX(0%);
   transition: transform 0.3s ease-out;
+}
+
+/* toggle */
+
+.toggle {
+  position: relative;
+  display: inline-block;
+  width: 40px;
+  height: 14px;
+}
+
+.toggleInput{
+  opacity: 0;
+  width: 0px;
+  height: 0px;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: .4s;
+  border-radius: 14px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 10px;
+  width: 10px;
+  left: 4px;
+  bottom: 2px;
+  background-color: white;
+  transition: .4s;
+  border-radius: 50%;
+}
+
+.toggleInput:checked + .slider {
+  background-color: #2196F3;
+}
+
+.toggleInput:focus + .slider {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+  transform: translateX(26px);
 }
 
 @media (max-width: 768px) {
