@@ -12,7 +12,7 @@ import '../assets/styles/Menu.css'
 
 function Menu({chats, updateChats, handleSidebarContent, handleDrawer}) {
   const { user, dispatch } = useAuthContext()
-  const { setCurrentChat } = useCurrentChatContext()
+  const { handleCurrentChat } = useCurrentChatContext()
   const { isDark, toggleTheme } = useThemeContext()
   const [menu, setMenu] = useState(false)
   const menuPopupRef = useRef(null);
@@ -53,7 +53,7 @@ function Menu({chats, updateChats, handleSidebarContent, handleDrawer}) {
     if (response.ok) {
       setNewGroupPopup(false)
       updateChats([json, ...chats])
-      setCurrentChat(json)
+      handleCurrentChat(json)
     }
   }
 

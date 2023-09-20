@@ -17,7 +17,7 @@ import ChatDrawer from './ChatDrawer';
 function ChatHeader({chats, updateChats, screenWidth, openChat}) {
   const { user } = useAuthContext()
   const { onlineUsers } = useOnlineUsersContext()
-  const { currentChat, setCurrentChat } = useCurrentChatContext()
+  const { currentChat, handleCurrentChat } = useCurrentChatContext()
   const [menu, setMenu] = useState(false)
   const menuPopupRef = useRef(null);
   const [drawer, setDrawer] = useState(false)
@@ -36,7 +36,7 @@ function ChatHeader({chats, updateChats, screenWidth, openChat}) {
     const json = await response.json()
     if (response.ok) {
       updateChats(chats.filter(c => c._id !== currentChat._id))
-      setCurrentChat(json)
+      handleCurrentChat(json)
     }
   }
 
@@ -64,7 +64,7 @@ function ChatHeader({chats, updateChats, screenWidth, openChat}) {
     })
     const json = await response.json()
     if (response.ok) {
-      setCurrentChat(json)
+      handleCurrentChat(json)
       socket.emit('update chat', json)
     }
   }
@@ -98,7 +98,7 @@ function ChatHeader({chats, updateChats, screenWidth, openChat}) {
               <Fragment key={u._id}>
                 <div className='chatHeaderInfo' onClick={() => {setDrawer(!drawer)}}>
                   {screenWidth < 768 &&
-                    <button onClick={() => setCurrentChat(null)} className="mainButton">
+                    <button onClick={() => handleCurrentChat(null)} className="mainButton">
                       <img src={backIcon} alt="back" className="mainButtonImg"></img>
                     </button>
                   }
@@ -131,7 +131,7 @@ function ChatHeader({chats, updateChats, screenWidth, openChat}) {
         <>
           <div className='chatHeaderInfo' key={currentChat._id} onClick={() => {setDrawer(!drawer)}}>
             {screenWidth < 768 &&
-              <button onClick={() => setCurrentChat(null)} className="mainButton">
+              <button onClick={() => handleCurrentChat(null)} className="mainButton">
                 <img src={backIcon} alt="back" className="mainButtonImg"></img>
               </button>
             }

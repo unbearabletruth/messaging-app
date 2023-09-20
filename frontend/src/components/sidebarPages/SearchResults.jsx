@@ -3,7 +3,7 @@ import { useCurrentChatContext } from "../../hooks/UseCurrentChatContext";
 import { useOnlineUsersContext } from "../../hooks/UseOnlineUsersContext";
 
 function SearchResults({searchUserResults, searchChatResults, openChat}) {
-  const { setCurrentChat } = useCurrentChatContext()
+  const { handleCurrentChat } = useCurrentChatContext()
   const { onlineUsers } = useOnlineUsersContext()
 
   return (
@@ -38,7 +38,7 @@ function SearchResults({searchUserResults, searchChatResults, openChat}) {
         <h1 className='searchTitle'>Groups</h1> 
         {searchChatResults.map(chat => {
           return (
-            <div onClick={() => setCurrentChat(chat)} key={chat._id} className="sidebarChat">
+            <div onClick={() => handleCurrentChat(chat)} key={chat._id} className="sidebarChat">
               <div className="sidebarChatContent">
                 <div className='userCardPicWrapper'>
                   <img src={chat.groupPic} alt="group picture" className="userCardPic"></img>

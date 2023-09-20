@@ -16,7 +16,7 @@ import NewMessage from './NewMessage';
 
 function Chat({chats, updateChats, refetchChats, screenWidth, openChat}) {
   const { user } = useAuthContext()
-  const { currentChat, setCurrentChat } = useCurrentChatContext()
+  const { currentChat, handleCurrentChat } = useCurrentChatContext()
   const { onlineUsers } = useOnlineUsersContext()
   const { isDark } = useThemeContext()
   const [messages, setMessages] = useState([])
@@ -43,7 +43,7 @@ function Chat({chats, updateChats, refetchChats, screenWidth, openChat}) {
     socket.on('receive chat', (updatedChat) => {
       if (currentChat && currentChat._id === updatedChat._id) {
         console.log('received chat with new ts')
-        setCurrentChat(updatedChat)
+        handleCurrentChat(updatedChat)
         if (!chats.some(chat => chat._id === updatedChat._id)) {
           updateChats([updatedChat, ...chats])
         }
@@ -117,7 +117,7 @@ function Chat({chats, updateChats, refetchChats, screenWidth, openChat}) {
     const json = await response.json()
     if (response.ok) {
       updateChats([json, ...chats])
-      setCurrentChat(json)
+      handleCurrentChat(json)
     }
   }
 
@@ -133,7 +133,7 @@ function Chat({chats, updateChats, refetchChats, screenWidth, openChat}) {
     const json = await response.json()
     if (response.ok) {
       console.log(json)
-      setCurrentChat(json)
+      handleCurrentChat(json)
       socket.emit('update chat', json)
     }
   }
@@ -189,7 +189,7 @@ function Chat({chats, updateChats, refetchChats, screenWidth, openChat}) {
                     message.author._id === user._id ?
                       <img src={readIcon} alt='read' className={`messageRead ${isDark && 'dark'}`}></img> 
                       : message.author._id === user._id ?
-                      <img src={sentIcon} alt='sent' className='messageSent'></img>
+                      <img src={sentIcon} alt='sent' className={`messageSent ${isDark && 'dark'}`}></img>
                       :
                       null
                     }

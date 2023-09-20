@@ -6,7 +6,7 @@ import formatDate from '../../formatDate';
 
 function AllChats({chats, handleSidebarContent, allMessages}) {
   const { user } = useAuthContext()
-  const { currentChat, setCurrentChat } = useCurrentChatContext()
+  const { currentChat, handleCurrentChat } = useCurrentChatContext()
   const { onlineUsers } = useOnlineUsersContext()
   
   const calculateUnread = (chat) => {
@@ -23,7 +23,7 @@ function AllChats({chats, handleSidebarContent, allMessages}) {
           return (
             chat.isGroupChat ?
               <div 
-                onClick={() => setCurrentChat(chat)} 
+                onClick={() => handleCurrentChat(chat)} 
                 key={chat._id} 
                 className={`sidebarChat ${currentChat?._id === chat._id ? 'selected' : ''}`}
               >
@@ -56,7 +56,7 @@ function AllChats({chats, handleSidebarContent, allMessages}) {
                 return (
                   u.username !== user.username ?
                     <div 
-                      onClick={() => setCurrentChat(chat)} 
+                      onClick={() => handleCurrentChat(chat)} 
                       key={chat._id} 
                       className={`sidebarChat ${currentChat?._id === chat._id ? 'selected' : ''}`}
                     >

@@ -10,7 +10,7 @@ import { socket } from '../socket';
 
 function MainWindow() {
   const { user, dispatch } = useAuthContext()
-  const { currentChat, setCurrentChat } = useCurrentChatContext()
+  const { currentChat, handleCurrentChat } = useCurrentChatContext()
   const { setOnlineUsers } = useOnlineUsersContext()
   const [chats, setChats] = useState(null)
   const [messages, setMessages] = useState([])
@@ -58,7 +58,7 @@ function MainWindow() {
     const json = await response.json()
     if (response.ok) {
       updateChats([json, ...chats])
-      setCurrentChat(json)
+      handleCurrentChat(json)
     }
   }
 
@@ -68,7 +68,7 @@ function MainWindow() {
     for (let chat of chats) {
       const chatExists = chat.users.find(u => u._id === userId)
       if (chatExists && !chat.isGroupChat) {
-        setCurrentChat(chat)
+        handleCurrentChat(chat)
         return
       }
     };
