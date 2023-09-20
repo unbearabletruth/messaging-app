@@ -26,7 +26,7 @@ function NewMessage({addMessage, chats, updateChats}) {
     text: '',
     media: null
   })
-  console.log(data)
+
   useEffect(() => {
     if (currentChat) {
       setNewMessage({
@@ -132,7 +132,6 @@ function NewMessage({addMessage, chats, updateChats}) {
   }
 
   const onEmojiSelect = (emoji) => {
-    console.log(emoji)
     setNewMessage({
       ...newMessage,
       text: newMessage.text.concat(emoji.native)

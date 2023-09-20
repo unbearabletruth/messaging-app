@@ -13,19 +13,19 @@ function SearchResults({searchUserResults, searchChatResults, openChat}) {
         <h1 className='searchTitle'>Users</h1> 
         {searchUserResults.map(user => {
           return (
-            <div className="sidebarUser" key={user._id} onClick={(e) => openChat(e, user._id)}>
-              <div className='sidebarPicWrapper'>
-                <img src={user.profilePic} alt="profile picture" className="sidebarPic"></img>
+            <div className="userCard" key={user._id} onClick={(e) => openChat(e, user._id)}>
+              <div className='userCardPicWrapper'>
+                <img src={user.profilePic} alt="profile picture" className="userCardPic"></img>
                 {onlineUsers.includes(user._id) && 
-                  <div className='sidebarUserStatus'></div>
+                  <div className='userCardStatus'></div>
                 }
               </div>
-              <div className="writeUserInfo">
-                <p className="writeName">{user.username}</p>
+              <div className="userCardInfo">
+                <p className="userCardName">{user.username}</p>
                 {onlineUsers.includes(user._id) ? 
-                  <p className='writeUserStatus'>online</p>
+                  <p className='userCardStatusText'>online</p>
                   : user.lastSeen &&
-                  <p className='writeLastSeen'>last seen {moment(user.lastSeen).fromNow()}</p>
+                  <p className='userCardLastSeen'>last seen {moment(user.lastSeen).fromNow()}</p>
                 }
               </div>
             </div>
@@ -40,8 +40,8 @@ function SearchResults({searchUserResults, searchChatResults, openChat}) {
           return (
             <div onClick={() => setCurrentChat(chat)} key={chat._id} className="sidebarChat">
               <div className="sidebarChatContent">
-                <div className='sidebarPicWrapper'>
-                  <img src={chat.groupPic} alt="group picture" className="sidebarPic"></img>
+                <div className='userCardPicWrapper'>
+                  <img src={chat.groupPic} alt="group picture" className="userCardPic"></img>
                 </div>
                 <div className="sidebarChatMain">
                   <p className="sidebarChatName">{chat.name}</p>

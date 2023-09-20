@@ -103,19 +103,19 @@ function Sidebar({chats, allMessages, updateChats, openChat})  {
             {users && users.map(u => {
               return (
                 u._id !== user._id &&
-                <div className="sidebarUser" key={u._id} onClick={(e) => openChat(e, u._id)}>
-                  <div className='sidebarPicWrapper'>
-                    <img src={u.profilePic} alt="profile picture" className="sidebarPic"></img>
+                <div className="userCard" key={u._id} onClick={(e) => openChat(e, u._id)}>
+                  <div className='userCardPicWrapper'>
+                    <img src={u.profilePic} alt="profile picture" className="userCardPic"></img>
                     {onlineUsers.includes(u._id) && 
-                      <div className='sidebarUserStatus'></div>
+                      <div className='userCardStatus'></div>
                     }
                   </div>
-                  <div className="writeUserInfo">
-                    <p className="writeName">{u.username}</p>
+                  <div className="userCardInfo">
+                    <p className="userCardName">{u.username}</p>
                     {onlineUsers.includes(u._id) ? 
-                      <p className='writeUserStatus'>online</p>
+                      <p className='userCardStatusText'>online</p>
                       : u.lastSeen &&
-                      <p className='writeLastSeen'>last seen {moment(u.lastSeen).fromNow()}</p>
+                      <p className='userCardLastSeen'>last seen {moment(u.lastSeen).fromNow()}</p>
                     }
                   </div>
                 </div>

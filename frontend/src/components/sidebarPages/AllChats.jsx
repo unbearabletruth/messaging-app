@@ -28,8 +28,8 @@ function AllChats({chats, handleSidebarContent, allMessages}) {
                 className={`sidebarChat ${currentChat?._id === chat._id ? 'selected' : ''}`}
               >
                 <div className="sidebarChatContent">
-                  <div className='sidebarPicWrapper'>
-                    <img src={chat.groupPic} alt="group picture" className="sidebarPic"></img>
+                  <div className='userCardPicWrapper'>
+                    <img src={chat.groupPic} alt="group picture" className="userCardPic"></img>
                   </div>
                   <div className="sidebarChatMain">
                     <div className='sidebarChatNameAndDate'>
@@ -61,10 +61,10 @@ function AllChats({chats, handleSidebarContent, allMessages}) {
                       className={`sidebarChat ${currentChat?._id === chat._id ? 'selected' : ''}`}
                     >
                       <div className="sidebarChatContent">
-                        <div className='sidebarPicWrapper'>
-                          <img src={u.profilePic} alt="profile picture" className="sidebarPic"></img>
+                        <div className='userCardPicWrapper'>
+                          <img src={u.profilePic} alt="profile picture" className="userCardPic"></img>
                           {onlineUsers.includes(u._id) && 
-                            <div className='sidebarUserStatus'></div>
+                            <div className='userCardStatus'></div>
                           }
                         </div>
                         <div className="sidebarChatMain">
