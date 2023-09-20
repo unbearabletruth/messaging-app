@@ -7,10 +7,14 @@
   position: relative;
 }
 
-.homeField{
+#homeField{
   display: flex;
   flex: 1;
   height: 100vh;
   background-image: url('/src/assets/images/background.jpg');
   background-position: center;
+} 
+
+#homeField.dark{
+  background-image: url('/src/assets/images/background-dark.jpg');
 } 

@@ -12,6 +12,10 @@
   background-color: #f0fdf4;
 }
 
+.myMessage.dark{
+  background-color: var(--main-color);
+}
+
 .message{
   margin-right: auto;
   background-color: var(--background);
@@ -75,6 +79,10 @@
   height: auto;
   width: 15px;
   filter: invert(58%) sepia(96%) saturate(2561%) hue-rotate(166deg) brightness(92%) contrast(98%);
+}
+
+.messageRead.dark{
+  filter: invert(100%) sepia(100%) saturate(0%) hue-rotate(288deg) brightness(102%) contrast(102%);
 }
 
 /*new message*/

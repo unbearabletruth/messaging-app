@@ -1,10 +1,12 @@
 import { useState, useEffect, useRef } from "react";
 import '../assets/styles/Search.css'
 import searchIcon from '../assets/images/search-icon.svg'
+import { useThemeContext } from "../hooks/UseThemeContext";
 
 function Search({handleSidebarContent, handleUserResults, handleChatResults, searchInput, handleSearchInput}){
   const [searchActive, setSearchActive] = useState(false)
   const searchRef = useRef(null)
+  const { isDark } = useThemeContext()
 
   useEffect(() => {
     const fetchSearch = async () => {
@@ -48,9 +50,9 @@ function Search({handleSidebarContent, handleUserResults, handleChatResults, sea
   }
 
   return(
-    <div id="searchBar" onClick={handleClick} ref={searchRef}>
+    <div id="searchBar" className={isDark && 'dark'} onClick={handleClick} ref={searchRef}>
       <div id="searchIconWrapper" className={searchActive ? 'active' : ''}>
-        <img src={searchIcon} alt="search" id="searchIcon"></img>
+        <img src={searchIcon} alt="search" id="searchIcon" className={isDark && 'dark'}></img>
       </div>
       <input 
         type='search' 

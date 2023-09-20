@@ -205,6 +205,7 @@ function NewMessage({addMessage, chats, updateChats}) {
               <input 
                 id="uploadCaptionInput" 
                 name="text" 
+                type='text'
                 onChange={handleMessage}
                 aria-label="message text"
                 placeholder="Text"

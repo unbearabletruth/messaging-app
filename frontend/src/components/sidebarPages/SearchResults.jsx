@@ -20,8 +20,13 @@ function SearchResults({searchUserResults, searchChatResults, openChat}) {
                   <div className='sidebarUserStatus'></div>
                 }
               </div>
-              <div>
-                <p className="sidebarName">{user.username}</p>
+              <div className="writeUserInfo">
+                <p className="writeName">{user.username}</p>
+                {onlineUsers.includes(user._id) ? 
+                  <p className='writeUserStatus'>online</p>
+                  : user.lastSeen &&
+                  <p className='writeLastSeen'>last seen {moment(user.lastSeen).fromNow()}</p>
+                }
               </div>
             </div>
           )
@@ -47,7 +52,6 @@ function SearchResults({searchUserResults, searchChatResults, openChat}) {
                   }
                 </div>
               </div>
-              <p className="sidebarChatUpdatedAt">{moment(chat.updatedAt).format('DD.MM.YYYY')}</p>
             </div>
           )
         })}

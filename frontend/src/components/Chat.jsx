@@ -5,6 +5,7 @@ import moment from 'moment';
 import { useAuthContext } from '../hooks/UseAuthContext';
 import { useCurrentChatContext } from "../hooks/UseCurrentChatContext";
 import { useOnlineUsersContext } from "../hooks/UseOnlineUsersContext";
+import { useThemeContext } from "../hooks/UseThemeContext";
 import { socket } from '../socket';
 import closeIcon from '../assets/images/close-icon.svg'
 import readIcon from '../assets/images/read.svg'
@@ -17,6 +18,7 @@ function Chat({chats, updateChats, refetchChats, screenWidth, openChat}) {
   const { user } = useAuthContext()
   const { currentChat, setCurrentChat } = useCurrentChatContext()
   const { onlineUsers } = useOnlineUsersContext()
+  const { isDark } = useThemeContext()
   const [messages, setMessages] = useState([])
   const [mediaPopup, setMediaPopup] = useState(false)
   const [bigImage, setBigImage] = useState(null)
@@ -168,10 +170,10 @@ function Chat({chats, updateChats, refetchChats, screenWidth, openChat}) {
           screenWidth={screenWidth}
           openChat={openChat}
         />
-        <div className="chatField" onScroll={handleScrollButton} ref={chatWindow}>
+        <div className={`chatField ${isDark && 'dark'}`} onScroll={handleScrollButton} ref={chatWindow}>
           {currentChat && messages && messages.toReversed().map(message => {
             return (
-              <div className={message.author._id === user._id ? 'myMessage' : 'message'} key={message._id}>
+              <div className={`${message.author._id === user._id ? 'myMessage' : 'message'} ${isDark && 'dark'}`} key={message._id}>
                 {message.media &&
                   <img src={message.media} alt='message media' className='messageMedia' onClick={() => showBigImage(message.media)}></img>
                 }
@@ -185,7 +187,7 @@ function Chat({chats, updateChats, refetchChats, screenWidth, openChat}) {
                     {!currentChat.lastSeenInChat.some(lastSeen => lastSeen.id !== user._id &&
                     lastSeen.timestamp < message.updatedAt) && 
                     message.author._id === user._id ?
-                      <img src={readIcon} alt='read' className='messageRead'></img> 
+                      <img src={readIcon} alt='read' className={`messageRead ${isDark && 'dark'}`}></img> 
                       : message.author._id === user._id ?
                       <img src={sentIcon} alt='sent' className='messageSent'></img>
                       :
@@ -219,7 +221,7 @@ function Chat({chats, updateChats, refetchChats, screenWidth, openChat}) {
         <NewMessage addMessage={addMessage} chats={chats} updateChats={updateChats}/>
       </>
       :
-      <div className="homeField"></div>
+      <div id="homeField" className={isDark && 'dark'}></div>
       }
       {mediaPopup &&
         <div className="popupBackground media">

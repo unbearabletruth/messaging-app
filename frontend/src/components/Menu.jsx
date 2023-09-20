@@ -66,7 +66,7 @@ function Menu({chats, updateChats, handleSidebarContent, handleDrawer}) {
     localStorage.removeItem('user')
     dispatch({type: 'logout'})
   }
-
+  console.log(isPrivate)
   return (
     <div id="menuWrapper">
       <button className="mainButton" onClick={() => setMenu(!menu)} ref={menuPopupRef}>
@@ -113,19 +113,21 @@ function Menu({chats, updateChats, handleSidebarContent, handleDrawer}) {
                 onChange={(e) => setGroupName(e.target.value)}
                 aria-label="group name"
                 placeholder="Name"
-                autocomplete="off"
+                autoComplete="off"
               >
               </input>
               <div id="newGroupCheckboxWrapper">
-                <input 
-                  type="checkbox" 
-                  id="newGroupIsPrivate" 
-                  name="isPrivate" 
-                  checked={isPrivate}
-                  onChange={() => setIsPrivate(!isPrivate)}
-                >
-                </input>
-                <label htmlFor="newGroupIsPrivate" id="newGroupCheckboxLabel">Private</label>
+                <label htmlFor="privateGroupCheckbox" id="newGroupCheckboxLabel">Private</label>
+                <label className="toggle" >
+                  <input 
+                    className="toggleInput" 
+                    id='privateGroupCheckbox' 
+                    type="checkbox" 
+                    onChange={() => setIsPrivate(!isPrivate)} 
+                    checked={isPrivate}>
+                  </input>
+                  <span className="slider"></span>
+                </label>
               </div>
               <button className="formButton">Create</button>
             </form>
