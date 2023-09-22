@@ -55,7 +55,7 @@ function Sidebar({chats, allMessages, updateChats, openChat})  {
   const handleDrawer = (value) => {
     setDrawer(value)
   }
-
+  console.log(chats)
   return (
     <div id="sidebar">
         {sidebarContent === 'write' || sidebarContent === 'search' ?

@@ -50,9 +50,9 @@ function Search({handleSidebarContent, handleUserResults, handleChatResults, sea
   }
 
   return(
-    <div id="searchBar" className={isDark && 'dark'} onClick={handleClick} ref={searchRef}>
+    <div id="searchBar" className={isDark ? 'dark' : ''} onClick={handleClick} ref={searchRef}>
       <div id="searchIconWrapper" className={searchActive ? 'active' : ''}>
-        <img src={searchIcon} alt="search" id="searchIcon" className={isDark && 'dark'}></img>
+        <img src={searchIcon} alt="search" id="searchIcon" className={isDark ? 'dark' : ''}></img>
       </div>
       <input 
         type='search' 

@@ -22,7 +22,7 @@
 }
 
 .messageMedia{
-  width: 200px;
+  width: 250px;
   height: auto;
   border-radius: 10px;
   margin-bottom: 10px;
@@ -37,7 +37,7 @@
   background: rgba(0, 0, 0, .85);
 }
 
-#messageMediaBig{
+.messageMediaBig{
   height: 80%;
   width: auto;
   border-radius: 25px;
@@ -120,8 +120,9 @@
   min-height: 250px;
 }
 
-#uploadImagePreview{
+.uploadMediaPreview{
   border-radius: 10px;
+  max-height: 300px;
 }
 
 #uploadForm{

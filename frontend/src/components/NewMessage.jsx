@@ -1,6 +1,6 @@
 import attachIcon from '../assets/images/attach.svg'
 import closeIcon from '../assets/images/close-icon.svg'
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import { useAuthContext } from '../hooks/UseAuthContext';
 import { useCurrentChatContext } from "../hooks/UseCurrentChatContext";
 import { useThemeContext } from "../hooks/UseThemeContext";
@@ -8,12 +8,15 @@ import { socket } from '../socket';
 import smileyIcon from '../assets/images/smiley-face.svg'
 import data from '@emoji-mart/data'
 import Picker from '@emoji-mart/react'
+import MediaPreview from './MediaPreview';
+
+const isImage = ['gif','jpg','jpeg','png'];
+const isVideo = ['mp4','mov']
 
 function NewMessage({addMessage, chats, updateChats}) {
   const { user } = useAuthContext()
   const { currentChat } = useCurrentChatContext()
   const { isDark } = useThemeContext()
-  const isImage = ['gif','jpg','jpeg','png'];
   const [wrongFile, setWrongFile] = useState(false)
   const fileInputRef = useRef(null);
   const [uploadPopup, setUploadPopup] = useState(false)
@@ -88,14 +91,15 @@ function NewMessage({addMessage, chats, updateChats}) {
     }
   }
 
-  const onMediaChange = (e) => {
-    if (isImage.some(type => e.target.files[0].type.includes(type))) {
-        setNewMessage({
-          ...newMessage,
-          media: e.target.files[0]
-        })
-        setUploadPopup(true)  
-      }
+  const onImageOrVideoChange = (e) => {
+    if (isImage.some(type => e.target.files[0].type.includes(type)) ||
+    isVideo.some(type => e.target.files[0].type.includes(type))) {
+      setNewMessage({
+        ...newMessage,
+        media: e.target.files[0]
+      })
+      setUploadPopup(true)  
+    }
     else {
       fileInputRef.current.value = null
       setWrongFile(true)
@@ -151,6 +155,14 @@ function NewMessage({addMessage, chats, updateChats}) {
     };
   }, [emojiPickerRef]);
 
+  const mediaPreview = useMemo(() => (
+    newMessage.media &&
+      <MediaPreview 
+        media={newMessage.media} 
+        isImage={isImage} 
+      />
+  ), [newMessage.media])
+  console.log(mediaPreview)
   return (
     <>
       <form onSubmit={submitMessage} id='messageForm'>
@@ -161,7 +173,7 @@ function NewMessage({addMessage, chats, updateChats}) {
           <Picker
             data={data}
             onEmojiSelect={onEmojiSelect}
-            theme={isDark && 'dark'}
+            theme={isDark ? 'dark' : 'light'}
           />
         </div>
         <input 
@@ -179,8 +191,8 @@ function NewMessage({addMessage, chats, updateChats}) {
             <input 
               type="file" 
               className='uploadInput' 
-              onChange={onMediaChange} 
-              accept='.gif,.jpg,.jpeg,.png'
+              onChange={onImageOrVideoChange} 
+              accept='.gif,.jpg,.jpeg,.png,.mp4,.mov'
               ref={fileInputRef} 
             >
             </input>
@@ -194,12 +206,7 @@ function NewMessage({addMessage, chats, updateChats}) {
             <button onClick={onUploadPopupClose} className="mainButton closePopup">
               <img src={closeIcon} alt="x" className="mainButtonImg closeIcon"></img>
             </button>
-            <img 
-              src={URL.createObjectURL(newMessage.media)}
-              alt="upload preview" 
-              id='uploadImagePreview'
-            >
-            </img>
+            {mediaPreview}
             <form id="uploadForm" onSubmit={submitMessage} encType="multipart/form-data">
               <input 
                 id="uploadCaptionInput" 
@@ -223,6 +230,7 @@ function NewMessage({addMessage, chats, updateChats}) {
         <div className="wrongFileMessage">
           <p className="wrongFileLine">Please, check that your file is:</p>
           <p className="wrongFileLine">Image: gif, jpg, jpeg, png</p>
+          <p className="wrongFileLine">Video: mp4, mov</p>
         </div>
       }
     </>

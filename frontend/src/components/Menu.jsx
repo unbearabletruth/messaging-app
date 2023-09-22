@@ -66,7 +66,7 @@ function Menu({chats, updateChats, handleSidebarContent, handleDrawer}) {
     localStorage.removeItem('user')
     dispatch({type: 'logout'})
   }
-  console.log(isPrivate)
+
   return (
     <div id="menuWrapper">
       <button className="mainButton" onClick={() => setMenu(!menu)} ref={menuPopupRef}>

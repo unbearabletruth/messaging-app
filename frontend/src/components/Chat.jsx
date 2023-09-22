@@ -14,6 +14,9 @@ import toBottomIcon from '../assets/images/to-bottom.svg'
 import ChatHeader from './ChatHeader';
 import NewMessage from './NewMessage';
 
+const isImage = ['gif','jpg','jpeg','png'];
+const isVideo = ['mp4','mov']
+
 function Chat({chats, updateChats, refetchChats, screenWidth, openChat}) {
   const { user } = useAuthContext()
   const { currentChat, handleCurrentChat } = useCurrentChatContext()
@@ -160,6 +163,13 @@ function Chat({chats, updateChats, refetchChats, screenWidth, openChat}) {
       setScrollButton(true)
     }
   }
+
+  const handleVideoClick = (e, message) => {
+    e.preventDefault()
+    e.target.pause()
+    showBigImage(message.media)
+  }
+  console.log(bigImage)
   return (
     <div id='content'>
       {currentChat ?
@@ -170,12 +180,15 @@ function Chat({chats, updateChats, refetchChats, screenWidth, openChat}) {
           screenWidth={screenWidth}
           openChat={openChat}
         />
-        <div className={`chatField ${isDark && 'dark'}`} onScroll={handleScrollButton} ref={chatWindow}>
+        <div className={`chatField ${isDark ? 'dark' : ''}`} onScroll={handleScrollButton} ref={chatWindow}>
           {currentChat && messages && messages.toReversed().map(message => {
             return (
-              <div className={`${message.author._id === user._id ? 'myMessage' : 'message'} ${isDark && 'dark'}`} key={message._id}>
-                {message.media &&
+              <div className={`${message.author._id === user._id ? 'myMessage' : 'message'} ${isDark ? 'dark' : ''}`} key={message._id}>
+                {message.media && isImage.some(type => message.media.includes(type)) &&
                   <img src={message.media} alt='message media' className='messageMedia' onClick={() => showBigImage(message.media)}></img>
+                }
+                {message.media && isVideo.some(type => message.media.includes(type)) &&
+                  <video src={message.media} className='messageMedia' onClick={(e) => handleVideoClick(e, message)} controls></video>
                 }
                 {currentChat.isGroupChat && message.author._id !== user._id &&
                   <span className='messageAuthor'>{message.author.username}</span>
@@ -187,9 +200,9 @@ function Chat({chats, updateChats, refetchChats, screenWidth, openChat}) {
                     {!currentChat.lastSeenInChat.some(lastSeen => lastSeen.id !== user._id &&
                     lastSeen.timestamp < message.updatedAt) && 
                     message.author._id === user._id ?
-                      <img src={readIcon} alt='read' className={`messageRead ${isDark && 'dark'}`}></img> 
+                      <img src={readIcon} alt='read' className={`messageRead ${isDark ? 'dark' : ''}`}></img> 
                       : message.author._id === user._id ?
-                      <img src={sentIcon} alt='sent' className={`messageSent ${isDark && 'dark'}`}></img>
+                      <img src={sentIcon} alt='sent' className={`messageSent ${isDark ? 'dark' : ''}`}></img>
                       :
                       null
                     }
@@ -221,14 +234,19 @@ function Chat({chats, updateChats, refetchChats, screenWidth, openChat}) {
         <NewMessage addMessage={addMessage} chats={chats} updateChats={updateChats}/>
       </>
       :
-      <div id="homeField" className={isDark && 'dark'}></div>
+      <div id="homeField" className={isDark ? 'dark' : ''}></div>
       }
       {mediaPopup &&
         <div className="popupBackground media">
           <button onClick={() => setMediaPopup(false)} className="mainButton closePopup">
               <img src={closeIcon} alt="x" className="mainButtonImg closeIcon"></img>
           </button>
-          <img src={bigImage} alt='media big' id='messageMediaBig'></img>
+          {isImage.some(type => bigImage.includes(type)) &&
+            <img src={bigImage} alt='media big' className='messageMediaBig'></img>
+          }
+          {isVideo.some(type => bigImage.includes(type)) &&
+            <video src={bigImage} className='messageMediaBig' controls></video>
+          }
         </div>
       }
     </div>
