@@ -1,5 +1,7 @@
 import attachIcon from '../assets/images/attach.svg'
 import closeIcon from '../assets/images/close-icon.svg'
+import documentIcon from '../assets/images/document-upload.svg'
+import imageIcon from '../assets/images/image-icon.svg'
 import { useState, useEffect, useRef, useMemo } from 'react';
 import { useAuthContext } from '../hooks/UseAuthContext';
 import { useCurrentChatContext } from "../hooks/UseCurrentChatContext";
@@ -20,6 +22,7 @@ function NewMessage({addMessage, chats, updateChats}) {
   const [wrongFile, setWrongFile] = useState(false)
   const fileInputRef = useRef(null);
   const [uploadPopup, setUploadPopup] = useState(false)
+  const [uploadMenu, setUploadMenu] = useState(false)
   const [emojiPicker, setEmojiPicker] = useState(false)
   const emojiPickerRef = useRef(null)
   const emojiPickerButtonRef = useRef(null)
@@ -106,6 +109,14 @@ function NewMessage({addMessage, chats, updateChats}) {
     }
   }
 
+  const onFileChange = (e) => {
+    setNewMessage({
+      ...newMessage,
+      media: e.target.files[0]
+    })
+    setUploadPopup(true)  
+  }
+
   useEffect(() => {
     if (wrongFile === true) {
       const timeId = setTimeout(() => {
@@ -153,16 +164,17 @@ function NewMessage({addMessage, chats, updateChats}) {
     return () => {
       document.removeEventListener("click", handleClickOutside);
     };
-  }, [emojiPickerRef]);
+  }, []);
 
   const mediaPreview = useMemo(() => (
     newMessage.media &&
       <MediaPreview 
         media={newMessage.media} 
         isImage={isImage} 
+        isVideo={isVideo}
       />
   ), [newMessage.media])
-  console.log(mediaPreview)
+  console.log(newMessage.media)
   return (
     <>
       <form onSubmit={submitMessage} id='messageForm'>
@@ -186,19 +198,37 @@ function NewMessage({addMessage, chats, updateChats}) {
           aria-label='new message'
         >
         </input>
-        <label>
-          <div className='mainButton'>
-            <input 
-              type="file" 
-              className='uploadInput' 
-              onChange={onImageOrVideoChange} 
-              accept='.gif,.jpg,.jpeg,.png,.mp4,.mov'
-              ref={fileInputRef} 
-            >
-            </input>
-            <img src={attachIcon} alt='attach' className="mainButtonImg"></img>
-          </div>
-        </label>
+        <button className='mainButton' onClick={() => setUploadMenu(!uploadMenu)}>
+          <img src={attachIcon} alt='attach' className="mainButtonImg"></img>
+        </button>
+        <div className={`menu ${uploadMenu ? 'visible' : ''}`} id='uploadMenu'>
+          <label>
+            <div className='menuOption' onClick={() => setUploadMenu(false)}>
+              <input 
+                type="file" 
+                className='uploadInput' 
+                onChange={onImageOrVideoChange} 
+                accept='.gif,.jpg,.jpeg,.png,.mp4,.mov'
+                ref={fileInputRef} 
+              >
+              </input>
+              <img src={imageIcon} alt='attach' className="menuOptionIcon"></img>
+              <p>Image or Video</p>
+            </div>
+          </label>
+          <label>
+            <div className='menuOption' onClick={() => setUploadMenu(false)}>
+              <input 
+                type="file" 
+                className='uploadInput' 
+                onChange={onFileChange} 
+              >
+              </input>
+              <img src={documentIcon} alt='attach' className="menuOptionIcon"></img>
+              <p>File</p>
+            </div>
+          </label>
+        </div>
       </form>
       {uploadPopup &&
         <div className="popupBackground">
@@ -228,7 +258,6 @@ function NewMessage({addMessage, chats, updateChats}) {
       }
       {wrongFile &&
         <div className="wrongFileMessage">
-          <p className="wrongFileLine">Please, check that your file is:</p>
           <p className="wrongFileLine">Image: gif, jpg, jpeg, png</p>
           <p className="wrongFileLine">Video: mp4, mov</p>
         </div>

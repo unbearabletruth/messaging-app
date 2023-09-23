@@ -36,7 +36,6 @@ function MainWindow() {
       const json = await response.json()
       if (response.ok) {
         setChats(json)
-        console.log(json, 'main')
       }
     }
 

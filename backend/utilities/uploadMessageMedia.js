@@ -12,15 +12,6 @@ const storage = multer.diskStorage({
 
 exports.uploadMedia = multer({
   storage: storage,
-  fileFilter: function (req, file, callback) {
-    const ext = path.extname(file.originalname);
-    console.log(ext)
-    if(ext !== '.png' && ext !== '.jpg' && ext !== '.gif' && ext !== '.jpeg' &&
-    ext !== '.mp4' && ext !== '.mov') {
-        return callback(new Error('Only images and videos are allowed'))
-    }
-    callback(null, true)
-  },
   limits:{
     fileSize: 10 * 1024 * 1024
   }

@@ -73,7 +73,7 @@ function Menu({chats, updateChats, handleSidebarContent, handleDrawer}) {
         <img src={menuIcon} alt="menu" className="mainButtonImg"></img>
       </button>
       {menu &&
-        <div className="menu">
+        <div className="menu" id="mainMenu">
           <p id="menuTitle">Logged in as {user.username}</p>
           <div className="menuOption" onClick={() => setNewGroupPopup(true)}>
             <img src={groupIcon} alt="new group" className="menuOptionIcon"></img>

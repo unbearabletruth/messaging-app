@@ -125,10 +125,36 @@
   max-height: 300px;
 }
 
+#uploadFilePreview{
+  display: flex;
+  gap: 10px;
+}
+
+#uploadFileImage{
+  width: 60px;
+  height: auto;
+  filter: invert(60%) sepia(80%) saturate(993%) hue-rotate(167deg) brightness(99%) contrast(96%);
+}
+
+#uploadFileImage.dark{
+  filter: invert(44%) sepia(39%) saturate(759%) hue-rotate(214deg) brightness(92%) contrast(85%);
+}
+
+#uploadFileText{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+}
+
+.uploadFileInfo{
+  color: var(--main-font-color);
+}
+
 #uploadForm{
   display: flex;
   flex-direction: column;
   gap: 20px;
+  position: relative;
 }
 
 #uploadCaptionInput{

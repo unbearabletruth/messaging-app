@@ -11,6 +11,7 @@ import closeIcon from '../assets/images/close-icon.svg'
 import readIcon from '../assets/images/read.svg'
 import sentIcon from '../assets/images/sent-check.svg'
 import toBottomIcon from '../assets/images/to-bottom.svg'
+import fileIcon from '../assets/images/file-icon.svg'
 import ChatHeader from './ChatHeader';
 import NewMessage from './NewMessage';
 
@@ -169,7 +170,7 @@ function Chat({chats, updateChats, refetchChats, screenWidth, openChat}) {
     e.target.pause()
     showBigImage(message.media)
   }
-  console.log(bigImage)
+
   return (
     <div id='content'>
       {currentChat ?
@@ -184,11 +185,26 @@ function Chat({chats, updateChats, refetchChats, screenWidth, openChat}) {
           {currentChat && messages && messages.toReversed().map(message => {
             return (
               <div className={`${message.author._id === user._id ? 'myMessage' : 'message'} ${isDark ? 'dark' : ''}`} key={message._id}>
-                {message.media && isImage.some(type => message.media.includes(type)) &&
+                {message.media && isImage.some(type => message.media.includes(type)) ?
                   <img src={message.media} alt='message media' className='messageMedia' onClick={() => showBigImage(message.media)}></img>
-                }
-                {message.media && isVideo.some(type => message.media.includes(type)) &&
+                : message.media && isVideo.some(type => message.media.includes(type)) ?
                   <video src={message.media} className='messageMedia' onClick={(e) => handleVideoClick(e, message)} controls></video>
+                : message.media ?
+                  <a href={message.media} id='uploadFilePreview'>
+                    <img 
+                      src={fileIcon} 
+                      alt='file icon' 
+                      id='uploadFileImage' 
+                      className={isDark ? 'dark' : ''}
+                    >
+                    </img>
+                    <div id='uploadFileText'>
+                      <p className='uploadFileInfo'>name</p>
+                      <p className='uploadFileInfo'>size</p>
+                    </div>
+                  </a>
+                :
+                  null
                 }
                 {currentChat.isGroupChat && message.author._id !== user._id &&
                   <span className='messageAuthor'>{message.author.username}</span>

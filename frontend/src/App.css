@@ -187,15 +187,16 @@ input[type=password]{
   gap: 5px;
   align-items: center;
   border-radius: 5px;
-  position: fixed;
+  position: absolute;
   left: 50%;
   transform: translate(-50%, 0);
-  bottom: 5vh;
+  bottom: 3vh;
   width: 300px;
   height: 60px;
   background-color: var(--main-darker);
   color: white;
   font-weight: bold;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 }
 
 #drawerWrapper,

@@ -2,7 +2,7 @@ import pencilIcon from '../../assets/images/pencil-icon.svg'
 import { useAuthContext } from '../../hooks/UseAuthContext';
 import { useCurrentChatContext } from "../../hooks/UseCurrentChatContext";
 import { useOnlineUsersContext } from "../../hooks/UseOnlineUsersContext";
-import formatDate from '../../formatDate';
+import formatDate from '../../utils/formatDate';
 
 function AllChats({chats, handleSidebarContent, allMessages}) {
   const { user } = useAuthContext()
