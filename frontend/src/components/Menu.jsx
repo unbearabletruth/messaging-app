@@ -9,6 +9,7 @@ import logoutIcon from '../assets/images/logout-icon.svg'
 import closeIcon from '../assets/images/close-icon.svg'
 import darkIcon from '../assets/images/dark-mode.svg'
 import '../assets/styles/Menu.css'
+import useClickOutside from "../hooks/UseClickOutside";
 
 function Menu({chats, updateChats, handleSidebarContent, handleDrawer}) {
   const { user, dispatch } = useAuthContext()
@@ -20,19 +21,6 @@ function Menu({chats, updateChats, handleSidebarContent, handleDrawer}) {
   const [newGroupPopup, setNewGroupPopup] = useState(false)
   const [groupName, setGroupName] = useState('')
   const [isPrivate, setIsPrivate] = useState(false)
-
-  useEffect(() => {
-    function handleClickOutside(e) {
-      if (menuPopupRef.current && !menuPopupRef.current.contains(e.target) &&
-      themeRef.current && !themeRef.current.contains(e.target)){
-        setMenu(false)
-      }
-    }
-    document.addEventListener("click", handleClickOutside);
-    return () => {
-      document.removeEventListener("click", handleClickOutside);
-    };
-  }, [menuPopupRef]);
 
   const newGroupChat = async (e) => {
     e.preventDefault()
@@ -66,6 +54,12 @@ function Menu({chats, updateChats, handleSidebarContent, handleDrawer}) {
     localStorage.removeItem('user')
     dispatch({type: 'logout'})
   }
+
+  const closeMenu = () => {
+    setMenu(false)
+  }
+
+  useClickOutside(menuPopupRef, closeMenu, themeRef)
 
   return (
     <div id="menuWrapper">

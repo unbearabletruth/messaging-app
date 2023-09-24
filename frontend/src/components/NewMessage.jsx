@@ -11,6 +11,7 @@ import smileyIcon from '../assets/images/smiley-face.svg'
 import data from '@emoji-mart/data'
 import Picker from '@emoji-mart/react'
 import MediaPreview from './MediaPreview';
+import useClickOutside from '../hooks/UseClickOutside';
 
 const isImage = ['gif','jpg','jpeg','png'];
 const isVideo = ['mp4','mov']
@@ -26,6 +27,7 @@ function NewMessage({addMessage, chats, updateChats}) {
   const [emojiPicker, setEmojiPicker] = useState(false)
   const emojiPickerRef = useRef(null)
   const emojiPickerButtonRef = useRef(null)
+  const uploadMenuRef = useRef(null)
   const [newMessage, setNewMessage] = useState({
     author: '',
     chat: '',
@@ -153,19 +155,6 @@ function NewMessage({addMessage, chats, updateChats}) {
     })
   }
 
-  useEffect(() => {
-    function handleClickOutside(e) {
-      if (emojiPickerRef.current && !emojiPickerRef.current.contains(e.target) &&
-      emojiPickerButtonRef.current && !emojiPickerButtonRef.current.contains(e.target)){
-        setEmojiPicker(false)
-      }
-    }
-    document.addEventListener("click", handleClickOutside);
-    return () => {
-      document.removeEventListener("click", handleClickOutside);
-    };
-  }, []);
-
   const mediaPreview = useMemo(() => (
     newMessage.media &&
       <MediaPreview 
@@ -174,7 +163,19 @@ function NewMessage({addMessage, chats, updateChats}) {
         isVideo={isVideo}
       />
   ), [newMessage.media])
-  console.log(newMessage.media)
+
+  const closeEmojiPicker = () => {
+    setEmojiPicker(false)
+  }
+
+  const closeUploadMenu = () => {
+    setUploadMenu(false)
+  }
+
+  useClickOutside(emojiPickerRef, closeEmojiPicker, emojiPickerButtonRef)
+
+  useClickOutside(uploadMenuRef, closeUploadMenu)
+
   return (
     <>
       <form onSubmit={submitMessage} id='messageForm'>
@@ -198,12 +199,12 @@ function NewMessage({addMessage, chats, updateChats}) {
           aria-label='new message'
         >
         </input>
-        <button className='mainButton' onClick={() => setUploadMenu(!uploadMenu)}>
+        <button className='mainButton' onClick={() => setUploadMenu(!uploadMenu)} ref={uploadMenuRef}>
           <img src={attachIcon} alt='attach' className="mainButtonImg"></img>
         </button>
         <div className={`menu ${uploadMenu ? 'visible' : ''}`} id='uploadMenu'>
           <label>
-            <div className='menuOption' onClick={() => setUploadMenu(false)}>
+            <div className='menuOption'>
               <input 
                 type="file" 
                 className='uploadInput' 

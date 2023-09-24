@@ -13,6 +13,7 @@ import acceptIcon from '../assets/images/submit.svg'
 import { useCurrentChatContext } from "../hooks/UseCurrentChatContext";
 import { useOnlineUsersContext } from "../hooks/UseOnlineUsersContext";
 import ChatDrawer from './ChatDrawer';
+import useClickOutside from '../hooks/UseClickOutside';
 
 function ChatHeader({chats, updateChats, screenWidth, openChat}) {
   const { user } = useAuthContext()
@@ -69,18 +70,6 @@ function ChatHeader({chats, updateChats, screenWidth, openChat}) {
     }
   }
 
-  useEffect(() => {
-    function handleClickOutside(e) {
-      if (menuPopupRef.current && !menuPopupRef.current.contains(e.target)){
-        setMenu(false)
-      }
-    }
-    document.addEventListener("click", handleClickOutside);
-    return () => {
-      document.removeEventListener("click", handleClickOutside);
-    };
-  }, [menuPopupRef]);
-
   const handleDrawer = (value) => {
     setDrawer(value)
   }
@@ -88,6 +77,12 @@ function ChatHeader({chats, updateChats, screenWidth, openChat}) {
   const handleSubsPopup = (value) => {
     setSubsPopup(value)
   }
+
+  const closeMenu = () => {
+    setMenu(false)
+  }
+
+  useClickOutside(menuPopupRef, closeMenu)
 
   return(
     <div id="chatHeader">
