@@ -13,7 +13,11 @@ exports.createMessage = async (req, res) => {
             text: req.body.text,
             author: req.body.author,
             chat: req.body.chat,
-            media: url
+            media: {
+                url: url,
+                name: req.file.filename,
+                size: req.file.size
+            }
         })
     } else {
         newMessage = new Message({

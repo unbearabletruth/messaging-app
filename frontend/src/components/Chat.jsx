@@ -14,6 +14,7 @@ import toBottomIcon from '../assets/images/to-bottom.svg'
 import fileIcon from '../assets/images/file-icon.svg'
 import ChatHeader from './ChatHeader';
 import NewMessage from './NewMessage';
+import formatBytes from '../utils/formatSize';
 
 const isImage = ['gif','jpg','jpeg','png'];
 const isVideo = ['mp4','mov']
@@ -168,7 +169,7 @@ function Chat({chats, updateChats, refetchChats, screenWidth, openChat}) {
   const handleVideoClick = (e, message) => {
     e.preventDefault()
     e.target.pause()
-    showBigImage(message.media)
+    showBigImage(message.media.url)
   }
 
   return (
@@ -185,22 +186,24 @@ function Chat({chats, updateChats, refetchChats, screenWidth, openChat}) {
           {currentChat && messages && messages.toReversed().map(message => {
             return (
               <div className={`${message.author._id === user._id ? 'myMessage' : 'message'} ${isDark ? 'dark' : ''}`} key={message._id}>
-                {message.media && isImage.some(type => message.media.includes(type)) ?
-                  <img src={message.media} alt='message media' className='messageMedia' onClick={() => showBigImage(message.media)}></img>
-                : message.media && isVideo.some(type => message.media.includes(type)) ?
-                  <video src={message.media} className='messageMedia' onClick={(e) => handleVideoClick(e, message)} controls></video>
+                {message.media && isImage.some(type => message.media.url.includes(type)) ?
+                  <img src={message.media.url} alt='message media' className='messageMedia' onClick={() => showBigImage(message.media.url)}></img>
+                : message.media && isVideo.some(type => message.media.url.includes(type)) ?
+                  <video src={message.media.url} className='messageMedia' onClick={(e) => handleVideoClick(e, message)} controls></video>
                 : message.media ?
-                  <a href={message.media} id='uploadFilePreview'>
-                    <img 
-                      src={fileIcon} 
-                      alt='file icon' 
-                      id='uploadFileImage' 
-                      className={isDark ? 'dark' : ''}
-                    >
-                    </img>
-                    <div id='uploadFileText'>
-                      <p className='uploadFileInfo'>name</p>
-                      <p className='uploadFileInfo'>size</p>
+                  <a href={message.media.url} className='fileBlock'>
+                    <div className='fileImageWrapper'>
+                      <img 
+                        src={fileIcon} 
+                        alt='file icon' 
+                        className={`fileImage ${isDark ? 'dark' : ''}`}
+                      >
+                      </img>
+                      <span className='fileExtension'>{message.media.name.split('.').pop()}</span>
+                    </div>
+                    <div className='fileText'>
+                      <p className='fileName'>{message.media.name}</p>
+                      <p className='fileSize'>{formatBytes(message.media.size)}</p>
                     </div>
                   </a>
                 :

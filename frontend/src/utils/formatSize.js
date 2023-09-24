@@ -1,9 +1,9 @@
 function formatBytes(bytes, decimals = 2) {
-  if (!+bytes) return '0 Bytes'
+  if (!+bytes) return '0 B'
 
   const k = 1024
   const dm = decimals < 0 ? 0 : decimals
-  const sizes = ['Bytes', 'KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB', 'ZiB', 'YiB']
+  const sizes = ['B', 'KB', 'MB', 'GB', 'TB']
 
   const i = Math.floor(Math.log(bytes) / Math.log(k))
 

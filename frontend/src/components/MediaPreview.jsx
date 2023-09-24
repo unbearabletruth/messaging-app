@@ -21,17 +21,19 @@ function MediaPreview({media, isImage, isVideo}) {
       >
       </video>
     :
-      <div id='uploadFilePreview'>
-        <img 
-          src={fileIcon} 
-          alt='file icon' 
-          id='uploadFileImage' 
-          className={isDark ? 'dark' : ''}
-        >
-        </img>
-        <div id='uploadFileText'>
-          <p className='uploadFileInfo'>{media.name}</p>
-          <p className='uploadFileInfo'>{formatBytes(media.size)}</p>
+      <div className='fileBlock'>
+        <div className='fileImageWrapper'>
+          <img 
+            src={fileIcon} 
+            alt='file icon' 
+            className={`fileImage ${isDark ? 'dark' : ''}`}
+          >
+          </img>
+          <span className='fileExtension'>{media.name.split('.').pop()}</span>
+        </div>
+        <div className='fileText'>
+          <p className='fileName'>{media.name}</p>
+          <p className='fileSize'>{formatBytes(media.size)}</p>
         </div>
       </div>
   )

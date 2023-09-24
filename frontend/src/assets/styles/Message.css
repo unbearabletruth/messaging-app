@@ -125,29 +125,49 @@
   max-height: 300px;
 }
 
-#uploadFilePreview{
+.fileBlock{
   display: flex;
   gap: 10px;
+  margin-bottom: 10px;
 }
 
-#uploadFileImage{
+.fileImageWrapper{
+  position: relative;
+}
+
+.fileImage{
   width: 60px;
   height: auto;
   filter: invert(60%) sepia(80%) saturate(993%) hue-rotate(167deg) brightness(99%) contrast(96%);
 }
 
-#uploadFileImage.dark{
-  filter: invert(44%) sepia(39%) saturate(759%) hue-rotate(214deg) brightness(92%) contrast(85%);
+.fileImage.dark{
+  filter: invert(48%) sepia(89%) saturate(834%) hue-rotate(218deg) brightness(78%) contrast(93%);
 }
 
-#uploadFileText{
+.fileExtension{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: var(--main-font-color);
+  font-weight: bold;
+}
+
+.fileText{
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
 }
 
-.uploadFileInfo{
+.fileName{
   color: var(--main-font-color);
+  font-weight: bold;
+}
+
+.fileSize{
+  color: var(--light-font-color);
+  font-size: 0.9rem;
 }
 
 #uploadForm{
