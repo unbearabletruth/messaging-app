@@ -15,12 +15,10 @@ function Menu({chats, updateChats, handleSidebarContent, handleDrawer}) {
   const { user, dispatch } = useAuthContext()
   const { handleCurrentChat } = useCurrentChatContext()
   const { isDark, toggleTheme } = useThemeContext()
-  const [menu, setMenu] = useState(false)
-  const menuPopupRef = useRef(null);
-  const themeRef = useRef(null);
   const [newGroupPopup, setNewGroupPopup] = useState(false)
   const [groupName, setGroupName] = useState('')
   const [isPrivate, setIsPrivate] = useState(false)
+  const { triggerRef, nodeRef, showMenu } = useClickOutside(false)
 
   const newGroupChat = async (e) => {
     e.preventDefault()
@@ -55,18 +53,12 @@ function Menu({chats, updateChats, handleSidebarContent, handleDrawer}) {
     dispatch({type: 'logout'})
   }
 
-  const closeMenu = () => {
-    setMenu(false)
-  }
-
-  useClickOutside(menuPopupRef, closeMenu, themeRef)
-
   return (
     <div id="menuWrapper">
-      <button className="mainButton" onClick={() => setMenu(!menu)} ref={menuPopupRef}>
+      <button className="mainButton" ref={triggerRef}>
         <img src={menuIcon} alt="menu" className="mainButtonImg"></img>
       </button>
-      {menu &&
+      {showMenu &&
         <div className="menu" id="mainMenu">
           <p id="menuTitle">Logged in as {user.username}</p>
           <div className="menuOption" onClick={() => setNewGroupPopup(true)}>
@@ -77,7 +69,7 @@ function Menu({chats, updateChats, handleSidebarContent, handleDrawer}) {
             <img src={profileIcon} alt="profile" className="menuOptionIcon"></img>
             <p className="menuText">Profile</p>
           </div>
-          <div className="menuOption" ref={themeRef}>
+          <div className="menuOption" ref={nodeRef}>
             <img src={darkIcon} alt="dark mode" className="menuOptionIcon"></img>
             <div className="menuTextWithToggle">
               <p className="menuText">Dark mode</p>

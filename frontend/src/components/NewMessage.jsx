@@ -1,7 +1,4 @@
-import attachIcon from '../assets/images/attach.svg'
 import closeIcon from '../assets/images/close-icon.svg'
-import documentIcon from '../assets/images/document-upload.svg'
-import imageIcon from '../assets/images/image-icon.svg'
 import { useState, useEffect, useRef, useMemo } from 'react';
 import { useAuthContext } from '../hooks/UseAuthContext';
 import { useCurrentChatContext } from "../hooks/UseCurrentChatContext";
@@ -12,6 +9,7 @@ import data from '@emoji-mart/data'
 import Picker from '@emoji-mart/react'
 import MediaPreview from './MediaPreview';
 import useClickOutside from '../hooks/UseClickOutside';
+import UploadMenu from './UploadMenu';
 
 const isImage = ['gif','jpg','jpeg','png'];
 const isVideo = ['mp4','mov']
@@ -23,11 +21,7 @@ function NewMessage({addMessage, chats, updateChats}) {
   const [wrongFile, setWrongFile] = useState(false)
   const fileInputRef = useRef(null);
   const [uploadPopup, setUploadPopup] = useState(false)
-  const [uploadMenu, setUploadMenu] = useState(false)
-  const [emojiPicker, setEmojiPicker] = useState(false)
-  const emojiPickerRef = useRef(null)
-  const emojiPickerButtonRef = useRef(null)
-  const uploadMenuRef = useRef(null)
+  const { triggerRef, nodeRef, showMenu } = useClickOutside(false)
   const [newMessage, setNewMessage] = useState({
     author: '',
     chat: '',
@@ -164,25 +158,13 @@ function NewMessage({addMessage, chats, updateChats}) {
       />
   ), [newMessage.media])
 
-  const closeEmojiPicker = () => {
-    setEmojiPicker(false)
-  }
-
-  const closeUploadMenu = () => {
-    setUploadMenu(false)
-  }
-
-  useClickOutside(emojiPickerRef, closeEmojiPicker, emojiPickerButtonRef)
-
-  useClickOutside(uploadMenuRef, closeUploadMenu)
-
   return (
     <>
       <form onSubmit={submitMessage} id='messageForm'>
-        <button type='button' className='mainButton' onClick={() => setEmojiPicker(!emojiPicker)} ref={emojiPickerButtonRef}>
+        <button type='button' className='mainButton' ref={triggerRef}>
           <img src={smileyIcon} alt='emoji picker' className="mainButtonImg"></img>
         </button>
-        <div id='emojiPickerWrapper' className={emojiPicker ? 'visible' : ''} ref={emojiPickerRef}>
+        <div id='emojiPickerWrapper' className={showMenu ? 'visible' : ''} ref={nodeRef}>
           <Picker
             data={data}
             onEmojiSelect={onEmojiSelect}
@@ -199,37 +181,7 @@ function NewMessage({addMessage, chats, updateChats}) {
           aria-label='new message'
         >
         </input>
-        <button className='mainButton' onClick={() => setUploadMenu(!uploadMenu)} ref={uploadMenuRef}>
-          <img src={attachIcon} alt='attach' className="mainButtonImg"></img>
-        </button>
-        <div className={`menu ${uploadMenu ? 'visible' : ''}`} id='uploadMenu'>
-          <label>
-            <div className='menuOption'>
-              <input 
-                type="file" 
-                className='uploadInput' 
-                onChange={onImageOrVideoChange} 
-                accept='.gif,.jpg,.jpeg,.png,.mp4,.mov'
-                ref={fileInputRef} 
-              >
-              </input>
-              <img src={imageIcon} alt='attach' className="menuOptionIcon"></img>
-              <p>Image or Video</p>
-            </div>
-          </label>
-          <label>
-            <div className='menuOption' onClick={() => setUploadMenu(false)}>
-              <input 
-                type="file" 
-                className='uploadInput' 
-                onChange={onFileChange} 
-              >
-              </input>
-              <img src={documentIcon} alt='attach' className="menuOptionIcon"></img>
-              <p>File</p>
-            </div>
-          </label>
-        </div>
+        <UploadMenu onImageOrVideoChange={onImageOrVideoChange} onFileChange={onFileChange} fileInputRef={fileInputRef}/>
       </form>
       {uploadPopup &&
         <div className="popupBackground">

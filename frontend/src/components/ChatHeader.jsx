@@ -19,11 +19,10 @@ function ChatHeader({chats, updateChats, screenWidth, openChat}) {
   const { user } = useAuthContext()
   const { onlineUsers } = useOnlineUsersContext()
   const { currentChat, handleCurrentChat } = useCurrentChatContext()
-  const [menu, setMenu] = useState(false)
-  const menuPopupRef = useRef(null);
   const [drawer, setDrawer] = useState(false)
   const [requestsPopup, setRequestsPopup] = useState(false)
   const [subsPopup, setSubsPopup] = useState(false)
+  const { triggerRef, showMenu } = useClickOutside(false)
 
   const leaveGroupChat = async () => {
     const userId = {user: user._id}
@@ -78,12 +77,6 @@ function ChatHeader({chats, updateChats, screenWidth, openChat}) {
     setSubsPopup(value)
   }
 
-  const closeMenu = () => {
-    setMenu(false)
-  }
-
-  useClickOutside(menuPopupRef, closeMenu)
-
   return(
     <div id="chatHeader">
       <ChatDrawer drawer={drawer} handleDrawer={handleDrawer} handleSubsPopup={handleSubsPopup}/>
@@ -107,10 +100,10 @@ function ChatHeader({chats, updateChats, screenWidth, openChat}) {
                     }
                   </div>
                 </div>
-                <button className="mainButton" onClick={() => setMenu(!menu)} ref={menuPopupRef}>
+                <button className="mainButton" ref={triggerRef}>
                   <img src={dotsMenuIcon} alt="menu" className="mainButtonImg dotsMenu"></img>
                 </button>
-                {menu &&
+                {showMenu &&
                   <div id="chatMenu" className='menu'>
                     <div className="menuOption" onClick={() => {setDrawer(true)}}>
                       <img src={profileIcon} alt="profile" className="menuOptionIcon"></img>

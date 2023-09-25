@@ -1,33 +1,31 @@
-import { useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 
-function useClickOutside(ref, handleState, ref2 = null) {
+function useClickOutside(initState) {
+  const [showMenu, setShowMenu] = useState(initState)
+  const triggerRef = useRef(null)
+  const nodeRef = useRef(null)
   
   const handleClickOutside = (e) => {
-    if (ref.current && !ref.current.contains(e.target)) {
-      handleState()
+    if (triggerRef.current && triggerRef.current.contains(e.target)) {
+      return setShowMenu(!showMenu)
+    } else if (!nodeRef.current && triggerRef.current && 
+      !triggerRef.current.contains(e.target)) {
+      return setShowMenu(false)
     }
-  }
-
-  const handleClickOutsideTwo = (e) => {
-    if (ref.current && !ref.current.contains(e.target) &&
-    ref2.current && !ref2.current.contains(e.target)){
-      handleState()
+   
+    if (nodeRef.current && !nodeRef.current.contains(e.target)) {
+      return setShowMenu(false)
     }
   }
   
   useEffect(() => {
-    if (ref2) {
-      document.addEventListener("click", handleClickOutsideTwo);
-      return () => {
-        document.removeEventListener("click", handleClickOutsideTwo);
-      };
-    } else {
-      document.addEventListener("click", handleClickOutside);
-      return () => {
-        document.removeEventListener("click", handleClickOutside);
-      };
+    document.addEventListener("click", handleClickOutside)
+    return () => {
+      document.removeEventListener("click", handleClickOutside)
     }
-  }, []);
+  }, [showMenu])
+
+  return { triggerRef, nodeRef, showMenu }
 }
 
 export default useClickOutside

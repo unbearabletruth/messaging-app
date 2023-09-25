@@ -2,7 +2,6 @@ import { useState, useEffect, useRef } from "react";
 import '../assets/styles/Search.css'
 import searchIcon from '../assets/images/search-icon.svg'
 import { useThemeContext } from "../hooks/UseThemeContext";
-import useClickOutside from "../hooks/UseClickOutside";
 
 function Search({handleSidebarContent, handleUserResults, handleChatResults, searchInput, handleSearchInput}){
   const [searchActive, setSearchActive] = useState(false)
@@ -38,11 +37,17 @@ function Search({handleSidebarContent, handleUserResults, handleChatResults, sea
     handleSidebarContent('search')
   }
 
-  const searchInactive = () => {
-    setSearchActive(false)
-  }
-
-  useClickOutside(searchRef, searchInactive)
+  useEffect(() => {
+    function handleClickOutside(e) {
+      if (searchRef.current && !searchRef.current.contains(e.target)){
+        setSearchActive(false)
+      }
+    }
+    document.addEventListener("click", handleClickOutside);
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, []);
 
   return(
     <div id="searchBar" className={isDark ? 'dark' : ''} onClick={handleClick} ref={searchRef}>
