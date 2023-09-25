@@ -76,18 +76,24 @@ exports.removeFromChat = async (req, res) => {
 }
 
 exports.updateUserTimestamp = async (req, res) => {
+    let chat
     const newTimestamp = req.body.lastSeenInChat
+    let hasDoc = await Chat.countDocuments({ _id: req.params.id, 'lastSeenInChat.id': newTimestamp.id });
+    console.log(hasDoc)
+    if (hasDoc > 0) {
+        chat = await Chat.findOneAndUpdate(
+            { _id: req.params.id, 'lastSeenInChat.id': newTimestamp.id },
+            { $set: { 'lastSeenInChat.$.timestamp': newTimestamp.timestamp } },
+            { new: true }
+        ).populate('latestMessage').populate('users', 'username profilePic lastSeen')
+    } else {
+        chat = await Chat.findByIdAndUpdate(req.params.id, { 
+            $push: { lastSeenInChat: newTimestamp }
+        }, { new: true }
+        ).populate('latestMessage').populate('users', 'username profilePic lastSeen')
+    }
 
-    let chat = await Chat.findByIdAndUpdate(req.params.id, { 
-        $pull: { 'lastSeenInChat': {'id': newTimestamp.id }}
-    }, { new: true }
-    )
-
-    chat = await Chat.findByIdAndUpdate(req.params.id, { 
-        $push: { lastSeenInChat: newTimestamp }
-    }, { new: true }
-    ).populate('latestMessage').populate('users', 'username profilePic lastSeen')
-
+    console.log(chat)
     if (chat){
         return res.status(200).json(chat)
     }

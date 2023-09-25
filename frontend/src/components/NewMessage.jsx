@@ -170,7 +170,7 @@ function NewMessage({addMessage, chats, updateChats}) {
         isVideo={isVideo}
       />
   ), [newMessage.media])
-  console.log( wrongFile, newMessage)
+
   return (
     <>
       <form onSubmit={submitMessage} id='messageForm'>

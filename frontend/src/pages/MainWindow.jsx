@@ -12,7 +12,7 @@ function MainWindow() {
   const { user, dispatch } = useAuthContext()
   const { currentChat, handleCurrentChat } = useCurrentChatContext()
   const { setOnlineUsers } = useOnlineUsersContext()
-  const [chats, setChats] = useState(null)
+  const [chats, setChats] = useState([])
   const [messages, setMessages] = useState([])
   const [refetch, setRefetch] = useState(false)
   const [screenWidth, setScreenWidth] = useState(window.innerWidth)

@@ -129,10 +129,10 @@ function ChatHeader({chats, updateChats, screenWidth, openChat}) {
               <p id='chatSubscribers'>{currentChat.users.length} {currentChat.users.length === 1 ? 'subscriber' : 'subscribers'}</p>
             </div>
           </div>
-          <button className="mainButton" onClick={() => setMenu(!menu)} ref={menuPopupRef}>
+          <button className="mainButton" ref={triggerRef}>
             <img src={dotsMenuIcon} alt="menu" className="mainButtonImg dotsMenu"></img>
           </button>
-          {menu &&
+          {showMenu &&
             <div id="chatMenu" className='menu'>
               <div className="menuOption" onClick={() => {setDrawer(true)}}>
                 <img src={groupIcon} alt="group" className="menuOptionIcon"></img>

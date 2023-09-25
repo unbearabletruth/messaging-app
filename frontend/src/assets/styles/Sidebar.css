@@ -126,9 +126,10 @@
 }
 
 .sidebarUnread{
-  background-color: #a3a3a3;
+  background-color: var(--main-darker);
   color: white;
   font-size: 0.75rem;
+  font-weight: bold;
   padding: 3px 6px;
   border-radius: 50%;
 }

@@ -112,7 +112,7 @@ function Chat({chats, updateChats, refetchChats, screenWidth, openChat}) {
 
   const joinGroupChat = async () => {
     const userId = {user: user._id}
-    const response = await fetch(`http://localhost:3000/chats/${chat._id}/add`, {
+    const response = await fetch(`http://localhost:3000/chats/${currentChat._id}/add`, {
       method: 'PATCH',
       body: JSON.stringify(userId),
       headers: {
@@ -215,7 +215,7 @@ function Chat({chats, updateChats, refetchChats, screenWidth, openChat}) {
                 <div className='messageContent'>
                   {message.text}
                   <span className='messageSideInfo'>
-                    <span className='messageTime'>{moment(message.createdAt).format('hh:mm')}</span>
+                    <span className='messageTime'>{moment(message.createdAt).format('HH:mm')}</span>
                     {!currentChat.lastSeenInChat.some(lastSeen => lastSeen.id !== user._id &&
                     lastSeen.timestamp < message.updatedAt) && 
                     message.author._id === user._id ?

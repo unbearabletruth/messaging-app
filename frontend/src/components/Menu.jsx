@@ -74,7 +74,7 @@ function Menu({chats, updateChats, handleSidebarContent, handleDrawer}) {
             <div className="menuTextWithToggle">
               <p className="menuText">Dark mode</p>
               <label className="toggle" onClick={(e) => e.preventDefault()}>
-                <input className="toggleInput" type="checkbox" checked={isDark}></input>
+                <input className="toggleInput" type="checkbox" checked={isDark} readOnly></input>
                 <span className="slider"></span>
               </label>
             </div>
