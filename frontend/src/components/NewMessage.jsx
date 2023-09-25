@@ -13,13 +13,15 @@ import UploadMenu from './UploadMenu';
 
 const isImage = ['gif','jpg','jpeg','png'];
 const isVideo = ['mp4','mov']
+const sizeLimit = 10 * 1024 * 1024 // 10 Mb
 
 function NewMessage({addMessage, chats, updateChats}) {
   const { user } = useAuthContext()
   const { currentChat } = useCurrentChatContext()
   const { isDark } = useThemeContext()
-  const [wrongFile, setWrongFile] = useState(false)
-  const fileInputRef = useRef(null);
+  const [wrongFile, setWrongFile] = useState('')
+  const fileInputRef = useRef(null)
+  const imgVidInputRef = useRef(null)
   const [uploadPopup, setUploadPopup] = useState(false)
   const { triggerRef, nodeRef, showMenu } = useClickOutside(false)
   const [newMessage, setNewMessage] = useState({
@@ -91,6 +93,11 @@ function NewMessage({addMessage, chats, updateChats}) {
   }
 
   const onImageOrVideoChange = (e) => {
+    if (e.target.files[0].size > sizeLimit) {
+      imgVidInputRef.current.value = null
+      setWrongFile('tooBig')
+      return
+    }
     if (isImage.some(type => e.target.files[0].type.includes(type)) ||
     isVideo.some(type => e.target.files[0].type.includes(type))) {
       setNewMessage({
@@ -100,12 +107,17 @@ function NewMessage({addMessage, chats, updateChats}) {
       setUploadPopup(true)  
     }
     else {
-      fileInputRef.current.value = null
-      setWrongFile(true)
+      imgVidInputRef.current.value = null
+      setWrongFile('wrongType')
     }
   }
 
   const onFileChange = (e) => {
+    if (e.target.files[0].size > sizeLimit) {
+      fileInputRef.current.value = null
+      setWrongFile('tooBig')
+      return
+    }
     setNewMessage({
       ...newMessage,
       media: e.target.files[0]
@@ -114,9 +126,9 @@ function NewMessage({addMessage, chats, updateChats}) {
   }
 
   useEffect(() => {
-    if (wrongFile === true) {
+    if (wrongFile) {
       const timeId = setTimeout(() => {
-          setWrongFile(false)
+          setWrongFile('')
         }, 7000)
     
       return () => {
@@ -133,6 +145,7 @@ function NewMessage({addMessage, chats, updateChats}) {
       media: null
     })
     fileInputRef.current.value = null
+    imgVidInputRef.current.value = null
   }
 
   const handleMessage = (e) => {
@@ -157,7 +170,7 @@ function NewMessage({addMessage, chats, updateChats}) {
         isVideo={isVideo}
       />
   ), [newMessage.media])
-
+  console.log( wrongFile, newMessage)
   return (
     <>
       <form onSubmit={submitMessage} id='messageForm'>
@@ -181,7 +194,12 @@ function NewMessage({addMessage, chats, updateChats}) {
           aria-label='new message'
         >
         </input>
-        <UploadMenu onImageOrVideoChange={onImageOrVideoChange} onFileChange={onFileChange} fileInputRef={fileInputRef}/>
+        <UploadMenu 
+          onImageOrVideoChange={onImageOrVideoChange} 
+          onFileChange={onFileChange} 
+          imgVidInputRef={imgVidInputRef}
+          fileInputRef={fileInputRef}
+        />
       </form>
       {uploadPopup &&
         <div className="popupBackground">
@@ -211,8 +229,14 @@ function NewMessage({addMessage, chats, updateChats}) {
       }
       {wrongFile &&
         <div className="wrongFileMessage">
-          <p className="wrongFileLine">Image: gif, jpg, jpeg, png</p>
-          <p className="wrongFileLine">Video: mp4, mov</p>
+          {wrongFile === 'wrongType' ?
+            <>
+              <p className="wrongFileLine">Image: gif, jpg, jpeg, png</p>
+              <p className="wrongFileLine">Video: mp4, mov</p>
+            </>
+          :
+            <p className="wrongFileLine">File shouldn't exceed 10 Mb</p>
+          }
         </div>
       }
     </>

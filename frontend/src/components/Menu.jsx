@@ -69,12 +69,12 @@ function Menu({chats, updateChats, handleSidebarContent, handleDrawer}) {
             <img src={profileIcon} alt="profile" className="menuOptionIcon"></img>
             <p className="menuText">Profile</p>
           </div>
-          <div className="menuOption" ref={nodeRef}>
+          <div className="menuOption" ref={nodeRef} onClick={toggleTheme}>
             <img src={darkIcon} alt="dark mode" className="menuOptionIcon"></img>
             <div className="menuTextWithToggle">
               <p className="menuText">Dark mode</p>
-              <label className="toggle">
-                <input className="toggleInput" type="checkbox" onChange={toggleTheme} checked={isDark}></input>
+              <label className="toggle" onClick={(e) => e.preventDefault()}>
+                <input className="toggleInput" type="checkbox" checked={isDark}></input>
                 <span className="slider"></span>
               </label>
             </div>

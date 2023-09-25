@@ -3,7 +3,7 @@ import imageIcon from '../assets/images/image-icon.svg'
 import attachIcon from '../assets/images/attach.svg'
 import useClickOutside from '../hooks/UseClickOutside';
 
-function UploadMenu({onImageOrVideoChange, onFileChange, fileInputRef}) {
+function UploadMenu({onImageOrVideoChange, onFileChange, imgVidInputRef, fileInputRef}) {
   const { triggerRef, showMenu } = useClickOutside(false)
 
   return (
@@ -19,7 +19,7 @@ function UploadMenu({onImageOrVideoChange, onFileChange, fileInputRef}) {
               className='uploadInput' 
               onChange={onImageOrVideoChange} 
               accept='.gif,.jpg,.jpeg,.png,.mp4,.mov'
-              ref={fileInputRef} 
+              ref={imgVidInputRef} 
             >
             </input>
             <img src={imageIcon} alt='attach' className="menuOptionIcon"></img>
@@ -32,6 +32,7 @@ function UploadMenu({onImageOrVideoChange, onFileChange, fileInputRef}) {
               type="file" 
               className='uploadInput' 
               onChange={onFileChange} 
+              ref={fileInputRef}
             >
             </input>
             <img src={documentIcon} alt='attach' className="menuOptionIcon"></img>
