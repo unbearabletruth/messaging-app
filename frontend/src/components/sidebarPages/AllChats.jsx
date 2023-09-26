@@ -11,7 +11,7 @@ function AllChats({chats, handleSidebarContent, allMessages}) {
   
   const calculateUnread = (chat) => {
     const chatMes = allMessages.find(mess => mess.id === chat._id).messages
-    const yourTimestamp = chat.lastSeenInChat.find(ls => ls.id === user._id).timestamp
+    const yourTimestamp = chat.lastSeenInChat.find(ls => ls.userId === user._id).timestamp
     const unread = chatMes.filter(mes => mes.author._id !== user._id && mes.updatedAt > yourTimestamp)
     return unread.length
   }

@@ -10,7 +10,7 @@ const ChatSchema = new Schema({
   admins: [{ type: Schema.Types.ObjectId, ref: "User", required: true }],
   requests: [{ type: Schema.Types.ObjectId, ref: "User" }],
   latestMessage: { type: Schema.Types.ObjectId, ref: "Message" },
-  lastSeenInChat: [{ id: String, timestamp: Date}],
+  lastSeenInChat: [{ userId: String, timestamp: Date}],
   groupPic: { 
     type: String,
     required: true,

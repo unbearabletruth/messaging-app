@@ -1,7 +1,7 @@
 import dotsMenuIcon from '../assets/images/dots-menu.svg'
 import { useAuthContext } from '../hooks/UseAuthContext';
 import moment from 'moment';
-import { useState, useEffect, useRef, Fragment } from 'react';
+import { useState, Fragment } from 'react';
 import profileIcon from '../assets/images/profile.png'
 import groupIcon from '../assets/images/group.svg'
 import leaveIcon from '../assets/images/logout-icon.svg'
@@ -37,6 +37,7 @@ function ChatHeader({chats, updateChats, screenWidth, openChat}) {
     if (response.ok) {
       updateChats(chats.filter(c => c._id !== currentChat._id))
       handleCurrentChat(json)
+      socket.emit('update chat', json)
     }
   }
 

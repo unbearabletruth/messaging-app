@@ -8,7 +8,7 @@ function UploadMenu({onImageOrVideoChange, onFileChange, imgVidInputRef, fileInp
 
   return (
     <>
-      <button className='mainButton' ref={triggerRef}>
+      <button type='button' className='mainButton' ref={triggerRef}>
         <img src={attachIcon} alt='attach' className="mainButtonImg"></img>
       </button>
       <div className={`menu ${showMenu ? 'visible' : ''}`} id='uploadMenu'>

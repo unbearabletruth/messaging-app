@@ -20,9 +20,10 @@ exports.getChat = async (req, res) => {
 exports.createChat = async (req, res) => {
     const lastSeenInChat = [];
     for (let user of req.body.users) {
-        let obj = {id: user, timestamp: Date.now()}
+        let obj = {userId: user, timestamp: Date.now()}
         lastSeenInChat.push(obj)
     }
+
     const newChat = new Chat({
         name: req.body.name,
         isGroupChat: req.body.isGroupChat,
@@ -52,8 +53,10 @@ exports.updateChat = async (req, res) => {
 }
 
 exports.addToChat = async (req, res) => {
+    const lastSeenInChat = {userId: req.body.user, timestamp: Date.now()}
+
     const chat = await Chat.findByIdAndUpdate(req.params.id, { 
-        $push: { users: req.body.user }
+        $push: { users: req.body.user, lastSeenInChat: lastSeenInChat }
     }, { new: true }
     ).populate('latestMessage').populate('users', 'username profilePic')
 
@@ -65,35 +68,25 @@ exports.addToChat = async (req, res) => {
 
 exports.removeFromChat = async (req, res) => {
     const chat = await Chat.findByIdAndUpdate(req.params.id, { 
-        $pull: { users: req.body.user }
+        $pull: { users: req.body.user, lastSeenInChat: {userId: req.body.user} }
     }, { new: true }
     ).populate('latestMessage').populate('users', 'username profilePic')
 
-    if (chat){
+    if (chat) {
         return res.status(200).json(chat)
     }
     res.status(400).json({error: 'No such chat'})
 }
 
 exports.updateUserTimestamp = async (req, res) => {
-    let chat
-    const newTimestamp = req.body.lastSeenInChat
-    let hasDoc = await Chat.countDocuments({ _id: req.params.id, 'lastSeenInChat.id': newTimestamp.id });
-    console.log(hasDoc)
-    if (hasDoc > 0) {
-        chat = await Chat.findOneAndUpdate(
-            { _id: req.params.id, 'lastSeenInChat.id': newTimestamp.id },
-            { $set: { 'lastSeenInChat.$.timestamp': newTimestamp.timestamp } },
-            { new: true }
-        ).populate('latestMessage').populate('users', 'username profilePic lastSeen')
-    } else {
-        chat = await Chat.findByIdAndUpdate(req.params.id, { 
-            $push: { lastSeenInChat: newTimestamp }
-        }, { new: true }
-        ).populate('latestMessage').populate('users', 'username profilePic lastSeen')
-    }
+    const lastSeenInChat = {userId: req.body.user, timestamp: Date.now()}
 
-    console.log(chat)
+    const chat = await Chat.findOneAndUpdate(
+        { _id: req.params.id, 'lastSeenInChat.userId': lastSeenInChat.userId },
+        { $set: { 'lastSeenInChat.$.timestamp': lastSeenInChat.timestamp } },
+        { new: true }
+    ).populate('latestMessage').populate('users', 'username profilePic lastSeen')
+
     if (chat){
         return res.status(200).json(chat)
     }

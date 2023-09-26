@@ -66,11 +66,11 @@ function Chat({chats, updateChats, refetchChats, screenWidth, openChat}) {
   }, [onlineUsers, currentChat && currentChat._id])
 
   const updateUserTimestampInChat = async () => {
-    if (currentChat) {
-      const lastSeenInChat = {lastSeenInChat: {id: user._id, timestamp: Date.now()}}
+    if (currentChat && currentChat.users.some(u => u._id === user._id)) {
+      const userId = {user: user._id}
       const response = await fetch(`http://localhost:3000/chats/${currentChat._id}/timestamp`, {
         method: 'PATCH',
-        body: JSON.stringify(lastSeenInChat),
+        body: JSON.stringify(userId),
         headers: {
           'Content-type': 'application/json'
         }
@@ -123,6 +123,7 @@ function Chat({chats, updateChats, refetchChats, screenWidth, openChat}) {
     if (response.ok) {
       updateChats([json, ...chats])
       handleCurrentChat(json)
+      socket.emit('update chat', json)
     }
   }
 
@@ -137,7 +138,6 @@ function Chat({chats, updateChats, refetchChats, screenWidth, openChat}) {
     })
     const json = await response.json()
     if (response.ok) {
-      console.log(json)
       handleCurrentChat(json)
       socket.emit('update chat', json)
     }
@@ -216,7 +216,7 @@ function Chat({chats, updateChats, refetchChats, screenWidth, openChat}) {
                   {message.text}
                   <span className='messageSideInfo'>
                     <span className='messageTime'>{moment(message.createdAt).format('HH:mm')}</span>
-                    {!currentChat.lastSeenInChat.some(lastSeen => lastSeen.id !== user._id &&
+                    {!currentChat.lastSeenInChat.some(lastSeen => lastSeen.userId !== user._id &&
                     lastSeen.timestamp < message.updatedAt) && 
                     message.author._id === user._id ?
                       <img src={readIcon} alt='read' className={`messageRead ${isDark ? 'dark' : ''}`}></img> 
