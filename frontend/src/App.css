@@ -352,6 +352,13 @@ input:checked + .slider:before {
   font-size: 0.9rem;
 }
 
+[contenteditable=true]:empty:before {
+  content: attr(data-placeholder);
+  pointer-events: none;
+  display: block; /* For Firefox */
+  color: var(--light-font-color);
+}
+
 @media (max-width: 768px) {
   #drawer{
     width: 100vw;

@@ -23,6 +23,7 @@ function NewMessage({addMessage, chats, updateChats}) {
   const fileInputRef = useRef(null)
   const imgVidInputRef = useRef(null)
   const textboxRef = useRef(null)
+  const textboxPopupRef = useRef(null)
   const [uploadPopup, setUploadPopup] = useState(false)
   const { triggerRef, nodeRef, showMenu } = useClickOutside(false)
   const [newMessage, setNewMessage] = useState({
@@ -59,8 +60,11 @@ function NewMessage({addMessage, chats, updateChats}) {
       if (response.ok) {
         setNewMessage({
           ...newMessage,
-          text: ''
+          text: '',
+          media: null
         })
+        fileInputRef.current.value = null
+        imgVidInputRef.current.value = null
         updateChatLatestMessage(json)
         addMessage(json)
         socket.emit('new message', json, currentChat)
@@ -160,7 +164,11 @@ function NewMessage({addMessage, chats, updateChats}) {
   }
 
   useEffect(() => {
-    textboxRef.current.textContent = newMessage.text
+    if (uploadPopup) {
+      textboxPopupRef.current.textContent = newMessage.text
+    } else {
+      textboxRef.current.textContent = newMessage.text
+    }
   }, [newMessage.text])
 
   const onEmojiSelect = (emoji) => {
@@ -178,7 +186,7 @@ function NewMessage({addMessage, chats, updateChats}) {
         isVideo={isVideo}
       />
   ), [newMessage.media])
-  console.log(newMessage.text)
+  console.log(newMessage)
   return (
     <>
       <form onSubmit={submitMessage} id='messageForm'>
@@ -201,6 +209,7 @@ function NewMessage({addMessage, chats, updateChats}) {
           role='textbox'
           contentEditable='true'
           tabIndex='0'
+          data-placeholder='Message'
         >
         </div>
         <UploadMenu 
@@ -218,15 +227,18 @@ function NewMessage({addMessage, chats, updateChats}) {
             </button>
             {mediaPreview}
             <form id="uploadForm" onSubmit={submitMessage} encType="multipart/form-data">
-              <input 
-                id="uploadCaptionInput" 
-                name="text" 
-                type='text'
-                onChange={handleMessage}
-                aria-label="message text"
-                placeholder="Text"
+              <div 
+                ref={textboxPopupRef}
+                onKeyUp={handleMessage}
+                onKeyDown={(e) => e.key === 'Enter' && e.shiftKey === false && e.preventDefault()}
+                id="uploadInput" 
+                aria-label='new message'
+                role='textbox'
+                contentEditable='true'
+                tabIndex='0'
+                data-placeholder='Text'
               >
-              </input>
+              </div>
               {newMessage.text ?
                 <button className="formButton">Send</button>
                 :
