@@ -58,33 +58,31 @@ function Menu({chats, updateChats, handleSidebarContent, handleDrawer}) {
       <button className="mainButton" ref={triggerRef}>
         <img src={menuIcon} alt="menu" className="mainButtonImg"></img>
       </button>
-      {showMenu &&
-        <div className="menu" id="mainMenu">
-          <p id="menuTitle">Logged in as {user.username}</p>
-          <div className="menuOption" onClick={() => setNewGroupPopup(true)}>
-            <img src={groupIcon} alt="new group" className="menuOptionIcon"></img>
-            <p className="menuText">New group chat</p>
-          </div>
-          <div className="menuOption" onClick={handleProfile}>
-            <img src={profileIcon} alt="profile" className="menuOptionIcon"></img>
-            <p className="menuText">Profile</p>
-          </div>
-          <div className="menuOption" ref={nodeRef} onClick={toggleTheme}>
-            <img src={darkIcon} alt="dark mode" className="menuOptionIcon"></img>
-            <div className="menuTextWithToggle">
-              <p className="menuText">Dark mode</p>
-              <label className="toggle" onClick={(e) => e.preventDefault()}>
-                <input className="toggleInput" type="checkbox" checked={isDark} readOnly></input>
-                <span className="slider"></span>
-              </label>
-            </div>
-          </div>
-          <div className="menuOption" onClick={handleLogout}>
-            <img src={logoutIcon} alt="log out" className="menuOptionIcon leaveIcon"></img>
-            <p className="menuLeaveText">Log out</p>
+      <div className={`menu ${showMenu ? 'visible' : ''}`} id="mainMenu">
+        <p id="menuTitle">Logged in as {user.username}</p>
+        <div className="menuOption" onClick={() => setNewGroupPopup(true)}>
+          <img src={groupIcon} alt="new group" className="menuOptionIcon"></img>
+          <p className="menuText">New group chat</p>
+        </div>
+        <div className="menuOption" onClick={handleProfile}>
+          <img src={profileIcon} alt="profile" className="menuOptionIcon"></img>
+          <p className="menuText">Profile</p>
+        </div>
+        <div className="menuOption" ref={nodeRef} onClick={toggleTheme}>
+          <img src={darkIcon} alt="dark mode" className="menuOptionIcon"></img>
+          <div className="menuTextWithToggle">
+            <p className="menuText">Dark mode</p>
+            <label className="toggle" onClick={(e) => e.preventDefault()}>
+              <input className="toggleInput" type="checkbox" checked={isDark} readOnly></input>
+              <span className="slider"></span>
+            </label>
           </div>
         </div>
-      }
+        <div className="menuOption" onClick={handleLogout}>
+          <img src={logoutIcon} alt="log out" className="menuOptionIcon leaveIcon"></img>
+          <p className="menuLeaveText">Log out</p>
+        </div>
+      </div>
       {newGroupPopup &&
         <div className="popupBackground">
           <div className='popup' id="newGroupPopup">

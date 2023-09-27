@@ -92,7 +92,7 @@
 /*new message*/
 
 #messageForm{
-  height: 50px;
+  min-height: 50px;
   width: 100%;
   display: flex;
   align-items: center;
@@ -104,11 +104,10 @@
 
 #messageInput{
   width: calc(100% - 80px);
-  height: 100%;
   border: 0px;
-  padding: 0px 8px;
+  padding: 12px 8px;
   background-color: var(--background);
-  color: var(--main-font-color)
+  color: var(--main-font-color);
 }
 
 #messageInput:focus{

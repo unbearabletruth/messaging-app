@@ -22,6 +22,7 @@ function NewMessage({addMessage, chats, updateChats}) {
   const [wrongFile, setWrongFile] = useState('')
   const fileInputRef = useRef(null)
   const imgVidInputRef = useRef(null)
+  const textboxRef = useRef(null)
   const [uploadPopup, setUploadPopup] = useState(false)
   const { triggerRef, nodeRef, showMenu } = useClickOutside(false)
   const [newMessage, setNewMessage] = useState({
@@ -149,11 +150,18 @@ function NewMessage({addMessage, chats, updateChats}) {
   }
 
   const handleMessage = (e) => {
+    if (e.key === 'Enter') {
+      submitMessage(e)
+    }
     setNewMessage({
       ...newMessage,
-      text: e.target.value
+      text: e.target.textContent
     })
   }
+
+  useEffect(() => {
+    textboxRef.current.textContent = newMessage.text
+  }, [newMessage.text])
 
   const onEmojiSelect = (emoji) => {
     setNewMessage({
@@ -170,7 +178,7 @@ function NewMessage({addMessage, chats, updateChats}) {
         isVideo={isVideo}
       />
   ), [newMessage.media])
-
+  console.log(newMessage.text)
   return (
     <>
       <form onSubmit={submitMessage} id='messageForm'>
@@ -184,16 +192,17 @@ function NewMessage({addMessage, chats, updateChats}) {
             theme={isDark ? 'dark' : 'light'}
           />
         </div>
-        <input 
-          type='text' 
-          onChange={handleMessage} 
-          value={uploadPopup ? '' : newMessage.text} 
+        <div 
+          ref={textboxRef}
+          onKeyUp={handleMessage}
+          onKeyDown={(e) => e.key === 'Enter' && e.shiftKey === false && e.preventDefault()}
           id='messageInput' 
-          placeholder='Message'
-          autoComplete="off"
           aria-label='new message'
+          role='textbox'
+          contentEditable='true'
+          tabIndex='0'
         >
-        </input>
+        </div>
         <UploadMenu 
           onImageOrVideoChange={onImageOrVideoChange} 
           onFileChange={onFileChange} 

@@ -104,14 +104,12 @@ function ChatHeader({chats, updateChats, screenWidth, openChat}) {
                 <button className="mainButton" ref={triggerRef}>
                   <img src={dotsMenuIcon} alt="menu" className="mainButtonImg dotsMenu"></img>
                 </button>
-                {showMenu &&
-                  <div id="chatMenu" className='menu'>
-                    <div className="menuOption" onClick={() => {setDrawer(true)}}>
-                      <img src={profileIcon} alt="profile" className="menuOptionIcon"></img>
-                      <p className='menuText'>Profile</p>
-                    </div>
+                <div className={`menu ${showMenu ? 'visible' : ''}`} id="chatMenu">
+                  <div className="menuOption" onClick={() => {setDrawer(true)}}>
+                    <img src={profileIcon} alt="profile" className="menuOptionIcon"></img>
+                    <p className='menuText'>Profile</p>
                   </div>
-                }
+                </div>
               </Fragment>
           )}
         )
@@ -133,26 +131,24 @@ function ChatHeader({chats, updateChats, screenWidth, openChat}) {
           <button className="mainButton" ref={triggerRef}>
             <img src={dotsMenuIcon} alt="menu" className="mainButtonImg dotsMenu"></img>
           </button>
-          {showMenu &&
-            <div id="chatMenu" className='menu'>
-              <div className="menuOption" onClick={() => {setDrawer(true)}}>
-                <img src={groupIcon} alt="group" className="menuOptionIcon"></img>
-                <p className='menuText'>Group info</p>
-              </div>
-              {currentChat.admins.includes(user._id) &&
-                <div className="menuOption" onClick={() => setRequestsPopup(true)}>
-                  <img src={requestIcon} alt="profile" className="menuOptionIcon"></img>
-                  <p className='menuText'>Requests</p>
-                </div>
-              }
-              {currentChat.users.some(u => u._id === user._id) &&
-                <div className="menuOption" onClick={leaveGroupChat}>
-                  <img src={leaveIcon} alt="profile" className="menuOptionIcon leaveIcon"></img>
-                  <p className='menuLeaveText'>Leave group</p>
-                </div>
-              }
+          <div id="chatMenu" className={`menu ${showMenu ? 'visible' : ''}`}>
+            <div className="menuOption" onClick={() => {setDrawer(true)}}>
+              <img src={groupIcon} alt="group" className="menuOptionIcon"></img>
+              <p className='menuText'>Group info</p>
             </div>
-          }
+            {currentChat.admins.includes(user._id) &&
+              <div className="menuOption" onClick={() => setRequestsPopup(true)}>
+                <img src={requestIcon} alt="profile" className="menuOptionIcon"></img>
+                <p className='menuText'>Requests</p>
+              </div>
+            }
+            {currentChat.users.some(u => u._id === user._id) &&
+              <div className="menuOption" onClick={leaveGroupChat}>
+                <img src={leaveIcon} alt="profile" className="menuOptionIcon leaveIcon"></img>
+                <p className='menuLeaveText'>Leave group</p>
+              </div>
+            }
+          </div>
           {requestsPopup &&
             <div className="popupBackground">
               <div className='popup' id="requestsPopup">
