@@ -186,7 +186,7 @@ function NewMessage({addMessage, chats, updateChats}) {
         isVideo={isVideo}
       />
   ), [newMessage.media])
-  console.log(newMessage)
+
   return (
     <>
       <form onSubmit={submitMessage} id='messageForm'>

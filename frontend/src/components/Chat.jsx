@@ -29,11 +29,36 @@ function Chat({chats, updateChats, refetchChats, screenWidth, openChat}) {
   const [bigImage, setBigImage] = useState(null)
   const [scrollButton, setScrollButton] = useState(false)
   const chatWindow = useRef(null);
+  const messagesToLoad = useRef(50)
+  const messagesToSkip = useRef(0)
+
+  useEffect(() => {
+    if (currentChat && !currentChat.privateGroup || currentChat &&
+      currentChat.privateGroup && currentChat.users.some(u => u._id === user._id)) {
+      console.log('render')
+      setMessages([])
+      messagesToSkip.current = 0
+      fetchMessages()
+    } else {
+      setMessages([])
+      messagesToSkip.current = 0
+    }
+  }, [currentChat && currentChat._id])
+
+  const fetchMessages = async () => {
+    const response = await fetch(`http://localhost:3000/chats/${currentChat._id}/messages?mes=${messagesToLoad.current}&skip=${messagesToSkip.current}`)
+    console.log(response)
+    const json = await response.json()
+    if (response.ok) {
+      console.log(json)
+      setMessages(prevState => [...prevState, ...json])
+    }
+  }
 
   useEffect(() => {
     socket.on('receive message', (newMessage) => {
       if (currentChat && currentChat._id === newMessage.chat._id) {
-        setMessages(prevState => [...prevState, newMessage])
+        setMessages(prevState => [newMessage, ...prevState])
         if (onlineUsers.includes(user._id)){
           updateUserTimestampInChat()
         }
@@ -93,23 +118,6 @@ function Chat({chats, updateChats, refetchChats, screenWidth, openChat}) {
     }
   }
 
-  useEffect(() => {
-    const fetchMessages = async () => {
-      const response = await fetch(`http://localhost:3000/chats/${currentChat._id}/messages`)
-      const json = await response.json()
-      if (response.ok) {
-        setMessages(json)
-      }
-    }
-    
-    if (currentChat && !currentChat.privateGroup || currentChat &&
-      currentChat.privateGroup && currentChat.users.some(u => u._id === user._id)) {
-      fetchMessages()
-    } else {
-      setMessages([])
-    }
-  }, [currentChat && currentChat._id])
-
   const joinGroupChat = async () => {
     const userId = {user: user._id}
     const response = await fetch(`http://localhost:3000/chats/${currentChat._id}/add`, {
@@ -149,12 +157,17 @@ function Chat({chats, updateChats, refetchChats, screenWidth, openChat}) {
   }
 
   const addMessage = (newMessage) => {
-    setMessages(prevState => [...prevState, newMessage])
+    setMessages(prevState => [newMessage, ...prevState])
   }
 
   const scrollBottom = () => {
     chatWindow.current.scrollTo({ behavior: 'smooth', top: 0 });
   };
+
+  const handleScroll = (e) => {
+    handleScrollButton(e)
+    infiniteScroll(e)
+  }
 
   const handleScrollButton = (e) => {
     //chat is reversed, so is scrollTop
@@ -163,6 +176,16 @@ function Chat({chats, updateChats, refetchChats, screenWidth, openChat}) {
       setScrollButton(false)
     } else {
       setScrollButton(true)
+    }
+  }
+
+  const infiniteScroll = (e) => {
+    //reversing
+    const scrollToTop = e.target.scrollHeight - e.target.clientHeight - Math.abs(e.target.scrollTop)
+
+    if (scrollToTop - 1 <= 0) {
+      messagesToSkip.current += 50
+      fetchMessages()
     }
   }
 
@@ -182,8 +205,8 @@ function Chat({chats, updateChats, refetchChats, screenWidth, openChat}) {
           screenWidth={screenWidth}
           openChat={openChat}
         />
-        <div className={`chatField ${isDark ? 'dark' : ''}`} onScroll={handleScrollButton} ref={chatWindow}>
-          {currentChat && messages && messages.toReversed().map(message => {
+        <div className={`chatField ${isDark ? 'dark' : ''}`} onScroll={handleScroll} ref={chatWindow}>
+          {currentChat && messages && messages.map(message => {
             return (
               <div className={`${message.author._id === user._id ? 'myMessage' : 'message'} ${isDark ? 'dark' : ''}`} key={message._id}>
                 {message.media && isImage.some(type => message.media.url.includes(type)) ?
