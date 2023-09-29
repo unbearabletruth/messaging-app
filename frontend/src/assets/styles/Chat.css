@@ -52,7 +52,7 @@
   overflow-y: auto;
   position: relative;
   gap: 0px;
-  width: 350px;
+  width: 400px;
 }
 
 #requestsPopup::-webkit-scrollbar {
@@ -85,6 +85,9 @@
   background-color: var(--main-darker);
   transition: background-color 0.2s ease-out;
   margin-left: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .declineButton{

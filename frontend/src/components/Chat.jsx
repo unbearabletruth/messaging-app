@@ -65,7 +65,6 @@ function Chat({chats, updateChats, refetchChats, screenWidth, openChat}) {
   useEffect(() => {
     socket.on('receive chat', (updatedChat) => {
       if (currentChat && currentChat._id === updatedChat._id) {
-        console.log('received chat with new ts')
         handleCurrentChat(updatedChat)
         if (!chats.some(chat => chat._id === updatedChat._id)) {
           updateChats([updatedChat, ...chats])
