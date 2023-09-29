@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react"
 import '../assets/styles/Sidebar.css'
 import '../assets/styles/Content.css'
+import '../assets/styles/UserCard.css'
 import Sidebar from "../components/Sidebar";
 import Chat from '../components/Chat';
 import { useAuthContext } from '../hooks/UseAuthContext';

@@ -1,0 +1,87 @@
+.formButton,
+.formButtonInactive{
+  width: 100px;
+  height: 40px;
+  background-color: var(--main-darker);
+  color: white;
+  border: 0px;
+  border-radius: 5px;
+  font-size: 1.1rem;
+  transition: background-color 0.2s ease-out;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.formButtonInactive{
+  opacity: 0.3;
+}
+
+.formButton:hover{
+  cursor: pointer;
+  background-color: var(--main-color);
+}
+
+.mainButton{
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 0px;
+  background-color: var(--background);
+  transition: background-color 0.2s ease-out;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.mainButton:hover{
+  background-color: var(--hover);
+  cursor: pointer;
+}
+
+.mainButtonImg{
+  width: 20px;
+  height: auto;
+  filter: var(--main-filter);
+}
+
+.mainButton.closePopup{
+  width: 34px;
+  height: 34px;
+  position: absolute;
+  left: 10px;
+  top: 10px;
+}
+
+.mainButtonImg.closeIcon{
+  width: 12px;
+  height: auto;
+}
+
+.mainButtonImg.dotsMenu{
+  width: 4px;
+  height: auto;
+}
+
+.bigButton{
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  border: 0px;
+  background-color: var(--main-darker);
+  transition: background-color 0.2s ease-out;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.bigButton:hover{
+  background-color: var(--main-color);
+  cursor: pointer;
+}
+
+.bigButtonImg{
+  width: 24px;
+  height: auto;
+  filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(93deg) brightness(103%) contrast(103%);
+}
