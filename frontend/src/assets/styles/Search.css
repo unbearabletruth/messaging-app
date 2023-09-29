@@ -1,7 +1,7 @@
 #searchBar{
   display: flex;
   position: relative;
-  width: calc(100% - 45px);
+  flex: 1;
   background-color: #f3f4f6;
   border-radius: 20px;
 }

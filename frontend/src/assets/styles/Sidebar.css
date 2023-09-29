@@ -1,5 +1,6 @@
 #sidebar{
   height: 100vh;
+  overflow: auto;
   display: flex;
   flex-direction: column;
   width: 420px;
@@ -24,6 +25,7 @@
 }
 
 #sidebarMain{
+  flex: 1;
   animation: sidebarGrow 200ms ease-in-out;
 }
 
@@ -148,6 +150,11 @@
   position: absolute;
   bottom: 50px;
   right: 50px;
+}
+
+.bigButtonImg.write{
+  width: 35px;
+  height: auto;
 }
 
 @media (max-width: 1200px) {

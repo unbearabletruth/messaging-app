@@ -57,7 +57,7 @@ function Sidebar({chats, allMessages, updateChats, openChat})  {
   }
 
   return (
-    <div id="sidebar">
+    <div id="sidebar" className="scrollable">
         {sidebarContent === 'write' || sidebarContent === 'search' ?
           <div id="sidebarHeader">
             <button onClick={backToMain} className="mainButton">

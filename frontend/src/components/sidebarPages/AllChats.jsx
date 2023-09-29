@@ -96,7 +96,7 @@ function AllChats({chats, handleSidebarContent, allMessages}) {
         }
       </div>
       <button className="bigButton write" onClick={() => handleSidebarContent('write')}>
-        <img src={pencilIcon} alt="write someone" className="bigButtonImg"></img>
+        <img src={pencilIcon} alt="write someone" className="bigButtonImg write"></img>
       </button>
     </>
   )

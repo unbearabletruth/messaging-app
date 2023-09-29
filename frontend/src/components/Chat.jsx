@@ -205,7 +205,7 @@ function Chat({chats, updateChats, refetchChats, screenWidth, openChat}) {
           screenWidth={screenWidth}
           openChat={openChat}
         />
-        <div className={`chatField ${isDark ? 'dark' : ''}`} onScroll={handleScroll} ref={chatWindow}>
+        <div className={`chatField scrollable ${isDark ? 'dark' : ''}`} onScroll={handleScroll} ref={chatWindow}>
           {currentChat && messages && messages.map(message => {
             return (
               <div className={`${message.author._id === user._id ? 'myMessage' : 'message'} ${isDark ? 'dark' : ''}`} key={message._id}>

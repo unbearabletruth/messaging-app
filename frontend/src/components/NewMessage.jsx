@@ -204,7 +204,8 @@ function NewMessage({addMessage, chats, updateChats}) {
           ref={textboxRef}
           onKeyUp={handleMessage}
           onKeyDown={(e) => e.key === 'Enter' && e.shiftKey === false && e.preventDefault()}
-          id='messageInput' 
+          id='messageInput'
+          className='scrollable' 
           aria-label='new message'
           role='textbox'
           contentEditable='true'
@@ -231,7 +232,8 @@ function NewMessage({addMessage, chats, updateChats}) {
                 ref={textboxPopupRef}
                 onKeyUp={handleMessage}
                 onKeyDown={(e) => e.key === 'Enter' && e.shiftKey === false && e.preventDefault()}
-                id="uploadInput" 
+                id="uploadInput"
+                className='scrollable'
                 aria-label='new message'
                 role='textbox'
                 contentEditable='true'
