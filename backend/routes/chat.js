@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const messageRouter = require('./message');
 const { 
-  getChat, getChats, createChat, updateChat, deleteChat, 
+  getChat, getChats, createChat, updateLatestMessage, deleteChat, 
   searchChats, addToChat, removeFromChat, updateUserTimestamp,
   addRequest, removeRequest 
 } = require('../controllers/chat_controller');
@@ -16,7 +16,7 @@ router.get("/:id", getChat);
 
 router.post("/", createChat);
 
-router.patch("/:id", updateChat);
+router.patch("/:id", updateLatestMessage);
 
 router.patch("/:id/add", addToChat);
 

@@ -27,7 +27,6 @@ function Chat({chats, updateChats, refetchChats, screenWidth, openChat}) {
   useEffect(() => {
     if (currentChat && !currentChat.privateGroup || currentChat &&
       currentChat.privateGroup && currentChat.users.some(u => u._id === user._id)) {
-      console.log('render')
       setMessages([])
       messagesToSkip.current = 0
       fetchMessages()
@@ -40,10 +39,8 @@ function Chat({chats, updateChats, refetchChats, screenWidth, openChat}) {
   const fetchMessages = async () => {
     const loadAmount = 50
     const response = await fetch(`http://localhost:3000/chats/${currentChat._id}/messages?mes=${loadAmount}&skip=${messagesToSkip.current}`)
-    console.log(response)
     const json = await response.json()
     if (response.ok) {
-      console.log(json)
       setMessages(prevState => [...prevState, ...json])
     }
   }
@@ -66,6 +63,7 @@ function Chat({chats, updateChats, refetchChats, screenWidth, openChat}) {
     socket.on('receive chat', (updatedChat) => {
       if (currentChat && currentChat._id === updatedChat._id) {
         handleCurrentChat(updatedChat)
+        updateChats(chats.map(c => c._id === updatedChat._id ? updatedChat : c))
         if (!chats.some(chat => chat._id === updatedChat._id)) {
           updateChats([updatedChat, ...chats])
         }

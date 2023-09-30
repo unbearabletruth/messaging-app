@@ -42,10 +42,12 @@ exports.createChat = async (req, res) => {
     }
 }
 
-exports.updateChat = async (req, res) => {
+exports.updateLatestMessage = async (req, res) => {
     const chat = await Chat.findByIdAndUpdate(req.params.id, {
         ...req.body,
-    }, { new: true }).populate('latestMessage')
+    }, { new: true }
+    ).populate('latestMessage').populate('users', 'username profilePic')
+    
     if (chat){
         return res.status(200).json(chat)
     }

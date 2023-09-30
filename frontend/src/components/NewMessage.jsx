@@ -84,6 +84,7 @@ function NewMessage({addMessage, chats, updateChats}) {
     })
     const json = await response.json()
     if (response.ok) {
+      socket.emit('update chat', json)
       const setChats = chats.map(chat => {
         if (chat._id === json._id) {
           return {
