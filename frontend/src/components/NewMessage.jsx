@@ -10,6 +10,7 @@ import Picker from '@emoji-mart/react'
 import MediaPreview from './MediaPreview';
 import useClickOutside from '../hooks/UseClickOutside';
 import UploadMenu from './UploadMenu';
+import sendIcon from '../assets/images/send-icon.svg'
 
 const isImage = ['gif','jpg','jpeg','png'];
 const isVideo = ['mp4','mov']
@@ -189,9 +190,9 @@ function NewMessage({addMessage, chats, updateChats}) {
   ), [newMessage.media])
 
   return (
-    <>
+    <div id='messageFormWrapper'>
       <form onSubmit={submitMessage} id='messageForm'>
-        <button type='button' className='mainButton' ref={triggerRef}>
+        <button type='button' className='mainButton textbox' ref={triggerRef}>
           <img src={smileyIcon} alt='emoji picker' className="mainButtonImg"></img>
         </button>
         <div id='emojiPickerWrapper' className={showMenu ? 'visible' : ''} ref={nodeRef}>
@@ -221,6 +222,9 @@ function NewMessage({addMessage, chats, updateChats}) {
           fileInputRef={fileInputRef}
         />
       </form>
+      <button className='bigButton send'>
+        <img src={sendIcon} alt='send' className="bigButtonImg"></img>
+      </button>
       {uploadPopup &&
         <div className="popupBackground">
           <div className="popup" id="uploadMediaPopup">
@@ -263,7 +267,7 @@ function NewMessage({addMessage, chats, updateChats}) {
           }
         </div>
       }
-    </>
+    </div>
   )
 }
 

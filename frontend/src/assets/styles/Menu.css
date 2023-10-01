@@ -32,7 +32,7 @@
 .menu#uploadMenu{
   transform-origin: bottom right;
   bottom: 55px;
-  right: 12px;
+  right: 0px;
   width: 180px;
 }
 

@@ -57,7 +57,7 @@ function ChatField({messages, showBigImage, fetchMessages, messagesToSkip}) {
   }
 
   return (
-    <div className={`chatField scrollable ${isDark ? 'dark' : ''}`} onScroll={handleScroll} ref={chatWindow}>
+    <div className='chatField scrollable' onScroll={handleScroll} ref={chatWindow}>
       {currentChat && messages && messages.map(message => {
         return (
           <div className={`${message.author._id === user._id ? 'myMessage' : 'message'} ${isDark ? 'dark' : ''}`} key={message._id}>
@@ -106,7 +106,7 @@ function ChatField({messages, showBigImage, fetchMessages, messagesToSkip}) {
         )
       })}
       <button className={`bigButton toBottom ${scrollButton ? 'visible' : ''}`} onClick={scrollBottom}>
-        <img src={toBottomIcon} alt="scroll bottom" className="bigButtonImg"></img>
+        <img src={toBottomIcon} alt="scroll bottom" className="bigButtonImg toBottom"></img>
       </button>
     </div>
   )

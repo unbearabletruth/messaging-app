@@ -151,8 +151,8 @@ function Chat({chats, updateChats, refetchChats, screenWidth, openChat}) {
   }
 
   return (
-    <div id='content'>
-      {currentChat ?
+    <div id='content' className={isDark ? 'dark' : ''}>
+      {currentChat &&
       <>
         <ChatHeader 
           chats={chats} 
@@ -184,8 +184,6 @@ function Chat({chats, updateChats, refetchChats, screenWidth, openChat}) {
         }
         <NewMessage addMessage={addMessage} chats={chats} updateChats={updateChats}/>
       </>
-      :
-      <div id="homeField" className={isDark ? 'dark' : ''}></div>
       }
       {mediaPopup &&
         <div className="popupBackground media">

@@ -3,7 +3,8 @@
   overflow: auto;
   display: flex;
   flex-direction: column;
-  width: 420px;
+  width: 440px;
+  padding: 0px 6px;
   min-width: 250px;
   border-right: 1px solid var(--light-border);
   position: relative;
@@ -61,7 +62,8 @@
   justify-content: space-between;
   gap: 5px;
   padding: 10px;
-  transition: background-color 0.2s ease-out;
+  border-radius: 8px;
+  transition: background-color 0.150s ease-out;
 }
 
 .sidebarChat:hover{

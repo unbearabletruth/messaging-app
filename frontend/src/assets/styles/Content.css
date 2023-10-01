@@ -3,18 +3,11 @@
   flex-direction: column;
   flex: 1;
   height: 100vh;
-  width: calc(100vw - 420px);
   position: relative;
-}
-
-#homeField{
-  display: flex;
-  flex: 1;
-  height: 100vh;
   background-image: url('/src/assets/images/background.jpg');
   background-position: center;
-} 
+}
 
-#homeField.dark{
+#content.dark{
   background-image: url('/src/assets/images/background-dark.jpg');
-} 
+}

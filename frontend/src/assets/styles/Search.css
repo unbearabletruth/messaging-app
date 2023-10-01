@@ -2,12 +2,8 @@
   display: flex;
   position: relative;
   flex: 1;
-  background-color: #f3f4f6;
+  background-color: var(--hover);
   border-radius: 20px;
-}
-
-#searchBar.dark{
-  background-color: #404040;
 }
 
 #searchIconWrapper{

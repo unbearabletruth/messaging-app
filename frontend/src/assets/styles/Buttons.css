@@ -73,6 +73,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
 }
 
 .bigButton:hover{
@@ -85,3 +86,46 @@
   height: auto;
   filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(93deg) brightness(103%) contrast(103%);
 }
+
+/* requests buttons */
+
+.acceptButton,
+.declineButton{
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 0px;
+  background-color: var(--main-darker);
+  transition: background-color 0.2s ease-out;
+  margin-left: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.declineButton{
+  background-color: inherit;
+}
+
+.acceptButton:hover{
+  background-color: var(--main-color);
+  cursor: pointer;
+}
+
+.declineButton:hover{
+  background-color: #fee2e2;
+  cursor: pointer;
+}
+
+.acceptButtonImg,
+.declineButtonImg{
+  width: 14px;
+  height: auto;
+  filter: invert(98%) sepia(0%) saturate(6037%) hue-rotate(226deg) brightness(123%) contrast(100%);
+}
+
+.declineButtonImg{
+  filter: invert(29%) sepia(69%) saturate(5529%) hue-rotate(347deg) brightness(88%) contrast(96%);
+}
+
+/**/
