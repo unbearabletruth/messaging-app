@@ -56,26 +56,28 @@ function Signup({closePopup}) {
         </button>
         <h1 id="signupTitle">Sign up</h1>
         <form id="signupForm" onSubmit={handleSignup}>
-          <input 
-            type="text"
-            className="signupInput" 
-            name="username" 
-            onChange={handleInput}
-            aria-label="username"
-            placeholder="Name"
-          >
-          </input>
-          <input 
-            type="password"
-            className="signupInput" 
-            name="password" 
-            onChange={handleInput}
-            aria-label="password"
-            placeholder="Password"
-          >
-          </input>
+          <div id="signupInputsWrapper">
+            <input 
+              type="text"
+              className="signupInput" 
+              name="username" 
+              onChange={handleInput}
+              aria-label="username"
+              placeholder="Name"
+            >
+            </input>
+            <input 
+              type="password"
+              className="signupInput" 
+              name="password" 
+              onChange={handleInput}
+              aria-label="password"
+              placeholder="Password"
+            >
+            </input>
+          </div>
+          {error && <p className="loginErrorMessage">{error}</p>}
           <button disabled={isLoading} className="formButton">Sign up</button>
-          {error && <p>{error}</p>}
         </form>
       </div>
     </div>

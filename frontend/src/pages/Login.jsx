@@ -76,8 +76,8 @@ function Login() {
             placeholder="Password"
           >
           </input>
+          {error && <p className="loginErrorMessage">{error}</p>}
           <button disabled={isLoading} className="formButton">Log in</button>
-          {error && <p>{error}</p>}
         </form>
         <div id="dontHaveAccount">
           <p>Don't have an account?</p>

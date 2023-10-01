@@ -190,41 +190,43 @@ function NewMessage({addMessage, chats, updateChats}) {
   ), [newMessage.media])
 
   return (
-    <div id='messageFormWrapper'>
-      <form onSubmit={submitMessage} id='messageForm'>
-        <button type='button' className='mainButton textbox' ref={triggerRef}>
-          <img src={smileyIcon} alt='emoji picker' className="mainButtonImg"></img>
-        </button>
-        <div id='emojiPickerWrapper' className={showMenu ? 'visible' : ''} ref={nodeRef}>
-          <Picker
-            data={data}
-            onEmojiSelect={onEmojiSelect}
-            theme={isDark ? 'dark' : 'light'}
+    <>
+      <div id='messageFormWrapper'>
+        <form onSubmit={submitMessage} id='messageForm'>
+          <button type='button' className='mainButton textbox' ref={triggerRef}>
+            <img src={smileyIcon} alt='emoji picker' className="mainButtonImg"></img>
+          </button>
+          <div id='emojiPickerWrapper' className={showMenu ? 'visible' : ''} ref={nodeRef}>
+            <Picker
+              data={data}
+              onEmojiSelect={onEmojiSelect}
+              theme={isDark ? 'dark' : 'light'}
+            />
+          </div>
+          <div 
+            ref={textboxRef}
+            onKeyUp={handleMessage}
+            onKeyDown={(e) => e.key === 'Enter' && e.shiftKey === false && e.preventDefault()}
+            id='messageInput'
+            className='scrollable' 
+            aria-label='new message'
+            role='textbox'
+            contentEditable='true'
+            tabIndex='0'
+            data-placeholder='Message'
+          >
+          </div>
+          <UploadMenu 
+            onImageOrVideoChange={onImageOrVideoChange} 
+            onFileChange={onFileChange} 
+            imgVidInputRef={imgVidInputRef}
+            fileInputRef={fileInputRef}
           />
-        </div>
-        <div 
-          ref={textboxRef}
-          onKeyUp={handleMessage}
-          onKeyDown={(e) => e.key === 'Enter' && e.shiftKey === false && e.preventDefault()}
-          id='messageInput'
-          className='scrollable' 
-          aria-label='new message'
-          role='textbox'
-          contentEditable='true'
-          tabIndex='0'
-          data-placeholder='Message'
-        >
-        </div>
-        <UploadMenu 
-          onImageOrVideoChange={onImageOrVideoChange} 
-          onFileChange={onFileChange} 
-          imgVidInputRef={imgVidInputRef}
-          fileInputRef={fileInputRef}
-        />
-      </form>
-      <button className='bigButton send'>
-        <img src={sendIcon} alt='send' className="bigButtonImg"></img>
-      </button>
+        </form>
+        <button className='bigButton send' form='messageForm'>
+          <img src={sendIcon} alt='send' className="bigButtonImg"></img>
+        </button>
+      </div>
       {uploadPopup &&
         <div className="popupBackground">
           <div className="popup" id="uploadMediaPopup">
@@ -267,7 +269,7 @@ function NewMessage({addMessage, chats, updateChats}) {
           }
         </div>
       }
-    </div>
+    </>
   )
 }
 

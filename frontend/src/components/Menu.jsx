@@ -4,7 +4,7 @@ import { useCurrentChatContext } from "../hooks/UseCurrentChatContext";
 import { useThemeContext } from "../hooks/UseThemeContext";
 import menuIcon from '../assets/images/menu-icon.svg'
 import groupIcon from '../assets/images/group.svg'
-import profileIcon from '../assets/images/profile.png'
+import profileIcon from '../assets/images/profile.svg'
 import logoutIcon from '../assets/images/logout-icon.svg'
 import closeIcon from '../assets/images/close-icon.svg'
 import darkIcon from '../assets/images/dark-mode.svg'

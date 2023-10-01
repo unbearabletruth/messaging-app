@@ -17,6 +17,11 @@
   gap: 20px;
 }
 
+#signupForm{
+  flex: 1;
+  gap: 10px;
+}
+
 .loginInput,
 .signupInput{
   width: 300px;
@@ -53,6 +58,18 @@
 #signupPopup{
   width: 350px;
   height: 300px;
+}
+
+#signupInputsWrapper{
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  flex: 1;
+}
+
+.loginErrorMessage{
+  font-size: 0.9rem;
+  color: #ef4444;
 }
 
 @media (max-width: 768px) {

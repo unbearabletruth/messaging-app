@@ -85,7 +85,7 @@
   flex-direction: column-reverse;
   width: 100%;
   flex: 1;
-  padding: 20px 20% 0px 20%;
+  padding: 20px 20% 5px 20%;
   align-items: flex-end;
   gap: 5px;
   overflow-y: auto;
@@ -97,9 +97,9 @@
   bottom: 90px;
   right: 10%;
   visibility: hidden;
-  transform: translateY(60%);
+  transform: translateY(100%);
   opacity: 0;
-  transition: transform 0.15s ease-in, visibility 0.15s, opacity 0.15s ease-in background-color 0.2s ease-out;
+  transition: transform 0.15s ease-in, visibility 0.15s, opacity 0.15s ease-in;
 }
 
 .bigButton.toBottom:hover{
@@ -110,7 +110,7 @@
   visibility: visible;
   transform: translateY(0%);
   opacity: 1;
-  transition: transform 0.15s ease-in opacity 0.15s ease-in;
+  transition: transform 0.15s ease-in, opacity 0.15s ease-in, background-color 0.2s ease-out;
 }
 
 .bigButtonImg.toBottom{
@@ -178,7 +178,7 @@
 
 @media (max-width: 1200px) {
   .chatField{
-    padding: 20px 5% 0px 5%;
+    padding: 20px 5% 5px 5%;
   }
 
   .bigButton.toBottom{

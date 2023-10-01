@@ -2,7 +2,7 @@ import dotsMenuIcon from '../assets/images/dots-menu.svg'
 import { useAuthContext } from '../hooks/UseAuthContext';
 import moment from 'moment';
 import { useState, Fragment } from 'react';
-import profileIcon from '../assets/images/profile.png'
+import profileIcon from '../assets/images/profile.svg'
 import groupIcon from '../assets/images/group.svg'
 import leaveIcon from '../assets/images/logout-icon.svg'
 import closeIcon from '../assets/images/close-icon.svg'
