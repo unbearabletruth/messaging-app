@@ -2,6 +2,7 @@ import { useState } from "react"
 import { useAuthContext } from "../hooks/UseAuthContext"
 import { useNavigate  } from "react-router-dom";
 import closeIcon from '../assets/images/close-icon.svg'
+import uniqid from 'uniqid';
 
 function Signup({closePopup}) {
   const navigate = useNavigate()
@@ -10,7 +11,7 @@ function Signup({closePopup}) {
     username: '',
     password: ''
   })
-  const [error, setError] = useState() 
+  const [errors, setErrors] = useState(null) 
   const [isLoading, setIsLoading] = useState()
 
   const handleInput = (e) => {
@@ -24,7 +25,7 @@ function Signup({closePopup}) {
     e.preventDefault()
     const signup = async (user) => {
       setIsLoading(true)
-      setError(null)
+      setErrors(null)
   
       const response = await fetch(`http://localhost:3000/users/signup`, {
         method: 'POST',
@@ -36,7 +37,7 @@ function Signup({closePopup}) {
       const json = await response.json()
       if (!response.ok) {
         setIsLoading(false)
-        setError(json.error)
+        setErrors(json.errors)
       }
       if (response.ok) {
         localStorage.setItem('user', JSON.stringify(json))
@@ -76,7 +77,11 @@ function Signup({closePopup}) {
             >
             </input>
           </div>
-          {error && <p className="loginErrorMessage">{error}</p>}
+          {errors && errors.map(err => {
+            return (
+              <p key={uniqid()} className="loginErrorMessage">{err.msg}</p>
+            )
+          })}
           <button disabled={isLoading} className="formButton">Sign up</button>
         </form>
       </div>
