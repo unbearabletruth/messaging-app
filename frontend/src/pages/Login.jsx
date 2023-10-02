@@ -60,29 +60,40 @@ function Login() {
       <div id="loginPage">
         <h1 id="loginTitle">Sign in to Messenger</h1>
         <form id="loginForm" onSubmit={handleLogin}>
-          <input 
-            type="text"
-            className="loginInput" 
-            name="username" 
-            onChange={handleInput}
-            aria-label="username"
-            placeholder="Name"
-          >
-          </input>
-          <input 
-            type="password"
-            className="loginInput" 
-            name="password" 
-            onChange={handleInput}
-            aria-label="password"
-            placeholder="Password"
-          >
-          </input>
-          {errors && errors.map(err => {
-            return (
-              <p key={uniqid()} className="loginErrorMessage">{err.msg}</p>
-            )
-          })}
+          <div className="loginInputWithError">
+            <input 
+              type="text"
+              className="loginInput" 
+              name="username" 
+              onChange={handleInput}
+              aria-label="username"
+              placeholder="Name"
+            >
+            </input>
+            {errors && errors.map(err => {
+              return (
+                err.path === 'username' &&
+                  <span key={uniqid()} className="loginErrorMessage">{err.msg}</span>
+              )
+            })}
+          </div>
+          <div className="loginInputWithError">
+            <input 
+              type="password"
+              className="loginInput" 
+              name="password" 
+              onChange={handleInput}
+              aria-label="password"
+              placeholder="Password"
+            >
+            </input>
+            {errors && errors.map(err => {
+              return (
+                err.path === 'password' &&
+                  <span key={uniqid()} className="loginErrorMessage">{err.msg}</span>
+              )
+            })}
+          </div>
           <button disabled={isLoading} className="formButton">Log in</button>
         </form>
         <div id="dontHaveAccount">

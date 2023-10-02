@@ -58,30 +58,41 @@ function Signup({closePopup}) {
         <h1 id="signupTitle">Sign up</h1>
         <form id="signupForm" onSubmit={handleSignup}>
           <div id="signupInputsWrapper">
-            <input 
-              type="text"
-              className="signupInput" 
-              name="username" 
-              onChange={handleInput}
-              aria-label="username"
-              placeholder="Name"
-            >
-            </input>
-            <input 
-              type="password"
-              className="signupInput" 
-              name="password" 
-              onChange={handleInput}
-              aria-label="password"
-              placeholder="Password"
-            >
-            </input>
+            <div className="loginInputWithError">
+              <input 
+                type="text"
+                className="signupInput" 
+                name="username" 
+                onChange={handleInput}
+                aria-label="username"
+                placeholder="Name"
+              >
+              </input>
+              {errors && errors.map(err => {
+                return (
+                  err.path === 'username' &&
+                    <span key={uniqid()} className="loginErrorMessage">{err.msg}</span>
+                )
+              })}
+            </div>
+            <div className="loginInputWithError">
+              <input 
+                type="password"
+                className="signupInput" 
+                name="password" 
+                onChange={handleInput}
+                aria-label="password"
+                placeholder="Password"
+              >
+              </input>
+              {errors && errors.map(err => {
+                return (
+                  err.path === 'password' &&
+                    <span key={uniqid()} className="loginErrorMessage">{err.msg}</span>
+                )
+              })}
+            </div>
           </div>
-          {errors && errors.map(err => {
-            return (
-              <p key={uniqid()} className="loginErrorMessage">{err.msg}</p>
-            )
-          })}
           <button disabled={isLoading} className="formButton">Sign up</button>
         </form>
       </div>
