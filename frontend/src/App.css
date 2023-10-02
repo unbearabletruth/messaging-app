@@ -103,7 +103,7 @@ input[type=password]{
   left: 50%;
   transform: translate(-50%, 0);
   bottom: 3vh;
-  width: 300px;
+  width: 330px;
   height: 60px;
   background-color: var(--main-darker);
   color: white;

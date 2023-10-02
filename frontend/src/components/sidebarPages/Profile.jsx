@@ -7,13 +7,17 @@ import backIcon from '../../assets/images/back-icon.svg'
 import submitIcon from '../../assets/images/submit.svg'
 import usernameIcon from '../../assets/images/at.svg'
 import bioIcon from '../../assets/images/info.svg'
+import uniqid from 'uniqid';
+
+const isImage = ['gif','jpg','jpeg','png'];
+const sizeLimit = 1024 * 1024 // 1 Mb
 
 function Profile({handleSidebarContent, drawer, handleDrawer}) {
-  const isImage = ['gif','jpg','jpeg','png'];
-  const [wrongFile, setWrongFile] = useState(false)
+  const [wrongFile, setWrongFile] = useState(null)
   const fileInputRef = useRef(null);
   const { user, dispatch } = useAuthContext()
   const [form, setForm] = useState(false)
+  const [errors, setErrors] = useState(null)
   const [profileInfo, setProfileInfo] = useState({
     username: '',
     bio: '',
@@ -23,11 +27,17 @@ function Profile({handleSidebarContent, drawer, handleDrawer}) {
   useEffect(() => {
     setProfileInfo({
       ...profileInfo,
-      username: user.username
+      username: user.username,
+      bio: user.bio
     })
   }, [])
 
   const onMediaChange = (e) => {
+    if (e.target.files[0].size > sizeLimit) {
+      fileInputRef.current.value = null
+      setWrongFile('tooBig')
+      return
+    }
     if(isImage.some(type => e.target.files[0].type.includes(type))) {
         setProfileInfo({
           ...profileInfo,
@@ -36,7 +46,7 @@ function Profile({handleSidebarContent, drawer, handleDrawer}) {
       }
     else{
       fileInputRef.current.value = null
-      setWrongFile(true)
+      setWrongFile('wrongType')
     }
   }
 
@@ -51,7 +61,9 @@ function Profile({handleSidebarContent, drawer, handleDrawer}) {
     e.preventDefault()
     const formData = new FormData();
     formData.append('profilePic', profileInfo.profilePic);
-    formData.append('username', profileInfo.username);
+    if (profileInfo.username !== user.username) {
+      formData.append('username', profileInfo.username);
+    }
     formData.append('bio', profileInfo.bio);
     
     const response = await fetch(`http://localhost:3000/users/${user._id}`, {
@@ -59,6 +71,9 @@ function Profile({handleSidebarContent, drawer, handleDrawer}) {
       body: formData,
     })
     const json = await response.json()
+    if (!response.ok) {
+      setErrors(json.errors)
+    }
     if (response.ok) {
       setForm(false)
       dispatch({type: 'set', payload: json})
@@ -66,20 +81,35 @@ function Profile({handleSidebarContent, drawer, handleDrawer}) {
   }
 
   useEffect(() => {
-    if (wrongFile === true) {
+    if (wrongFile || errors) {
       const timeId = setTimeout(() => {
-          setWrongFile(false)
+          setWrongFile(null)
+          setErrors(null)
         }, 7000)
     
       return () => {
         clearTimeout(timeId)
       }
     }
-  }, [wrongFile]);
+  }, [wrongFile, errors]);
 
   const backToMain = () => {
     handleSidebarContent('main')
     handleDrawer(false)
+  }
+
+  const reverseChanges = () => {
+    fileInputRef.current.value = null
+    setProfileInfo({
+      username: user.username,
+      bio: user.bio,
+      profilePic: null
+    })
+  }
+
+  const onFormClose = () => {
+    setForm(false)
+    reverseChanges()
   }
 
   return (
@@ -121,7 +151,7 @@ function Profile({handleSidebarContent, drawer, handleDrawer}) {
         :
           <>
             <div className='profileHeader'>
-              <button onClick={() => setForm(false)} className="mainButton">
+              <button onClick={onFormClose} className="mainButton">
                 <img src={backIcon} alt="back" className="mainButtonImg"></img>
               </button>
               <h1 className='sidebarTitle'>Edit profile</h1>
@@ -179,10 +209,19 @@ function Profile({handleSidebarContent, drawer, handleDrawer}) {
             </form>
           </>
         }
-        {wrongFile &&
+        {(wrongFile || errors) &&
           <div className="wrongFileMessage" id='wfmProfile'>
-            <p className="wrongFileLine">Please, check that your file is:</p>
-            <p className="wrongFileLine">Image: gif, jpg, jpeg, png</p>
+            {wrongFile === 'wrongType' &&
+              <p className="wrongFileLine">Image: gif, jpg, jpeg, png</p>
+            }
+            {wrongFile === 'tooBig' &&
+              <p className="wrongFileLine">Image shouldn't exceed 1 Mb</p>
+            }
+            {errors && errors.map(err => {
+            return (
+              <p key={uniqid()} className="wrongFileLine">{err.msg}</p>
+              )
+            })}
           </div>
         }
       </div>

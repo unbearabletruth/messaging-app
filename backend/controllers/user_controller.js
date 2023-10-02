@@ -98,27 +98,50 @@ exports.searchUsers = async (req, res) => {
 	}
 };
 
-exports.updateUser = async (req, res) => {
-    let url, user;
-    if (req.file){
-        url = `${req.protocol}://${req.get('host')}/profiles/${req.file.filename}`
-        user = await User.findByIdAndUpdate(req.params.id, {
-            profilePic: url
-        }, { new: true })
-    }
-    if (req.body.username) {
-        user = await User.findByIdAndUpdate(req.params.id, {
-            username: req.body.username,
-        }, { new: true })
-    }
-    if (req.body.bio) {
-        user = await User.findByIdAndUpdate(req.params.id, {
-            bio: req.body.bio,
-        }, { new: true })
-    }
+exports.updateUser = [
+    body("username")
+        .trim()
+        .isLength({ min: 3 })
+        .withMessage('Username min length is 3 characters')
+        .isLength({ max: 15})
+        .withMessage('Username max length is 15 characters')
+        .escape()
+        .custom(async value => {
+            const exists = await User.findOne({ username: value });
+            if (exists) {
+                throw new Error('Username already in use');
+            }
+        })
+        .optional(),
+    body("bio", "bio shouldn't exceed 50 characters")
+        .trim()
+        .isLength({ max: 50 })
+        .optional(),
 
-    if (user){
+    async (req, res) => {
+        const errors = validationResult(req);
+        console.log(req.body.username)
+        if (!errors.isEmpty()) {
+            return res.status(400).json({errors: errors.array()})
+        }
+        let url, user;
+        if (req.file){
+            url = `${req.protocol}://${req.get('host')}/profiles/${req.file.filename}`
+            user = await User.findByIdAndUpdate(req.params.id, {
+                profilePic: url
+            }, { new: true })
+        }
+        if (req.body.username) {
+            user = await User.findByIdAndUpdate(req.params.id, {
+                username: req.body.username,
+            }, { new: true })
+        }
+        if (req.body.bio) {
+            user = await User.findByIdAndUpdate(req.params.id, {
+                bio: req.body.bio,
+            }, { new: true })
+        }
+
         return res.status(200).json(user)
     }
-    res.status(400).json({error: 'No such chat'})
-}
+]
