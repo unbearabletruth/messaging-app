@@ -1,5 +1,4 @@
-import { createContext } from "react";
-import { useState } from "react";
+import { useState, createContext } from "react";
 
 export const CurrentChatContext = createContext()
 

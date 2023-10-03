@@ -54,7 +54,7 @@ function AllChats({chats, handleSidebarContent, allMessages}) {
             :
               !chat.isGroupChat && chat.users.map(u => {
                 return (
-                  u.username !== user.username ?
+                  u._id !== user._id ?
                     <div 
                       onClick={() => handleCurrentChat(chat)} 
                       key={chat._id} 

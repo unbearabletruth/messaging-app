@@ -17,7 +17,7 @@ function MainWindow() {
   const [messages, setMessages] = useState([])
   const [refetch, setRefetch] = useState(false)
   const [screenWidth, setScreenWidth] = useState(window.innerWidth)
-
+  console.log(user)
   useEffect(() => {
     const fetchUser = async () => {
       const response = await fetch(`http://localhost:3000/users/${user._id}`)
@@ -41,7 +41,7 @@ function MainWindow() {
     }
 
     fetchChats()
-  }, [refetch])
+  }, [refetch, user])
 
   const newChat = async (e, partnerId) => {
     e.preventDefault()

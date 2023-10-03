@@ -21,7 +21,7 @@ exports.loginUser = [
         .trim()
         .escape()
         .custom(async (value, {req}) => {
-            const user = await User.findOne({ username: req.body.username });
+            const user = await User.findOne({ username: req.body.username }).select('password');
             if (user) {
                 const match = await bcrypt.compare(value, user.password);
                 if (!match) {
@@ -86,7 +86,7 @@ exports.getUsers = async (req, res) => {
 };
 
 exports.getUser = async (req, res) => {
-	const user = await User.findById(req.params.id, 'username profilePic bio').exec()
+	const user = await User.findById(req.params.id).exec()
 	res.status(200).json(user)
 };
 
@@ -120,7 +120,6 @@ exports.updateUser = [
 
     async (req, res) => {
         const errors = validationResult(req);
-        console.log(req.body.username)
         if (!errors.isEmpty()) {
             return res.status(400).json({errors: errors.array()})
         }

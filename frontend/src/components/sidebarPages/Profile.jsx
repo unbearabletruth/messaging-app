@@ -77,6 +77,9 @@ function Profile({handleSidebarContent, drawer, handleDrawer}) {
     if (response.ok) {
       setForm(false)
       dispatch({type: 'set', payload: json})
+      const localStateUser = JSON.parse(localStorage.getItem('user'))
+      localStateUser.username = json.username
+      localStorage.setItem('user', JSON.stringify(localStateUser))
     } 
   }
 

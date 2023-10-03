@@ -58,7 +58,7 @@ function ChatHeader({chats, updateChats, screenWidth, openChat}) {
       <ChatDrawer drawer={drawer} handleDrawer={handleDrawer} handleSubsPopup={handleSubsPopup}/>
       {currentChat && !currentChat.isGroupChat && currentChat.users.map(u => {
           return (
-            u.username !== user.username &&
+            u._id !== user._id &&
               <Fragment key={u._id}>
                 <div className='chatHeaderInfo' onClick={() => {setDrawer(!drawer)}}>
                   {screenWidth < 768 &&
