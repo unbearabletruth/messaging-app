@@ -1,4 +1,5 @@
 const Message = require("../models/message");
+const { body, validationResult } = require("express-validator");
 
 exports.getMessages = async (req, res) => {
     const messages = await Message.find({chat: req.params.id})
@@ -11,36 +12,45 @@ exports.getMessages = async (req, res) => {
     res.status(200).json(messages)
 };
 
-exports.createMessage = async (req, res) => {
-    let newMessage, url;
-    if (req.file) {
-        url = `${req.protocol}://${req.get('host')}/media/${req.file.filename}`
-        newMessage = new Message({
-            text: req.body.text,
-            author: req.body.author,
-            chat: req.body.chat,
-            media: {
-                url: url,
-                name: req.file.filename,
-                size: req.file.size
-            }
-        })
-    } else {
-        newMessage = new Message({
-            text: req.body.text,
-            author: req.body.author,
-            chat: req.body.chat,
-        })
+exports.createMessage = [
+    body("text").trim().escape().isLength({ max: 4096 }),
+
+    async (req, res) => {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({errors: errors.array()})
+        }
+
+        let newMessage, url;
+        if (req.file) {
+            url = `${req.protocol}://${req.get('host')}/media/${req.file.filename}`
+            newMessage = new Message({
+                text: req.body.text,
+                author: req.body.author,
+                chat: req.body.chat,
+                media: {
+                    url: url,
+                    name: req.file.filename,
+                    size: req.file.size
+                }
+            })
+        } else {
+            newMessage = new Message({
+                text: req.body.text,
+                author: req.body.author,
+                chat: req.body.chat,
+            })
+        }
+        try{
+            const message = await newMessage.save()
+            await message.populate('chat')
+            await message.populate('author', 'username');
+            res.status(200).json(message)
+        } catch (error){
+            res.status(400).json({error: error.message})
+        }
     }
-    try{
-        const message = await newMessage.save()
-        await message.populate('chat')
-        await message.populate('author', 'username');
-        res.status(200).json(message)
-    } catch (error){
-        res.status(400).json({error: error.message})
-    }
-}
+]
 
 exports.deleteMessage = async (req, res) => {
     const message = await Message.findByIdAndDelete(req.params.messageId)

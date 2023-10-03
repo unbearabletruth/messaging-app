@@ -15,6 +15,7 @@ import sendIcon from '../assets/images/send-icon.svg'
 const isImage = ['gif','jpg','jpeg','png'];
 const isVideo = ['mp4','mov']
 const sizeLimit = 10 * 1024 * 1024 // 10 Mb
+const charLimit = 4096
 
 function NewMessage({addMessage, chats, updateChats}) {
   const { user } = useAuthContext()
@@ -133,6 +134,13 @@ function NewMessage({addMessage, chats, updateChats}) {
   }
 
   useEffect(() => {
+    if (uploadPopup && newMessage.text) {
+      textboxPopupRef.current.textContent = textboxRef.current.textContent  
+      textboxRef.current.textContent = null
+    }
+  }, [uploadPopup])
+
+  useEffect(() => {
     if (wrongFile) {
       const timeId = setTimeout(() => {
           setWrongFile('')
@@ -156,13 +164,17 @@ function NewMessage({addMessage, chats, updateChats}) {
   }
 
   const handleMessage = (e) => {
-    if (e.key === 'Enter') {
-      submitMessage(e)
-    }
     setNewMessage({
       ...newMessage,
       text: e.target.textContent
     })
+  }
+
+  const handleEnter = (e) => {
+    if (e.key === 'Enter' && e.shiftKey === false) {
+      e.preventDefault()
+      submitMessage(e)
+    }
   }
 
   useEffect(() => {
@@ -188,6 +200,14 @@ function NewMessage({addMessage, chats, updateChats}) {
         isVideo={isVideo}
       />
   ), [newMessage.media])
+  
+  const formatTooManySymbols = () => {
+    let string = Math.abs(charLimit - newMessage.text.length).toString()
+    if (string.length > 3) {
+      string = `${string.slice(0, -3)}k`
+    }
+    return string
+  }
 
   return (
     <>
@@ -205,8 +225,8 @@ function NewMessage({addMessage, chats, updateChats}) {
           </div>
           <div 
             ref={textboxRef}
-            onKeyUp={handleMessage}
-            onKeyDown={(e) => e.key === 'Enter' && e.shiftKey === false && e.preventDefault()}
+            onInput={handleMessage}
+            onKeyDown={handleEnter}
             id='messageInput'
             className='scrollable' 
             aria-label='new message'
@@ -216,16 +236,29 @@ function NewMessage({addMessage, chats, updateChats}) {
             data-placeholder='Message'
           >
           </div>
-          <UploadMenu 
-            onImageOrVideoChange={onImageOrVideoChange} 
-            onFileChange={onFileChange} 
-            imgVidInputRef={imgVidInputRef}
-            fileInputRef={fileInputRef}
-          />
+          <div id='uploadButtonBlock'>
+            {newMessage.text.length > 4096 && !uploadPopup &&
+              <div className="tooManySymbols">
+                {formatTooManySymbols()}
+              </div>
+            }
+            <UploadMenu 
+              onImageOrVideoChange={onImageOrVideoChange} 
+              onFileChange={onFileChange} 
+              imgVidInputRef={imgVidInputRef}
+              fileInputRef={fileInputRef}
+            />
+          </div>
         </form>
-        <button className='bigButton send' form='messageForm'>
-          <img src={sendIcon} alt='send' className="bigButtonImg"></img>
-        </button>
+        {(!newMessage.text || newMessage.text.length > 4096) || uploadPopup ?
+          <button className='bigButtonInactive send' form='messageForm' type='button'>
+            <img src={sendIcon} alt='send' className="bigButtonImg"></img>
+          </button>
+          :
+          <button className='bigButton send' form='messageForm'>
+            <img src={sendIcon} alt='send' className="bigButtonImg"></img>
+          </button>
+        }
       </div>
       {uploadPopup &&
         <div className="popupBackground">
@@ -237,8 +270,8 @@ function NewMessage({addMessage, chats, updateChats}) {
             <form id="uploadForm" onSubmit={submitMessage} encType="multipart/form-data">
               <div 
                 ref={textboxPopupRef}
-                onKeyUp={handleMessage}
-                onKeyDown={(e) => e.key === 'Enter' && e.shiftKey === false && e.preventDefault()}
+                onInput={handleMessage}
+                onKeyDown={handleEnter}
                 id="uploadInput"
                 className='scrollable'
                 aria-label='new message'
@@ -248,11 +281,18 @@ function NewMessage({addMessage, chats, updateChats}) {
                 data-placeholder='Text'
               >
               </div>
-              {newMessage.text ?
-                <button className="formButton">Send</button>
-                :
-                <button type='button' className="formButtonInactive">Send</button>
-              }
+              <div id='uploadPopupFooter'>
+                {!newMessage.text || newMessage.text.length > 4096 ?
+                  <button type='button' className="formButtonInactive">Send</button>
+                  :
+                  <button className="formButton">Send</button>
+                }
+                {newMessage.text.length > 4096 &&
+                  <div className="tooManySymbols">
+                    {Math.abs(4096 - newMessage.text.length)}
+                  </div>
+                }
+              </div>
             </form>
           </div>
         </div>
