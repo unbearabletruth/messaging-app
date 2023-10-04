@@ -9,7 +9,7 @@ import { useAuthContext } from '../hooks/UseAuthContext';
 import { useOnlineUsersContext } from "../hooks/UseOnlineUsersContext";
 import moment from 'moment';
 
-function Sidebar({chats, allMessages, updateChats, openChat})  {
+function Sidebar({allMessages, openChat})  {
   const { user } = useAuthContext()
   const { onlineUsers } = useOnlineUsersContext()
   const [users, setUsers] = useState(null)
@@ -74,8 +74,6 @@ function Sidebar({chats, allMessages, updateChats, openChat})  {
         : !sidebarContent || sidebarContent === 'main' ?
           <div id="sidebarHeader">
             <Menu 
-              chats={chats} 
-              updateChats={updateChats}
               handleSidebarContent={handleSidebarContent}
               handleDrawer={handleDrawer}
             />
@@ -93,7 +91,6 @@ function Sidebar({chats, allMessages, updateChats, openChat})  {
         {!sidebarContent && null}
         {sidebarContent === 'main' &&
           <AllChats 
-            chats={chats} 
             handleSidebarContent={handleSidebarContent}
             allMessages={allMessages}
           />

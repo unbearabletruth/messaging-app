@@ -3,6 +3,7 @@ import { useState, useEffect, useRef, useMemo } from 'react';
 import { useAuthContext } from '../hooks/UseAuthContext';
 import { useCurrentChatContext } from "../hooks/UseCurrentChatContext";
 import { useThemeContext } from "../hooks/UseThemeContext";
+import { useChatsContext } from '../hooks/UseChats';
 import { socket } from '../socket';
 import smileyIcon from '../assets/images/smiley-face.svg'
 import data from '@emoji-mart/data'
@@ -17,9 +18,10 @@ const isVideo = ['mp4','mov']
 const sizeLimit = 10 * 1024 * 1024 // 10 Mb
 const charLimit = 4096
 
-function NewMessage({addMessage, chats, updateChats}) {
+function NewMessage({addMessage}) {
   const { user } = useAuthContext()
   const { currentChat } = useCurrentChatContext()
+  const { chats, handleChats } = useChatsContext() 
   const { isDark } = useThemeContext()
   const [wrongFile, setWrongFile] = useState('')
   const fileInputRef = useRef(null)
@@ -96,7 +98,7 @@ function NewMessage({addMessage, chats, updateChats}) {
         }
         return chat;
       })
-      updateChats(setChats);
+      handleChats(setChats);
     }
   }
 

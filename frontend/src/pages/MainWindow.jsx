@@ -7,13 +7,14 @@ import Chat from '../components/Chat';
 import { useAuthContext } from '../hooks/UseAuthContext';
 import { useCurrentChatContext } from "../hooks/UseCurrentChatContext";
 import { useOnlineUsersContext } from "../hooks/UseOnlineUsersContext";
+import { useChatsContext } from "../hooks/UseChats";
 import { socket } from '../socket';
 
 function MainWindow() {
   const { user, dispatch } = useAuthContext()
   const { currentChat, handleCurrentChat } = useCurrentChatContext()
   const { setOnlineUsers } = useOnlineUsersContext()
-  const [chats, setChats] = useState([])
+  const { chats, handleChats } = useChatsContext()
   const [messages, setMessages] = useState([])
   const [refetch, setRefetch] = useState(false)
   const [screenWidth, setScreenWidth] = useState(window.innerWidth)
@@ -36,12 +37,12 @@ function MainWindow() {
       const response = await fetch(`http://localhost:3000/chats/users/${user._id}`)
       const json = await response.json()
       if (response.ok) {
-        setChats(json)
+        handleChats(json)
       }
     }
 
     fetchChats()
-  }, [refetch, user])
+  }, [user])
 
   const newChat = async (e, partnerId) => {
     e.preventDefault()
@@ -58,7 +59,7 @@ function MainWindow() {
     })
     const json = await response.json()
     if (response.ok) {
-      updateChats([json, ...chats])
+      handleChats([json, ...chats])
       handleCurrentChat(json)
     }
   }
@@ -130,42 +131,24 @@ function MainWindow() {
     };
   }, [])
 
-  const updateChats = (chats) => {
-    setChats(chats)
-  }
-
-  const refetchChats = () => {
-    setRefetch(!refetch)
-  }
-
   return (
     screenWidth >= 768 ?
       <>
         <Sidebar
-          chats={chats}
-          updateChats={updateChats}
           allMessages={messages}
           openChat={openChat}
         />
         <Chat 
-          chats={chats} 
-          updateChats={updateChats}
-          refetchChats={refetchChats}
           openChat={openChat} 
         />
       </>
       : currentChat !== null ?
         <Chat 
-          chats={chats} 
-          updateChats={updateChats}
-          refetchChats={refetchChats}
           screenWidth={screenWidth}
           openChat={openChat} 
         />
       :
         <Sidebar
-          chats={chats}
-          updateChats={updateChats} 
           allMessages={messages}
           openChat={openChat} 
         />

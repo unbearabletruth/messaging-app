@@ -1,7 +1,8 @@
-import { useState, useRef, useEffect } from "react"
+import { useState, useEffect } from "react"
 import { useAuthContext } from '../hooks/UseAuthContext';
 import { useCurrentChatContext } from "../hooks/UseCurrentChatContext";
 import { useThemeContext } from "../hooks/UseThemeContext";
+import { useChatsContext } from "../hooks/UseChats";
 import menuIcon from '../assets/images/menu-icon.svg'
 import groupIcon from '../assets/images/group.svg'
 import profileIcon from '../assets/images/profile.svg'
@@ -11,10 +12,11 @@ import darkIcon from '../assets/images/dark-mode.svg'
 import '../assets/styles/Menu.css'
 import useClickOutside from "../hooks/UseClickOutside";
 
-function Menu({chats, updateChats, handleSidebarContent, handleDrawer}) {
+function Menu({handleSidebarContent, handleDrawer}) {
   const { user, dispatch } = useAuthContext()
   const { handleCurrentChat } = useCurrentChatContext()
   const { isDark, toggleTheme } = useThemeContext()
+  const { chats, handleChats } = useChatsContext()
   const [newGroupPopup, setNewGroupPopup] = useState(false)
   const [groupName, setGroupName] = useState('')
   const [isPrivate, setIsPrivate] = useState(false)
@@ -46,7 +48,7 @@ function Menu({chats, updateChats, handleSidebarContent, handleDrawer}) {
     }
     if (response.ok) {
       setNewGroupPopup(false)
-      updateChats([json, ...chats])
+      handleChats([json, ...chats])
       handleCurrentChat(json)
     }
   }

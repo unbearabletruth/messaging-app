@@ -2,11 +2,13 @@ import pencilIcon from '../../assets/images/pencil-icon.svg'
 import { useAuthContext } from '../../hooks/UseAuthContext';
 import { useCurrentChatContext } from "../../hooks/UseCurrentChatContext";
 import { useOnlineUsersContext } from "../../hooks/UseOnlineUsersContext";
+import { useChatsContext } from '../../hooks/UseChats';
 import formatDate from '../../utils/formatDate';
 
-function AllChats({chats, handleSidebarContent, allMessages}) {
+function AllChats({handleSidebarContent, allMessages}) {
   const { user } = useAuthContext()
   const { currentChat, handleCurrentChat } = useCurrentChatContext()
+  const { chats } = useChatsContext()
   const { onlineUsers } = useOnlineUsersContext()
   
   const calculateUnread = (chat) => {

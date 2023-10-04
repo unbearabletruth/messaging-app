@@ -5,6 +5,7 @@ import { useAuthContext } from '../hooks/UseAuthContext';
 import { useCurrentChatContext } from "../hooks/UseCurrentChatContext";
 import { useOnlineUsersContext } from "../hooks/UseOnlineUsersContext";
 import { useThemeContext } from "../hooks/UseThemeContext";
+import { useChatsContext } from '../hooks/UseChats';
 import { socket } from '../socket';
 import closeIcon from '../assets/images/close-icon.svg'
 import ChatHeader from './ChatHeader';
@@ -14,9 +15,10 @@ import ChatField from './ChatField';
 const isImage = ['gif','jpg','jpeg','png'];
 const isVideo = ['mp4','mov']
 
-function Chat({chats, updateChats, refetchChats, screenWidth, openChat}) {
+function Chat({screenWidth, openChat}) {
   const { user } = useAuthContext()
   const { currentChat, handleCurrentChat } = useCurrentChatContext()
+  const { chats, handleChats } = useChatsContext()
   const { onlineUsers } = useOnlineUsersContext()
   const { isDark } = useThemeContext()
   const [messages, setMessages] = useState([])
@@ -52,9 +54,7 @@ function Chat({chats, updateChats, refetchChats, screenWidth, openChat}) {
         if (onlineUsers.includes(user._id)){
           updateUserTimestampInChat()
         }
-      } else {
-        refetchChats()
-      }
+      } 
     })
     return () => socket.off('receive message')
   }, [currentChat && currentChat._id, onlineUsers])
@@ -63,12 +63,12 @@ function Chat({chats, updateChats, refetchChats, screenWidth, openChat}) {
     socket.on('receive chat', (updatedChat) => {
       if (currentChat && currentChat._id === updatedChat._id) {
         handleCurrentChat(updatedChat)
-        updateChats(chats.map(c => c._id === updatedChat._id ? updatedChat : c))
+        handleChats(chats.map(c => c._id === updatedChat._id ? updatedChat : c))
         if (!chats.some(chat => chat._id === updatedChat._id)) {
-          updateChats([updatedChat, ...chats])
+          handleChats([updatedChat, ...chats])
         }
       } else {
-        updateChats(chats.map(c => c._id === updatedChat._id ? updatedChat : c))
+        handleChats(chats.map(c => c._id === updatedChat._id ? updatedChat : c))
       }
     })
     return () => socket.off('receive chat')
@@ -103,7 +103,7 @@ function Chat({chats, updateChats, refetchChats, screenWidth, openChat}) {
           }
           return chat;
         })
-        updateChats(setChats);
+        handleChats(setChats);
       }
     }
   }
@@ -119,7 +119,7 @@ function Chat({chats, updateChats, refetchChats, screenWidth, openChat}) {
     })
     const json = await response.json()
     if (response.ok) {
-      updateChats([json, ...chats])
+      handleChats([json, ...chats])
       handleCurrentChat(json)
       socket.emit('update chat', json)
     }
@@ -154,9 +154,7 @@ function Chat({chats, updateChats, refetchChats, screenWidth, openChat}) {
     <div id='content' className={isDark ? 'dark' : ''}>
       {currentChat &&
       <>
-        <ChatHeader 
-          chats={chats} 
-          updateChats={updateChats} 
+        <ChatHeader
           screenWidth={screenWidth}
           openChat={openChat}
         />
@@ -182,7 +180,7 @@ function Chat({chats, updateChats, refetchChats, screenWidth, openChat}) {
             }
           </div>
         }
-        <NewMessage addMessage={addMessage} chats={chats} updateChats={updateChats}/>
+        <NewMessage addMessage={addMessage}/>
       </>
       }
       {mediaPopup &&

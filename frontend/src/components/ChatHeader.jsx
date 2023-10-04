@@ -11,14 +11,16 @@ import requestIcon from '../assets/images/request.svg'
 import { socket } from '../socket';
 import { useCurrentChatContext } from "../hooks/UseCurrentChatContext";
 import { useOnlineUsersContext } from "../hooks/UseOnlineUsersContext";
+import { useChatsContext } from '../hooks/UseChats';
 import ChatDrawer from './ChatDrawer';
 import useClickOutside from '../hooks/UseClickOutside';
 import RequestsPopup from './RequestsPopup';
 
-function ChatHeader({chats, updateChats, screenWidth, openChat}) {
+function ChatHeader({screenWidth, openChat}) {
   const { user } = useAuthContext()
   const { onlineUsers } = useOnlineUsersContext()
   const { currentChat, handleCurrentChat } = useCurrentChatContext()
+  const { chats, handleChats } = useChatsContext()
   const [drawer, setDrawer] = useState(false)
   const [requestsPopup, setRequestsPopup] = useState(false)
   const [subsPopup, setSubsPopup] = useState(false)
@@ -35,7 +37,7 @@ function ChatHeader({chats, updateChats, screenWidth, openChat}) {
     })
     const json = await response.json()
     if (response.ok) {
-      updateChats(chats.filter(c => c._id !== currentChat._id))
+      handleChats(chats.filter(c => c._id !== currentChat._id))
       handleCurrentChat(json)
       socket.emit('update chat', json)
     }
