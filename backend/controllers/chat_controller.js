@@ -1,4 +1,6 @@
 const Chat = require("../models/chat");
+const { body, validationResult } = require("express-validator");
+
 
 exports.getChats = async (req, res) => {
     const chats = await Chat.find({users: { $in: [req.params.id] }})
@@ -17,30 +19,39 @@ exports.getChat = async (req, res) => {
     res.status(400).json({error: 'No such chat'})
 };
 
-exports.createChat = async (req, res) => {
-    const lastSeenInChat = [];
-    for (let user of req.body.users) {
-        let obj = {userId: user, timestamp: Date.now()}
-        lastSeenInChat.push(obj)
-    }
+exports.createChat = [
+    body("name").trim().escape().isLength({ min: 3, max: 25 }),
 
-    const newChat = new Chat({
-        name: req.body.name,
-        isGroupChat: req.body.isGroupChat,
-        privateGroup: req.body.privateGroup,
-        admins: req.body.users,
-        users: req.body.users,
-        latestMessage: null,
-        lastSeenInChat: lastSeenInChat
-    })
-    try{
-        const chat = await newChat.save()
-        await chat.populate('users', 'username profilePic')
-        res.status(200).json(chat)
-    } catch (error){
-        res.status(400).json({error: error.message})
+    async (req, res) => {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({errors: errors.array()})
+        }
+
+        const lastSeenInChat = [];
+        for (let user of req.body.users) {
+            let obj = {userId: user, timestamp: Date.now()}
+            lastSeenInChat.push(obj)
+        }
+
+        const newChat = new Chat({
+            name: req.body.name,
+            isGroupChat: req.body.isGroupChat,
+            privateGroup: req.body.privateGroup,
+            admins: req.body.users,
+            users: req.body.users,
+            latestMessage: null,
+            lastSeenInChat: lastSeenInChat
+        })
+        try{
+            const chat = await newChat.save()
+            await chat.populate('users', 'username profilePic')
+            res.status(200).json(chat)
+        } catch (error){
+            res.status(400).json({error: error.message})
+        }
     }
-}
+]
 
 exports.updateLatestMessage = async (req, res) => {
     const chat = await Chat.findByIdAndUpdate(req.params.id, {

@@ -96,19 +96,26 @@ input[type=password]{
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 5px;
   align-items: center;
+  gap: 5px;
   border-radius: 5px;
   position: absolute;
   left: 50%;
   transform: translate(-50%, 0);
   bottom: 3vh;
   width: 330px;
+  padding: 0px 12px;
+  max-width: 90%;
   height: 60px;
   background-color: var(--main-darker);
   color: white;
   font-weight: bold;
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+
+.wrongFileLine{
+  width: 100%;
+  text-align: center;
 }
 
 #drawerWrapper,

@@ -114,7 +114,7 @@ function Profile({handleSidebarContent, drawer, handleDrawer}) {
     setForm(false)
     reverseChanges()
   }
-
+  console.log(errors)
   return (
     <div id='sidebarDrawerWrapper'>
       <div id='sidebarDrawer' className={drawer ? 'active' : ''}>
@@ -213,7 +213,7 @@ function Profile({handleSidebarContent, drawer, handleDrawer}) {
           </>
         }
         {(wrongFile || errors) &&
-          <div className="wrongFileMessage" id='wfmProfile'>
+          <div className="wrongFileMessage">
             {wrongFile === 'wrongType' &&
               <p className="wrongFileLine">Image: gif, jpg, jpeg, png</p>
             }

@@ -19,9 +19,14 @@ function Menu({chats, updateChats, handleSidebarContent, handleDrawer}) {
   const [groupName, setGroupName] = useState('')
   const [isPrivate, setIsPrivate] = useState(false)
   const { triggerRef, nodeRef, showMenu } = useClickOutside(false)
+  const [error, setError] = useState(false)
 
   const newGroupChat = async (e) => {
     e.preventDefault()
+    if (groupName.length < 3 || groupName.length > 25) {
+      setError(true)
+      return
+    }
     const newGroup = {
       name: groupName,
       isGroupChat: true,
@@ -36,6 +41,9 @@ function Menu({chats, updateChats, handleSidebarContent, handleDrawer}) {
       }
     })
     const json = await response.json()
+    if (!response.ok) {
+      setError(true)
+    }
     if (response.ok) {
       setNewGroupPopup(false)
       updateChats([json, ...chats])
@@ -52,6 +60,18 @@ function Menu({chats, updateChats, handleSidebarContent, handleDrawer}) {
     localStorage.removeItem('user')
     dispatch({type: 'logout'})
   }
+
+  useEffect(() => {
+    if (error) {
+      const timeId = setTimeout(() => {
+          setError(null)
+        }, 7000)
+    
+      return () => {
+        clearTimeout(timeId)
+      }
+    }
+  }, [error]);
 
   return (
     <div id="menuWrapper">
@@ -116,8 +136,14 @@ function Menu({chats, updateChats, handleSidebarContent, handleDrawer}) {
               <button className="formButton">Create</button>
             </form>
           </div>
+          {error &&
+            <div className="wrongFileMessage">
+              <p className="wrongFileLine">Groupname should be 3-25 characters</p>
+            </div>
+          }
         </div>
       }
+      
     </div>
   )
 }

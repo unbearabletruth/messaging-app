@@ -188,9 +188,3 @@
   outline: none;
   border: 2px solid var(--main-color);
 }
-
-/**/
-
-.wrongFileMessage#wfmProfile{
-  position: absolute;
-}
