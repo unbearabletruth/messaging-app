@@ -1,20 +1,20 @@
-import dotsMenuIcon from '../assets/images/dots-menu.svg'
-import { useAuthContext } from '../hooks/UseAuthContext';
+import dotsMenuIcon from '../../assets/images/dots-menu.svg'
+import { useAuthContext } from '../../hooks/UseAuthContext';
 import moment from 'moment';
 import { useState, Fragment } from 'react';
-import profileIcon from '../assets/images/profile.svg'
-import groupIcon from '../assets/images/group.svg'
-import leaveIcon from '../assets/images/logout-icon.svg'
-import closeIcon from '../assets/images/close-icon.svg'
-import backIcon from '../assets/images/back-icon.svg'
-import requestIcon from '../assets/images/request.svg'
-import { socket } from '../socket';
-import { useCurrentChatContext } from "../hooks/UseCurrentChatContext";
-import { useOnlineUsersContext } from "../hooks/UseOnlineUsersContext";
-import { useChatsContext } from '../hooks/UseChats';
+import profileIcon from '../../assets/images/profile.svg'
+import groupIcon from '../../assets/images/group.svg'
+import leaveIcon from '../../assets/images/logout-icon.svg'
+import closeIcon from '../../assets/images/close-icon.svg'
+import backIcon from '../../assets/images/back-icon.svg'
+import requestIcon from '../../assets/images/request.svg'
+import { socket } from '../../socket';
+import { useCurrentChatContext } from "../../hooks/UseCurrentChatContext";
+import { useOnlineUsersContext } from "../../hooks/UseOnlineUsersContext";
+import { useChatsContext } from '../../hooks/UseChats';
 import ChatDrawer from './ChatDrawer';
-import useClickOutside from '../hooks/UseClickOutside';
-import RequestsPopup from './RequestsPopup';
+import useClickOutside from '../../hooks/UseClickOutside';
+import RequestsPopup from '../RequestsPopup';
 
 function ChatHeader({screenWidth, openChat}) {
   const { user } = useAuthContext()

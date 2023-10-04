@@ -1,9 +1,9 @@
-import usernameIcon from '../assets/images/at.svg'
-import bioIcon from '../assets/images/info.svg'
-import closeIcon from '../assets/images/close-icon.svg'
-import groupIcon from '../assets/images/group.svg'
-import { useCurrentChatContext } from "../hooks/UseCurrentChatContext";
-import { useAuthContext } from '../hooks/UseAuthContext';
+import usernameIcon from '../../assets/images/at.svg'
+import bioIcon from '../../assets/images/info.svg'
+import closeIcon from '../../assets/images/close-icon.svg'
+import groupIcon from '../../assets/images/group.svg'
+import { useCurrentChatContext } from "../../hooks/UseCurrentChatContext";
+import { useAuthContext } from '../../hooks/UseAuthContext';
 import moment from 'moment';
 
 function ChatDrawer({drawer, handleDrawer, handleSubsPopup}) {

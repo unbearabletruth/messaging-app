@@ -1,13 +1,13 @@
-import '../assets/styles/Chat.css'
-import '../assets/styles/Message.css'
+import '../../assets/styles/Chat.css'
+import '../../assets/styles/Message.css'
 import { useState, useEffect, useRef } from 'react';
-import { useAuthContext } from '../hooks/UseAuthContext';
-import { useCurrentChatContext } from "../hooks/UseCurrentChatContext";
-import { useOnlineUsersContext } from "../hooks/UseOnlineUsersContext";
-import { useThemeContext } from "../hooks/UseThemeContext";
-import { useChatsContext } from '../hooks/UseChats';
-import { socket } from '../socket';
-import closeIcon from '../assets/images/close-icon.svg'
+import { useAuthContext } from '../../hooks/UseAuthContext';
+import { useCurrentChatContext } from "../../hooks/UseCurrentChatContext";
+import { useOnlineUsersContext } from "../../hooks/UseOnlineUsersContext";
+import { useThemeContext } from "../../hooks/UseThemeContext";
+import { useChatsContext } from '../../hooks/UseChats';
+import { socket } from '../../socket';
+import closeIcon from '../../assets/images/close-icon.svg'
 import ChatHeader from './ChatHeader';
 import NewMessage from './NewMessage';
 import ChatField from './ChatField';

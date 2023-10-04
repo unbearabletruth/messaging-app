@@ -1,6 +1,6 @@
-import fileIcon from '../assets/images/file-icon.svg'
-import { useThemeContext } from "../hooks/UseThemeContext";
-import formatBytes from '../utils/formatSize';
+import fileIcon from '../../assets/images/file-icon.svg'
+import { useThemeContext } from "../../hooks/UseThemeContext";
+import formatBytes from '../../utils/formatSize';
 
 function MediaPreview({media, isImage, isVideo}) {
   const { isDark } = useThemeContext()

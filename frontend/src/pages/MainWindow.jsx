@@ -2,8 +2,8 @@ import { useState, useEffect } from "react"
 import '../assets/styles/Sidebar.css'
 import '../assets/styles/Content.css'
 import '../assets/styles/UserCard.css'
-import Sidebar from "../components/Sidebar";
-import Chat from '../components/Chat';
+import Sidebar from "../components/sidebar/Sidebar";
+import Chat from '../components/chat/Chat';
 import { useAuthContext } from '../hooks/UseAuthContext';
 import { useCurrentChatContext } from "../hooks/UseCurrentChatContext";
 import { useOnlineUsersContext } from "../hooks/UseOnlineUsersContext";
@@ -16,7 +16,6 @@ function MainWindow() {
   const { setOnlineUsers } = useOnlineUsersContext()
   const { chats, handleChats } = useChatsContext()
   const [messages, setMessages] = useState([])
-  const [refetch, setRefetch] = useState(false)
   const [screenWidth, setScreenWidth] = useState(window.innerWidth)
 
   useEffect(() => {

@@ -6,7 +6,8 @@ export const ChatsContextProvider = ({children}) => {
   const [chats, setChats] = useState([])
 
   const handleChats = (chats) => {
-    setChats(chats)
+    const sortedChats = [...chats].sort((a, b) => a.latestMessage.updatedAt < b.latestMessage.updatedAt ? 1 : -1)
+    setChats(sortedChats)
   }
 
   return (

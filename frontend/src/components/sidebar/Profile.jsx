@@ -114,7 +114,7 @@ function Profile({handleSidebarContent, drawer, handleDrawer}) {
     setForm(false)
     reverseChanges()
   }
-  console.log(errors)
+
   return (
     <div id='sidebarDrawerWrapper'>
       <div id='sidebarDrawer' className={drawer ? 'active' : ''}>

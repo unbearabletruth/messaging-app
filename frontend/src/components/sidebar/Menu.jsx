@@ -1,16 +1,16 @@
 import { useState, useEffect } from "react"
-import { useAuthContext } from '../hooks/UseAuthContext';
-import { useCurrentChatContext } from "../hooks/UseCurrentChatContext";
-import { useThemeContext } from "../hooks/UseThemeContext";
-import { useChatsContext } from "../hooks/UseChats";
-import menuIcon from '../assets/images/menu-icon.svg'
-import groupIcon from '../assets/images/group.svg'
-import profileIcon from '../assets/images/profile.svg'
-import logoutIcon from '../assets/images/logout-icon.svg'
-import closeIcon from '../assets/images/close-icon.svg'
-import darkIcon from '../assets/images/dark-mode.svg'
-import '../assets/styles/Menu.css'
-import useClickOutside from "../hooks/UseClickOutside";
+import { useAuthContext } from '../../hooks/UseAuthContext';
+import { useCurrentChatContext } from "../../hooks/UseCurrentChatContext";
+import { useThemeContext } from "../../hooks/UseThemeContext";
+import { useChatsContext } from "../../hooks/UseChats";
+import menuIcon from '../../assets/images/menu-icon.svg'
+import groupIcon from '../../assets/images/group.svg'
+import profileIcon from '../../assets/images/profile.svg'
+import logoutIcon from '../../assets/images/logout-icon.svg'
+import closeIcon from '../../assets/images/close-icon.svg'
+import darkIcon from '../../assets/images/dark-mode.svg'
+import '../../assets/styles/Menu.css'
+import useClickOutside from "../../hooks/UseClickOutside";
 
 function Menu({handleSidebarContent, handleDrawer}) {
   const { user, dispatch } = useAuthContext()

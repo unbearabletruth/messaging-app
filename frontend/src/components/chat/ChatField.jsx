@@ -1,13 +1,13 @@
 import { useState, useRef } from 'react'
-import readIcon from '../assets/images/read.svg'
-import sentIcon from '../assets/images/sent-check.svg'
-import toBottomIcon from '../assets/images/to-bottom.svg'
-import fileIcon from '../assets/images/file-icon.svg'
+import readIcon from '../../assets/images/read.svg'
+import sentIcon from '../../assets/images/sent-check.svg'
+import toBottomIcon from '../../assets/images/to-bottom.svg'
+import fileIcon from '../../assets/images/file-icon.svg'
 import moment from 'moment';
-import formatBytes from '../utils/formatSize';
-import { useThemeContext } from "../hooks/UseThemeContext";
-import { useCurrentChatContext } from "../hooks/UseCurrentChatContext";
-import { useAuthContext } from '../hooks/UseAuthContext';
+import formatBytes from '../../utils/formatSize';
+import { useThemeContext } from "../../hooks/UseThemeContext";
+import { useCurrentChatContext } from "../../hooks/UseCurrentChatContext";
+import { useAuthContext } from '../../hooks/UseAuthContext';
 
 const isImage = ['gif','jpg','jpeg','png'];
 const isVideo = ['mp4','mov']

@@ -1,17 +1,17 @@
-import closeIcon from '../assets/images/close-icon.svg'
+import closeIcon from '../../assets/images/close-icon.svg'
 import { useState, useEffect, useRef, useMemo } from 'react';
-import { useAuthContext } from '../hooks/UseAuthContext';
-import { useCurrentChatContext } from "../hooks/UseCurrentChatContext";
-import { useThemeContext } from "../hooks/UseThemeContext";
-import { useChatsContext } from '../hooks/UseChats';
-import { socket } from '../socket';
-import smileyIcon from '../assets/images/smiley-face.svg'
+import { useAuthContext } from '../../hooks/UseAuthContext';
+import { useCurrentChatContext } from "../../hooks/UseCurrentChatContext";
+import { useThemeContext } from "../../hooks/UseThemeContext";
+import { useChatsContext } from '../../hooks/UseChats';
+import { socket } from '../../socket';
+import smileyIcon from '../../assets/images/smiley-face.svg'
 import data from '@emoji-mart/data'
 import Picker from '@emoji-mart/react'
 import MediaPreview from './MediaPreview';
-import useClickOutside from '../hooks/UseClickOutside';
+import useClickOutside from '../../hooks/UseClickOutside';
 import UploadMenu from './UploadMenu';
-import sendIcon from '../assets/images/send-icon.svg'
+import sendIcon from '../../assets/images/send-icon.svg'
 
 const isImage = ['gif','jpg','jpeg','png'];
 const isVideo = ['mp4','mov']

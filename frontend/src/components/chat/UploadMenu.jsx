@@ -1,7 +1,7 @@
-import documentIcon from '../assets/images/document-upload.svg'
-import imageIcon from '../assets/images/image-icon.svg'
-import attachIcon from '../assets/images/attach.svg'
-import useClickOutside from '../hooks/UseClickOutside';
+import documentIcon from '../../assets/images/document-upload.svg'
+import imageIcon from '../../assets/images/image-icon.svg'
+import attachIcon from '../../assets/images/attach.svg'
+import useClickOutside from '../../hooks/UseClickOutside';
 
 function UploadMenu({onImageOrVideoChange, onFileChange, imgVidInputRef, fileInputRef}) {
   const { triggerRef, showMenu } = useClickOutside(false)

@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react"
-import backIcon from '../assets/images/back-icon.svg'
+import backIcon from '../../assets/images/back-icon.svg'
 import Search from "./Search";
 import Menu from "./Menu";
-import AllChats from "./sidebarPages/AllChats";
-import SearchResults from "./sidebarPages/SearchResults";
-import Profile from "./sidebarPages/Profile";
-import { useAuthContext } from '../hooks/UseAuthContext';
-import { useOnlineUsersContext } from "../hooks/UseOnlineUsersContext";
+import AllChats from "./AllChats";
+import SearchResults from "./SearchResults";
+import Profile from "./Profile";
+import { useAuthContext } from '../../hooks/UseAuthContext';
+import { useOnlineUsersContext } from "../../hooks/UseOnlineUsersContext";
 import moment from 'moment';
 
 function Sidebar({allMessages, openChat})  {

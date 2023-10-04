@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
-import '../assets/styles/Search.css'
-import searchIcon from '../assets/images/search-icon.svg'
-import { useThemeContext } from "../hooks/UseThemeContext";
+import '../../assets/styles/Search.css'
+import searchIcon from '../../assets/images/search-icon.svg'
+import { useThemeContext } from "../../hooks/UseThemeContext";
 
 function Search({handleSidebarContent, handleUserResults, handleChatResults, searchInput, handleSearchInput}){
   const [searchActive, setSearchActive] = useState(false)
