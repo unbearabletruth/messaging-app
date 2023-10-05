@@ -7,7 +7,7 @@ exports.getChats = async (req, res) => {
         .populate('latestMessage')
         .populate('users', 'username profilePic bio lastSeen')
         .populate('requests', 'username profilePic lastSeen')
-        .sort({latestMessage: -1}).exec()
+        .exec()
     res.status(200).json(chats)
 };
 
@@ -20,7 +20,7 @@ exports.getChat = async (req, res) => {
 };
 
 exports.createChat = [
-    body("name").trim().escape().isLength({ min: 3, max: 25 }),
+    body("name").trim().escape().isLength({ min: 3, max: 25 }).optional(),
 
     async (req, res) => {
         const errors = validationResult(req);
