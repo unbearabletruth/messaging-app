@@ -20,7 +20,7 @@ exports.getChat = async (req, res) => {
 };
 
 exports.createChat = [
-    body("name").trim().escape().isLength({ min: 3, max: 25 }).optional(),
+    body("name").trim().isLength({ min: 3, max: 25 }).optional(),
 
     async (req, res) => {
         const errors = validationResult(req);

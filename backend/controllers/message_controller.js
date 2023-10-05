@@ -13,7 +13,7 @@ exports.getMessages = async (req, res) => {
 };
 
 exports.createMessage = [
-    body("text").trim().escape().isLength({ max: 4096 }),
+    body("text").trim().isLength({ max: 4096 }),
 
     async (req, res) => {
         const errors = validationResult(req);

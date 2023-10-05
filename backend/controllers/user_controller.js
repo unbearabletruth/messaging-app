@@ -90,6 +90,14 @@ exports.getUser = async (req, res) => {
 	res.status(200).json(user)
 };
 
+exports.getBot = async (req, res) => {
+    const bot = await User.findOne({username: req.params.name}).exec()
+    if (bot) {
+        return res.status(200).json(bot)
+    }
+    return res.status(400).json({error: 'No such bot'})
+}
+
 exports.searchUsers = async (req, res) => {
 	if (req.query.search) {
 		const keyword = {username: {$regex: req.query.search, $options: 'i'}}

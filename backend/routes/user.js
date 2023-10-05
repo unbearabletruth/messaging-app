@@ -1,5 +1,5 @@
 const express = require('express');
-const { loginUser, signupUser, getUsers, getUser, searchUsers, updateUser } = require('../controllers/user_controller');
+const { loginUser, signupUser, getUsers, getUser, searchUsers, updateUser, getBot } = require('../controllers/user_controller');
 const router = express.Router();
 const { upload } = require('../utilities/uploadProfileImg')
 
@@ -13,6 +13,8 @@ router.get("/", getUsers);
 router.get('/search', searchUsers)
 
 router.get("/:id", getUser);
+
+router.get("/bot/:name", getBot);
 
 router.patch('/:id', upload.single('profilePic'), updateUser)
 

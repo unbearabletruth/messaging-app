@@ -3,6 +3,7 @@ import { useAuthContext } from "../hooks/UseAuthContext"
 import { useNavigate  } from "react-router-dom";
 import closeIcon from '../assets/images/close-icon.svg'
 import uniqid from 'uniqid';
+import { useWelcomeChat } from "../hooks/UseWelcomeChat";
 
 function Signup({closePopup}) {
   const navigate = useNavigate()
@@ -13,6 +14,7 @@ function Signup({closePopup}) {
   })
   const [errors, setErrors] = useState(null) 
   const [isLoading, setIsLoading] = useState()
+  const { initBot } = useWelcomeChat()
 
   const handleInput = (e) => {
     setUser({
@@ -44,6 +46,7 @@ function Signup({closePopup}) {
         dispatch({type: 'login', payload: json})
         setIsLoading(false)
         navigate("/");
+        initBot(json._id)
       }
     }
     await signup(user)
