@@ -7,7 +7,7 @@
   background-color: white;
   border-radius: 10px;
   width: fit-content;
-  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+  box-shadow: var(--soft-shadow);
   max-width: 450px;
   background-color: #f0fdf4;
 }
@@ -111,7 +111,7 @@
   border-radius: 8px;
   padding: 5px;
   position: relative;
-  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+  box-shadow: var(--soft-shadow);
 }
 
 .bigButton.send,
@@ -258,6 +258,8 @@
   transform-origin: left bottom;
   transform: scale(0.85);
   opacity: 0;
+  border-radius: 10px;
+  box-shadow: var(--soft-shadow);
   transition: transform 0.15s ease-out, opacity 0.15s ease-out, visibility 0.15s;
 }
 

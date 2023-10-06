@@ -13,15 +13,26 @@
   align-items: center;
 }
 
+.formButton:hover{
+  cursor: pointer;
+  background-color: var(--main-color);
+}
+
 .formButton.delete{
   font-size: 0.8rem;
   font-weight: bold;
   width: 130px;
+  background-color: #ef4444;
+}
+
+.formButton.delete:hover{
+  background-color: #dc2626;
 }
 
 .formButton.delete.hollow{
   background-color: var(--background);
-  border: 3px solid var(--main-darker)
+  border: 2px solid #ef4444;
+  color: #ef4444;
 }
 
 .formButton.delete.hollow:hover{
@@ -30,11 +41,6 @@
 
 .formButtonInactive{
   opacity: 0.3;
-}
-
-.formButton:hover{
-  cursor: pointer;
-  background-color: var(--main-color);
 }
 
 .mainButton{
@@ -88,7 +94,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+  box-shadow: var(--soft-shadow);
   transition: background-color 0.2s ease-out, opacity 0.2s ease-out;
 }
 

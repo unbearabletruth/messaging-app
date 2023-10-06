@@ -141,11 +141,12 @@
   left: 50%;
   top: 50%;
   transform: translate(-50%,-50%);
-  background-color: white;
+  background-color: var(--background);
   width: 300px;
+  max-width: 90%;
   border-radius: 10px;
   padding: 25px;
-  box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+  box-shadow: var(--soft-shadow);
 }
 
 #joinPrivateImage{
@@ -184,7 +185,7 @@
 
 #deleteMessage{
   font-weight: bold;
-  color: #ff3737;
+  color: var(--main-font-color);
 }
 
 #deletePopupButtons{
