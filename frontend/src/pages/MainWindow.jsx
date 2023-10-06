@@ -86,7 +86,7 @@ function MainWindow() {
     fetchChat()
   }
 
-  const addUserBackToChat = async (chat) => {
+  const addUserBackToChat = async (chat, incoming = false) => {
     const userId = {user: user._id}
     const response = await fetch(`http://localhost:3000/chats/${chat._id}/addFor`, {
       method: 'PATCH',
@@ -97,8 +97,8 @@ function MainWindow() {
     })
     const json = await response.json()
     if (response.ok) {
-      handleChats([chat, ...chats])/////////////////doesn't update
-      handleCurrentChat(json)
+      handleChats([json, ...chats])
+      !incoming && handleCurrentChat(json)
       socket.emit('update chat', json)
     }
   }
@@ -156,7 +156,7 @@ function MainWindow() {
       window.removeEventListener('resize', handleWindowResize);
     };
   }, [])
-  console.log(chats)
+
   return (
     screenWidth >= 768 ?
       <>
@@ -165,13 +165,15 @@ function MainWindow() {
           openChat={openChat}
         />
         <Chat 
-          openChat={openChat} 
+          openChat={openChat}
+          addUserBackToChat={addUserBackToChat} 
         />
       </>
       : currentChat !== null ?
         <Chat 
           screenWidth={screenWidth}
-          openChat={openChat} 
+          openChat={openChat}
+          addUserBackToChat={addUserBackToChat}  
         />
       :
         <Sidebar

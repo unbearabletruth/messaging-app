@@ -16,6 +16,8 @@ router.get("/:id", getChat);
 
 router.post("/", createChat);
 
+router.delete("/:id", deleteChat);
+
 router.patch("/:id", updateLatestMessage);
 
 router.patch("/:id/add", addToChat);
@@ -31,8 +33,6 @@ router.patch("/:id/removeRequest", removeRequest)
 router.patch("/:id/deleteFor", deleteFor)
 
 router.patch("/:id/addFor", addFor)
-
-router.delete("/:id", deleteChat);
 
 router.use('/:id', messageRouter);
 

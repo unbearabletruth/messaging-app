@@ -15,7 +15,7 @@ import ChatField from './ChatField';
 const isImage = ['gif','jpg','jpeg','png'];
 const isVideo = ['mp4','mov']
 
-function Chat({screenWidth, openChat}) {
+function Chat({screenWidth, openChat, addUserBackToChat}) {
   const { user } = useAuthContext()
   const { currentChat, handleCurrentChat } = useCurrentChatContext()
   const { chats, handleChats } = useChatsContext()
@@ -49,6 +49,10 @@ function Chat({screenWidth, openChat}) {
 
   useEffect(() => {
     socket.on('receive message', (newMessage) => {
+      if (newMessage.chat.deletedBy.includes(user._id)) {
+        const incoming = true
+        addUserBackToChat(newMessage.chat, incoming)
+      }
       if (currentChat && currentChat._id === newMessage.chat._id) {
         setMessages(prevState => [newMessage, ...prevState])
         if (onlineUsers.includes(user._id)){

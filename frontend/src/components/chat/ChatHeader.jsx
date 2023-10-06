@@ -28,6 +28,17 @@ function ChatHeader({screenWidth, openChat}) {
   const { triggerRef, showMenu } = useClickOutside(false)
   const [deletePopup, setDeletePopup] = useState(false)
 
+  const deleteChat = async () => {
+    const response = await fetch(`http://localhost:3000/chats/${currentChat._id}`, {
+      method: 'DELETE'
+    })
+    const json = await response.json()
+    if (response.ok) {
+      handleChats(chats.filter(c => c._id !== json._id))
+      handleCurrentChat(null)
+    }
+  }
+
   const deleteChatForYourself = async () => {
     const userId = {user: user._id}
     const response = await fetch(`http://localhost:3000/chats/${currentChat._id}/deleteFor`, {
@@ -39,8 +50,7 @@ function ChatHeader({screenWidth, openChat}) {
     })
     const json = await response.json()
     if (response.ok) {
-      handleChats(chats.filter(c => c._id !== currentChat._id))
-      handleCurrentChat(json)
+      handleChats(chats.filter(c => c._id !== json._id))
       socket.emit('update chat', json)
       setDeletePopup(false)
       handleCurrentChat(null)
@@ -205,11 +215,11 @@ function ChatHeader({screenWidth, openChat}) {
             </button>
             <p id='deleteMessage'>Are you sure you want to delete this chat?</p>
               {currentChat.isGroupChat ?
-                <button className='formButton delete'>Delete</button>
+                <button className='formButton delete' onClick={deleteChat}>Delete</button>
                 :
                 <div id='deletePopupButtons'>
                   <button className='formButton delete hollow' onClick={deleteChatForYourself}>Delete for yourself</button>
-                  <button className='formButton delete'>Delete for both</button>
+                  <button className='formButton delete' onClick={deleteChat}>Delete for both</button>
                 </div>
               }
           </div>
