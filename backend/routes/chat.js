@@ -4,7 +4,7 @@ const messageRouter = require('./message');
 const { 
   getChat, getChats, createChat, updateLatestMessage, deleteChat, 
   searchChats, addToChat, removeFromChat, updateUserTimestamp,
-  addRequest, removeRequest 
+  addRequest, removeRequest, deleteFor, addFor 
 } = require('../controllers/chat_controller');
 
 
@@ -27,6 +27,10 @@ router.patch("/:id/timestamp", updateUserTimestamp);
 router.patch("/:id/addRequest", addRequest)
 
 router.patch("/:id/removeRequest", removeRequest)
+
+router.patch("/:id/deleteFor", deleteFor)
+
+router.patch("/:id/addFor", addFor)
 
 router.delete("/:id", deleteChat);
 

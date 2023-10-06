@@ -63,17 +63,44 @@ function MainWindow() {
     }
   }
 
-  const openChat = (e, userId) => {
-    if (userId === user._id) return
-    
-    for (let chat of chats) {
-      const chatExists = chat.users.find(u => u._id === userId)
-      if (chatExists && !chat.isGroupChat) {
-        handleCurrentChat(chat)
-        return
+  const openChat = (e, user2) => {
+    if (user2 === user._id) return
+
+    const fetchChat = async () => {
+      const response = await fetch(`http://localhost:3000/chats/byUsers?user1=${user._id}&user2=${user2}`)
+      const json = await response.json()
+      if (!response.ok) {
+        newChat(e, user2)
       }
-    };
-    newChat(e, userId)
+      if (response.ok) {
+        if (json.deletedBy.includes(user._id)) {
+          addUserBackToChat(json)
+          return
+        }
+        if (!json.isGroupChat) {
+          handleCurrentChat(json)
+          return
+        }
+      }
+    }
+    fetchChat()
+  }
+
+  const addUserBackToChat = async (chat) => {
+    const userId = {user: user._id}
+    const response = await fetch(`http://localhost:3000/chats/${chat._id}/addFor`, {
+      method: 'PATCH',
+      body: JSON.stringify(userId),
+      headers: {
+        'Content-type': 'application/json'
+      }
+    })
+    const json = await response.json()
+    if (response.ok) {
+      handleChats([chat, ...chats])/////////////////doesn't update
+      handleCurrentChat(json)
+      socket.emit('update chat', json)
+    }
   }
 
   useEffect(() => {
@@ -129,7 +156,7 @@ function MainWindow() {
       window.removeEventListener('resize', handleWindowResize);
     };
   }, [])
-
+  console.log(chats)
   return (
     screenWidth >= 768 ?
       <>

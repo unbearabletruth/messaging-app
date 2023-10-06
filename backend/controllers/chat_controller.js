@@ -3,7 +3,7 @@ const { body, validationResult } = require("express-validator");
 
 
 exports.getChats = async (req, res) => {
-    const chats = await Chat.find({users: { $in: [req.params.id] }})
+    const chats = await Chat.find({users: { $in: [req.params.id] }, deletedBy: { $nin: [req.params.id]}})
         .populate('latestMessage')
         .populate('users', 'username profilePic bio lastSeen')
         .populate('requests', 'username profilePic lastSeen')
@@ -12,7 +12,10 @@ exports.getChats = async (req, res) => {
 };
 
 exports.getChat = async (req, res) => {
-    const chat = await Chat.findById(req.params.id).populate('users', 'username profilePic bio lastSeen').exec()
+    const chat = await Chat.findOne({users: { $all: [req.query.user1, req.query.user2] }, isGroupChat: false})
+        .populate('users', 'username profilePic bio lastSeen')
+        .exec()
+
     if (chat){
         return res.status(200).json(chat)
     }
@@ -152,3 +155,30 @@ exports.removeRequest = async (req, res) => {
     }
     res.status(400).json({error: 'No such chat'})
 }
+
+exports.deleteFor = async (req, res) => {
+    const chat = await Chat.findByIdAndUpdate(req.params.id, { 
+        $push: { deletedBy: req.body.user }
+    }, { new: true }
+    ).populate('latestMessage')
+    .populate('users', 'username profilePic')
+
+    if (chat){
+        return res.status(200).json(chat)
+    }
+    res.status(400).json({error: 'No such chat'})
+}
+
+exports.addFor = async (req, res) => {
+    const chat = await Chat.findByIdAndUpdate(req.params.id, { 
+        $pull: { deletedBy: req.body.user }
+    }, { new: true }
+    ).populate('latestMessage')
+    .populate('users', 'username profilePic')
+
+    if (chat){
+        return res.status(200).json(chat)
+    }
+    res.status(400).json({error: 'No such chat'})
+}
+

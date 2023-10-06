@@ -11,6 +11,7 @@ const ChatSchema = new Schema({
   requests: [{ type: Schema.Types.ObjectId, ref: "User" }],
   latestMessage: { type: Schema.Types.ObjectId, ref: "Message" },
   lastSeenInChat: [{ userId: String, timestamp: Date}],
+  deletedBy: [{ type: Schema.Types.ObjectId, ref: "User" }],
   groupPic: { 
     type: String,
     required: true,

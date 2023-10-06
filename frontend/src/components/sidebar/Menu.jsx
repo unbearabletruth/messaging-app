@@ -101,8 +101,8 @@ function Menu({handleSidebarContent, handleDrawer}) {
           </div>
         </div>
         <div className="menuOption" onClick={handleLogout}>
-          <img src={logoutIcon} alt="log out" className="menuOptionIcon leaveIcon"></img>
-          <p className="menuLeaveText">Log out</p>
+          <img src={logoutIcon} alt="log out" className="menuOptionIcon redIcon"></img>
+          <p className="menuRedText">Log out</p>
         </div>
       </div>
       {newGroupPopup &&

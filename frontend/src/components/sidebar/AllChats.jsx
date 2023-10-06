@@ -56,7 +56,7 @@ function AllChats({handleSidebarContent, allMessages}) {
             :
               !chat.isGroupChat && chat.users.map(u => {
                 return (
-                  u._id !== user._id ?
+                  u._id !== user._id && !chat.deletedBy.includes(user._id) ?
                     <div 
                       onClick={() => handleCurrentChat(chat)} 
                       key={chat._id} 

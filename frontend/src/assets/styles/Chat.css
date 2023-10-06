@@ -176,6 +176,22 @@
   font-weight: bold;
 }
 
+/* delete popup */
+
+#deletePopup{
+  width: 330px;
+}
+
+#deleteMessage{
+  font-weight: bold;
+  color: #ff3737;
+}
+
+#deletePopupButtons{
+  display: flex;
+  justify-content: space-between;
+}
+
 @media (max-width: 1200px) {
   .chatField{
     padding: 20px 5% 5px 5%;

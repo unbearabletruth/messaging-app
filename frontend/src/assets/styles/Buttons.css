@@ -13,6 +13,21 @@
   align-items: center;
 }
 
+.formButton.delete{
+  font-size: 0.8rem;
+  font-weight: bold;
+  width: 130px;
+}
+
+.formButton.delete.hollow{
+  background-color: var(--background);
+  border: 3px solid var(--main-darker)
+}
+
+.formButton.delete.hollow:hover{
+  background-color: var(--hover);
+}
+
 .formButtonInactive{
   opacity: 0.3;
 }

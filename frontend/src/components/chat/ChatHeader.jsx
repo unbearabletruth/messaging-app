@@ -8,6 +8,7 @@ import leaveIcon from '../../assets/images/logout-icon.svg'
 import closeIcon from '../../assets/images/close-icon.svg'
 import backIcon from '../../assets/images/back-icon.svg'
 import requestIcon from '../../assets/images/request.svg'
+import deleteIcon from '../../assets/images/delete-icon.svg'
 import { socket } from '../../socket';
 import { useCurrentChatContext } from "../../hooks/UseCurrentChatContext";
 import { useOnlineUsersContext } from "../../hooks/UseOnlineUsersContext";
@@ -25,6 +26,26 @@ function ChatHeader({screenWidth, openChat}) {
   const [requestsPopup, setRequestsPopup] = useState(false)
   const [subsPopup, setSubsPopup] = useState(false)
   const { triggerRef, showMenu } = useClickOutside(false)
+  const [deletePopup, setDeletePopup] = useState(false)
+
+  const deleteChatForYourself = async () => {
+    const userId = {user: user._id}
+    const response = await fetch(`http://localhost:3000/chats/${currentChat._id}/deleteFor`, {
+      method: 'PATCH',
+      body: JSON.stringify(userId),
+      headers: {
+        'Content-type': 'application/json'
+      }
+    })
+    const json = await response.json()
+    if (response.ok) {
+      handleChats(chats.filter(c => c._id !== currentChat._id))
+      handleCurrentChat(json)
+      socket.emit('update chat', json)
+      setDeletePopup(false)
+      handleCurrentChat(null)
+    }
+  }
 
   const leaveGroupChat = async () => {
     const userId = {user: user._id}
@@ -86,6 +107,10 @@ function ChatHeader({screenWidth, openChat}) {
                     <img src={profileIcon} alt="profile" className="menuOptionIcon"></img>
                     <p className='menuText'>Profile</p>
                   </div>
+                  <div className="menuOption" onClick={() => {setDeletePopup(true)}}>
+                    <img src={deleteIcon} alt="delete chat" className="menuOptionIcon redIcon"></img>
+                    <p className='menuRedText'>Delete chat</p>
+                  </div>
                 </div>
               </Fragment>
           )}
@@ -114,15 +139,21 @@ function ChatHeader({screenWidth, openChat}) {
               <p className='menuText'>Group info</p>
             </div>
             {currentChat.admins.includes(user._id) &&
-              <div className="menuOption" onClick={() => setRequestsPopup(true)}>
-                <img src={requestIcon} alt="profile" className="menuOptionIcon"></img>
-                <p className='menuText'>Requests</p>
-              </div>
+              <>
+                <div className="menuOption" onClick={() => setRequestsPopup(true)}>
+                  <img src={requestIcon} alt="profile" className="menuOptionIcon"></img>
+                  <p className='menuText'>Requests</p>
+                </div>
+                <div className="menuOption" onClick={() => {setDeletePopup(true)}}>
+                  <img src={deleteIcon} alt="delete chat" className="menuOptionIcon redIcon"></img>
+                  <p className='menuRedText'>Delete chat</p>
+                </div>
+              </>
             }
-            {currentChat.users.some(u => u._id === user._id) &&
+            {currentChat.users.some(u => u._id === user._id) && !currentChat.admins.includes(user._id) &&
               <div className="menuOption" onClick={leaveGroupChat}>
-                <img src={leaveIcon} alt="profile" className="menuOptionIcon leaveIcon"></img>
-                <p className='menuLeaveText'>Leave group</p>
+                <img src={leaveIcon} alt="profile" className="menuOptionIcon redIcon"></img>
+                <p className='menuRedText'>Leave group</p>
               </div>
             }
           </div>
@@ -165,6 +196,24 @@ function ChatHeader({screenWidth, openChat}) {
             </div>
           }
         </>
+      }
+      {deletePopup &&
+        <div className="popupBackground">
+          <div className='popup' id='deletePopup'>
+            <button onClick={() => setDeletePopup(false)} className="mainButton closePopup">
+              <img src={closeIcon} alt="x" className="mainButtonImg closeIcon"></img>
+            </button>
+            <p id='deleteMessage'>Are you sure you want to delete this chat?</p>
+              {currentChat.isGroupChat ?
+                <button className='formButton delete'>Delete</button>
+                :
+                <div id='deletePopupButtons'>
+                  <button className='formButton delete hollow' onClick={deleteChatForYourself}>Delete for yourself</button>
+                  <button className='formButton delete'>Delete for both</button>
+                </div>
+              }
+          </div>
+        </div>
       }
     </div>
   )
