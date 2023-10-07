@@ -91,6 +91,16 @@
   overflow-y: auto;
 }
 
+.chatFieldDay{
+  margin-left: auto;
+  margin-right: auto;
+  background-color: rgba(0, 0, 0, 0.4);
+  color: white;
+  font-size: 0.9rem;
+  padding: 5px 10px;
+  border-radius: 10px;
+}
+
 .bigButton.toBottom{
   background-color: var(--background);
   position: absolute;
@@ -180,11 +190,10 @@
 /* delete popup */
 
 #deletePopup{
-  width: 330px;
+  width: 350px;
 }
 
 #deleteMessage{
-  font-weight: bold;
   color: var(--main-font-color);
 }
 

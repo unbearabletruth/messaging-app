@@ -81,7 +81,6 @@ function Menu({handleSidebarContent, handleDrawer}) {
         <img src={menuIcon} alt="menu" className="mainButtonImg"></img>
       </button>
       <div className={`menu ${showMenu ? 'visible' : ''}`} id="mainMenu">
-        <p id="menuTitle">Logged in as {user.username}</p>
         <div className="menuOption" onClick={() => setNewGroupPopup(true)}>
           <img src={groupIcon} alt="new group" className="menuOptionIcon"></img>
           <p className="menuText">New group chat</p>
@@ -104,6 +103,7 @@ function Menu({handleSidebarContent, handleDrawer}) {
           <img src={logoutIcon} alt="log out" className="menuOptionIcon redIcon"></img>
           <p className="menuRedText">Log out</p>
         </div>
+        <p id="menuUserInfo">Logged in as {user.username}</p>
       </div>
       {newGroupPopup &&
         <div className="popupBackground">

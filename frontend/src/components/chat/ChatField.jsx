@@ -1,10 +1,11 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, Fragment } from 'react'
 import readIcon from '../../assets/images/read.svg'
 import sentIcon from '../../assets/images/sent-check.svg'
 import toBottomIcon from '../../assets/images/to-bottom.svg'
 import fileIcon from '../../assets/images/file-icon.svg'
 import moment from 'moment';
 import formatBytes from '../../utils/formatSize';
+import { formatDateChat } from '../../utils/formatDate'
 import { useThemeContext } from "../../hooks/UseThemeContext";
 import { useCurrentChatContext } from "../../hooks/UseCurrentChatContext";
 import { useAuthContext } from '../../hooks/UseAuthContext';
@@ -58,51 +59,57 @@ function ChatField({messages, showBigImage, fetchMessages, messagesToSkip}) {
 
   return (
     <div className='chatField scrollable' onScroll={handleScroll} ref={chatWindow}>
-      {currentChat && messages && messages.map(message => {
+      {currentChat && messages && messages.map((message, i) => {
+        const prevMessage = messages[i + 1] //chat reversed
         return (
-          <div className={`${message.author._id === user._id ? 'myMessage' : 'message'} ${isDark ? 'dark' : ''}`} key={message._id}>
-            {message.media && isImage.some(type => message.media.url.includes(type)) ?
-              <img src={message.media.url} alt='message media' className='messageMedia' onClick={() => showBigImage(message.media.url)}></img>
-            : message.media && isVideo.some(type => message.media.url.includes(type)) ?
-              <video src={message.media.url} className='messageMedia' onClick={(e) => handleVideoClick(e, message)} controls></video>
-            : message.media ?
-              <a href={message.media.url} className='fileBlock'>
-                <div className='fileImageWrapper'>
-                  <img 
-                    src={fileIcon} 
-                    alt='file icon' 
-                    className={`fileImage ${isDark ? 'dark' : ''}`}
-                  >
-                  </img>
-                  <span className='fileExtension'>{message.media.name.split('.').pop()}</span>
-                </div>
-                <div className='fileText'>
-                  <p className='fileName'>{message.media.name}</p>
-                  <p className='fileSize'>{formatBytes(message.media.size)}</p>
-                </div>
-              </a>
-            :
-              null
-            }
-            {currentChat.isGroupChat && message.author._id !== user._id &&
-              <span className='messageAuthor'>{message.author.username}</span>
-            }
-            <div className='messageContent'>
-              {message.text}
-              <span className='messageSideInfo'>
-                <span className='messageTime'>{moment(message.createdAt).format('HH:mm')}</span>
-                {!currentChat.lastSeenInChat.some(lastSeen => lastSeen.userId !== user._id &&
-                lastSeen.timestamp < message.updatedAt) && 
-                message.author._id === user._id ?
-                  <img src={readIcon} alt='read' className={`messageRead ${isDark ? 'dark' : ''}`}></img> 
-                  : message.author._id === user._id ?
-                  <img src={sentIcon} alt='sent' className={`messageSent ${isDark ? 'dark' : ''}`}></img>
-                  :
-                  null
-                }
-              </span>
+          <Fragment key={message._id}>
+            <div className={`${message.author._id === user._id ? 'myMessage' : 'message'} ${isDark ? 'dark' : ''}`}>
+              {message.media && isImage.some(type => message.media.url.includes(type)) ?
+                <img src={message.media.url} alt='message media' className='messageMedia' onClick={() => showBigImage(message.media.url)}></img>
+              : message.media && isVideo.some(type => message.media.url.includes(type)) ?
+                <video src={message.media.url} className='messageMedia' onClick={(e) => handleVideoClick(e, message)} controls></video>
+              : message.media ?
+                <a href={message.media.url} className='fileBlock'>
+                  <div className='fileImageWrapper'>
+                    <img 
+                      src={fileIcon} 
+                      alt='file icon' 
+                      className={`fileImage ${isDark ? 'dark' : ''}`}
+                    >
+                    </img>
+                    <span className='fileExtension'>{message.media.name.split('.').pop()}</span>
+                  </div>
+                  <div className='fileText'>
+                    <p className='fileName'>{message.media.name}</p>
+                    <p className='fileSize'>{formatBytes(message.media.size)}</p>
+                  </div>
+                </a>
+              :
+                null
+              }
+              {currentChat.isGroupChat && message.author._id !== user._id &&
+                <span className='messageAuthor'>{message.author.username}</span>
+              }
+              <div className='messageContent'>
+                {message.text}
+                <span className='messageSideInfo'>
+                  <span className='messageTime'>{moment(message.createdAt).format('HH:mm')}</span>
+                  {!currentChat.lastSeenInChat.some(lastSeen => lastSeen.userId !== user._id &&
+                  lastSeen.timestamp < message.updatedAt) && 
+                  message.author._id === user._id ?
+                    <img src={readIcon} alt='read' className={`messageRead ${isDark ? 'dark' : ''}`}></img> 
+                    : message.author._id === user._id ?
+                    <img src={sentIcon} alt='sent' className={`messageSent ${isDark ? 'dark' : ''}`}></img>
+                    :
+                    null
+                  }
+                </span>
+              </div>
             </div>
-          </div>
+            {prevMessage && !moment(prevMessage.createdAt).isSame(moment(message.createdAt), "day") &&
+              <div className='chatFieldDay'>{formatDateChat(message.createdAt)}</div>
+            }
+          </Fragment>
         )
       })}
       <button className={`bigButton toBottom ${scrollButton ? 'visible' : ''}`} onClick={scrollBottom}>

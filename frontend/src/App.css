@@ -13,10 +13,12 @@ body {
   --border: #a3a3a3;
   --light-border: #e5e5e5;
   --hover: #eeeeee;
+  --hover-contrast: #e5e5e5;
   --background: #ffffff;
+  --trans-background: rgba(255, 255, 255, 0.8);
   --main-filter: invert(39%) sepia(0%) saturate(0%) hue-rotate(146deg) brightness(111%) contrast(79%);
   --soft-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
-  --hard-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+  --hard-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
 }
 
 body.dark{
@@ -27,10 +29,12 @@ body.dark{
   --border: #a3a3a3;
   --light-border: #525252;
   --hover: #313131;
+  --hover-contrast: #404040;
   --background: #262626;
+  --trans-background: rgba(38, 38, 38, 0.8);
   --main-filter: invert(98%) sepia(0%) saturate(6246%) hue-rotate(195deg) brightness(116%) contrast(66%);
   --soft-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
-  --hard-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+  --hard-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
 }
 
 #root{
@@ -187,7 +191,7 @@ input[type=password]{
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: #ccc;
+  background-color: #a3a3a3;
   transition: .4s;
   border-radius: 14px;
 }

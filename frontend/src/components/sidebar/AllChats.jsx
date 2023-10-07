@@ -3,7 +3,7 @@ import { useAuthContext } from '../../hooks/UseAuthContext';
 import { useCurrentChatContext } from "../../hooks/UseCurrentChatContext";
 import { useOnlineUsersContext } from "../../hooks/UseOnlineUsersContext";
 import { useChatsContext } from '../../hooks/UseChats';
-import formatDate from '../../utils/formatDate';
+import { formatDateSidebar } from '../../utils/formatDate';
 
 function AllChats({handleSidebarContent, allMessages}) {
   const { user } = useAuthContext()
@@ -37,7 +37,9 @@ function AllChats({handleSidebarContent, allMessages}) {
                     <div className='sidebarChatNameAndDate'>
                       <p className={`sidebarChatName ${currentChat?._id === chat._id ? 'selected' : ''}`}>{chat.name}</p>
                       {chat.latestMessage &&
-                        <p className={`sidebarChatUpdatedAt ${currentChat?._id === chat._id ? 'selected' : ''}`}>{formatDate(chat.latestMessage.updatedAt)}</p>
+                        <p className={`sidebarChatUpdatedAt ${currentChat?._id === chat._id ? 'selected' : ''}`}>
+                          {formatDateSidebar(chat.latestMessage.updatedAt)}
+                        </p>
                       }
                     </div>
                     <div className='sidebarChatMessageAndUnread'>
@@ -73,7 +75,7 @@ function AllChats({handleSidebarContent, allMessages}) {
                           <div className='sidebarChatNameAndDate'>
                             <p className={`sidebarChatName ${currentChat?._id === chat._id ? 'selected' : ''}`}>{u.username}</p>
                             {chat.latestMessage &&
-                              <p className={`sidebarChatUpdatedAt ${currentChat?._id === chat._id ? 'selected' : ''}`}>{formatDate(chat.latestMessage.updatedAt)}</p>
+                              <p className={`sidebarChatUpdatedAt ${currentChat?._id === chat._id ? 'selected' : ''}`}>{formatDateSidebar(chat.latestMessage.updatedAt)}</p>
                             }
                           </div>
                           <div className='sidebarChatMessageAndUnread'>
