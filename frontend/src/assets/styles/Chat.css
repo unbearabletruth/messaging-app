@@ -95,12 +95,16 @@
 
 .joinChatButton{
   border: 0px;
-  height: 50px;
+  height: 35px;
+  margin-top: 15px;
+  width: 60%;
   background-color: var(--main-darker);
   color: white;
   font-weight: bold;
-  font-size: 1.4rem;
+  font-size: 1.1rem;
   transition: background-color 0.2s ease-out;
+  align-self: center;
+  border-radius: 10px;
 }
 
 .joinChatButton:hover{
@@ -156,6 +160,10 @@
 @media (max-width: 1200px) {
   .chatField{
     padding: 20px 5% 5px 5%;
+  }
+
+  .joinChatButton{
+    width: 90%;
   }
 
   .bigButton.toBottom{

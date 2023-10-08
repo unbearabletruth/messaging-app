@@ -64,7 +64,7 @@ input[type=password]{
   color: var(--main-font-color)
 }
 
-.wrongFileMessage{
+.alert{
   z-index: 1;
   display: flex;
   flex-direction: column;
@@ -86,7 +86,13 @@ input[type=password]{
   box-shadow: var(--hard-shadow);
 }
 
-.wrongFileLine{
+.alert.centered{
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%,-50%);
+}
+
+.alertLine{
   width: 100%;
   text-align: center;
 }

@@ -1,4 +1,5 @@
 const Chat = require("../models/chat");
+const Message = require("../models/message");
 const { body, validationResult } = require("express-validator");
 
 
@@ -111,6 +112,8 @@ exports.updateUserTimestamp = async (req, res) => {
 
 exports.deleteChat = async (req, res) => {
     const chat = await Chat.findByIdAndDelete(req.params.id)
+    await Message.deleteMany({chat: req.params.id})
+
     if (chat){
         return res.status(200).json(chat)
     }

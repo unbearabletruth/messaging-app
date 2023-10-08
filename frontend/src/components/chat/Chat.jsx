@@ -190,7 +190,7 @@ function Chat({screenWidth, openChat, addUserBackToChat}) {
       {mediaPopup &&
         <div className="popupBackground media">
           <button onClick={() => setMediaPopup(false)} className="mainButton closePopup">
-              <img src={closeIcon} alt="x" className="mainButtonImg closeIcon"></img>
+            <img src={closeIcon} alt="x" className="mainButtonImg closeIcon"></img>
           </button>
           {isImage.some(type => bigImage.includes(type)) &&
             <img src={bigImage} alt='media big' className='messageMediaBig'></img>

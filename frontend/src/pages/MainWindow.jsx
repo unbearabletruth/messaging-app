@@ -74,13 +74,9 @@ function MainWindow() {
       }
       if (response.ok) {
         if (json.deletedBy.includes(user._id)) {
-          addUserBackToChat(json)
-          return
+          return addUserBackToChat(json)
         }
-        if (!json.isGroupChat) {
-          handleCurrentChat(json)
-          return
-        }
+        handleCurrentChat(json)
       }
     }
     fetchChat()

@@ -167,16 +167,16 @@ function ProfileEditor({closeForm}) {
         </form>
       </>
       {(wrongFile || errors) &&
-        <div className="wrongFileMessage">
+        <div className="alert">
           {wrongFile === 'wrongType' &&
-            <p className="wrongFileLine">Image: gif, jpg, jpeg, png</p>
+            <p className="alertLine">Image: gif, jpg, jpeg, png</p>
           }
           {wrongFile === 'tooBig' &&
-            <p className="wrongFileLine">Image shouldn't exceed 1 Mb</p>
+            <p className="alertLine">Image shouldn't exceed 1 Mb</p>
           }
           {errors && errors.map(err => {
           return (
-            <p key={uniqid()} className="wrongFileLine">{err.msg}</p>
+            <p key={uniqid()} className="alertLine">{err.msg}</p>
             )
           })}
         </div>

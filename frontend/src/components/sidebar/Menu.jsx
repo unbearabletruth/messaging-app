@@ -139,8 +139,8 @@ function Menu({handleSidebarContent, handleDrawer}) {
             </form>
           </div>
           {error &&
-            <div className="wrongFileMessage">
-              <p className="wrongFileLine">Groupname should be 3-25 characters</p>
+            <div className="alert">
+              <p className="alertLine">Groupname should be 3-25 characters</p>
             </div>
           }
         </div>

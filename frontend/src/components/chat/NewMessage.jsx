@@ -301,14 +301,14 @@ function NewMessage({addMessage}) {
         </div>
       }
       {wrongFile &&
-        <div className="wrongFileMessage">
+        <div className="alert">
           {wrongFile === 'wrongType' ?
             <>
-              <p className="wrongFileLine">Image: gif, jpg, jpeg, png</p>
-              <p className="wrongFileLine">Video: mp4, mov</p>
+              <p className="alertLine">Image: gif, jpg, jpeg, png</p>
+              <p className="alertLine">Video: mp4, mov</p>
             </>
           :
-            <p className="wrongFileLine">File shouldn't exceed 10 Mb</p>
+            <p className="alertLine">File shouldn't exceed 10 Mb</p>
           }
         </div>
       }
