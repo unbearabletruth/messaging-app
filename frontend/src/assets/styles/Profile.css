@@ -8,6 +8,7 @@
 }
 
 #profileContent{
+  width: 100%;
   animation: sidebarShrink 200ms ease-in-out;      
 }
 
@@ -69,6 +70,7 @@
 /*in drawer*/
 
 #profilePictureWrapper{
+  width: 100%;
   position: relative;
 }
 

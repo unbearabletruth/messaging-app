@@ -1,6 +1,7 @@
 import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
 import './App.css'
 import './assets/styles/Buttons.css'
+import './assets/styles/Popups.css'
 import MainWindow from './pages/MainWindow';
 import Login from './pages/Login';
 import { useAuthContext } from './hooks/UseAuthContext';

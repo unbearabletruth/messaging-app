@@ -172,7 +172,7 @@ function ChatHeader({screenWidth, openChat}) {
           }
           {subsPopup &&
             <div className="popupBackground">
-              <div className='popup' id="requestsPopup">
+              <div className='popup userListPopup'>
                 <button onClick={() => setSubsPopup(false)} className="mainButton closePopup">
                   <img src={closeIcon} alt="x" className="mainButtonImg closeIcon"></img>
                 </button>

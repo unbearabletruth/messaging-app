@@ -40,7 +40,7 @@ function RequestsPopup({handleRequestsPopup}) {
 
   return (
     <div className="popupBackground">
-      <div className='popup' id="requestsPopup">
+      <div className='popup userListPopup'>
         <button onClick={() => handleRequestsPopup(false)} className="mainButton closePopup">
           <img src={closeIcon} alt="x" className="mainButtonImg closeIcon"></img>
         </button>

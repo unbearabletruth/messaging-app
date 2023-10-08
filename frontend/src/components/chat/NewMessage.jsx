@@ -12,6 +12,7 @@ import MediaPreview from './MediaPreview';
 import useClickOutside from '../../hooks/UseClickOutside';
 import UploadMenu from './UploadMenu';
 import sendIcon from '../../assets/images/send-icon.svg'
+import '../../assets/styles/Textbox.css'
 
 const isImage = ['gif','jpg','jpeg','png'];
 const isVideo = ['mp4','mov']

@@ -1,0 +1,183 @@
+.popupBackground{
+  background: rgba(0, 0, 0, .4);
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.popup{
+  position: relative;
+  background-color: var(--background);
+  padding: 50px 25px 25px 25px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  border-radius: 10px;
+  box-shadow: var(--hard-shadow);
+  animation: slideIntoView 150ms ease-out;
+}
+
+@keyframes slideIntoView {
+  0% {
+    opacity: 0;
+    transform: translateY(-20%);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* userList */
+
+.userListPopup{
+  max-height: 60vh;
+  overflow-y: auto;
+  position: relative;
+  gap: 0px;
+  width: 400px;
+}
+
+#userListPopup::-webkit-scrollbar {
+  width: 5px;
+}
+
+#userListPopup::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 20px;
+}
+
+.requestsTitle{
+  color: var(--main-font-color);
+  font-size: 1.2rem;
+}
+
+.requestButtons{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 5px;
+}
+
+/* delete */
+
+#deletePopup{
+  width: 350px;
+  align-items: center;
+}
+
+#deleteMessage{
+  color: var(--main-font-color);
+}
+
+#deletePopupButtons{
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
+
+/* sing up */
+
+#signupPopup{
+  width: 350px;
+  height: 325px;
+}
+
+#signupInputsWrapper{
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  flex: 1;
+  width: 100%;
+}
+
+/* new group */
+
+#newGroupPopup{
+  width: 350px;
+}
+
+#newGroupForm{
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+#newGroupName{
+  width: 100%;
+  height: 35px;
+  border-radius: 5px;
+  padding: 0px 8px;
+  border: 1px solid var(--border)
+}
+
+#newGroupName:focus{
+  outline: none;
+  border: 2px solid var(--main-color);
+}
+
+#newGroupCheckboxWrapper{
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+#newGroupCheckboxLabel{
+  color: var(--main-font-color);
+}
+
+/* upload */
+
+#uploadMediaPopup{
+  width: 400px;
+  min-height: 250px;
+}
+
+#uploadForm{
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  position: relative;
+}
+
+.uploadMediaPreview{
+  border-radius: 10px;
+  max-height: 300px;
+  max-width: 100%;
+  width: auto;
+  align-self: center;
+}
+
+#uploadInput{
+  width: 100%;
+  border: 0px;
+  max-height: 120px;
+  overflow: auto;
+  padding: 5px;
+  background-color: var(--background);
+  color: var(--main-font-color);
+  border-bottom: 1px solid var(--border);
+}
+
+#uploadInput:focus {
+  outline: none;
+}
+
+#uploadPopupFooter{
+  display: flex;
+  justify-content: space-between;
+}
+
+/**/
+
+@media (max-width: 768px) {
+  .popup{
+    width: 90% !important;
+  }
+}

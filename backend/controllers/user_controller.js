@@ -81,7 +81,7 @@ exports.signupUser = [
 ]
 
 exports.getUsers = async (req, res) => {
-  const users = await User.find().exec()
+  const users = await User.find().sort({lastSeen: -1}).limit(10).exec()
   res.status(200).json(users)
 };
 
@@ -101,7 +101,7 @@ exports.getBot = async (req, res) => {
 exports.searchUsers = async (req, res) => {
 	if (req.query.search) {
 		const keyword = {username: {$regex: req.query.search, $options: 'i'}}
-		const users = await User.find(keyword).exec()
+		const users = await User.find(keyword).sort({lastSeen: -1}).limit(10).exec()
 		res.status(200).json(users)
 	}
 };

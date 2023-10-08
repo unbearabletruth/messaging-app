@@ -37,6 +37,10 @@
   border: 1px solid var(--border)
 }
 
+.signupInput{
+  width: 100%;
+}
+
 .loginInput:focus,
 .signupInput:focus{
   outline: none;
@@ -61,29 +65,8 @@
   gap: 10px;
 }
 
-#signupPopup{
-  width: 350px;
-  height: 325px;
-}
-
-#signupInputsWrapper{
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  flex: 1;
-}
-
 .loginErrorMessage{
   font-size: 0.8rem;
   color: #ef4444;
 }
 
-@media (max-width: 768px) {
-  #signupPopup{
-    width: 90%;
-  }
-
-  .signupInput{
-    width: 100%;
-  }
-}
