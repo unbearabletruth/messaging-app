@@ -9,18 +9,21 @@ import { formatDateChat } from '../../utils/formatDate'
 import { useThemeContext } from "../../hooks/UseThemeContext";
 import { useCurrentChatContext } from "../../hooks/UseCurrentChatContext";
 import { useAuthContext } from '../../hooks/UseAuthContext';
+import closeIcon from '../../assets/images/close-icon.svg'
 
 const isImage = ['gif','jpg','jpeg','png'];
 const isVideo = ['mp4','mov']
 
 //chat flow is reversed
 
-function ChatField({messages, showBigImage, fetchMessages, messagesToSkip}) {
+function ChatField({messages, fetchMessages, messagesToSkip}) {
   const { user } = useAuthContext()
   const { currentChat } = useCurrentChatContext()
   const { isDark } = useThemeContext()
   const [scrollButton, setScrollButton] = useState(false)
   const chatWindow = useRef(null);
+  const [mediaPopup, setMediaPopup] = useState(false)
+  const [bigMedia, setBigMedia] = useState(null)
 
   const scrollBottom = () => {
     chatWindow.current.scrollTo({ behavior: 'smooth', top: 0 });
@@ -54,7 +57,12 @@ function ChatField({messages, showBigImage, fetchMessages, messagesToSkip}) {
   const handleVideoClick = (e, message) => {
     e.preventDefault()
     e.target.pause()
-    showBigImage(message.media.url)
+    showBigMedia(message.media.url)
+  }
+
+  const showBigMedia = (media) => {
+    setBigMedia(media)
+    setMediaPopup(true)
   }
 
   return (
@@ -65,7 +73,7 @@ function ChatField({messages, showBigImage, fetchMessages, messagesToSkip}) {
           <Fragment key={message._id}>
             <div className={`${message.author._id === user._id ? 'myMessage' : 'message'} ${isDark ? 'dark' : ''}`}>
               {message.media && isImage.some(type => message.media.url.includes(type)) ?
-                <img src={message.media.url} alt='message media' className='messageMedia' onClick={() => showBigImage(message.media.url)}></img>
+                <img src={message.media.url} alt='message media' className='messageMedia' onClick={() => showBigMedia(message.media.url)}></img>
               : message.media && isVideo.some(type => message.media.url.includes(type)) ?
                 <video src={message.media.url} className='messageMedia' onClick={(e) => handleVideoClick(e, message)} controls></video>
               : message.media ?
@@ -115,6 +123,19 @@ function ChatField({messages, showBigImage, fetchMessages, messagesToSkip}) {
       <button className={`bigButton toBottom ${scrollButton ? 'visible' : ''}`} onClick={scrollBottom}>
         <img src={toBottomIcon} alt="scroll bottom" className="bigButtonImg toBottom"></img>
       </button>
+      {mediaPopup &&
+        <div className="popupBackground media">
+          <button onClick={() => setMediaPopup(false)} className="mainButton closePopup">
+            <img src={closeIcon} alt="x" className="mainButtonImg closeIcon"></img>
+          </button>
+          {isImage.some(type => bigMedia.includes(type)) &&
+            <img src={bigMedia} alt='media big' className='messageMediaBig'></img>
+          }
+          {isVideo.some(type => bigMedia.includes(type)) &&
+            <video src={bigMedia} className='messageMediaBig' controls></video>
+          }
+        </div>
+      }
     </div>
   )
 }

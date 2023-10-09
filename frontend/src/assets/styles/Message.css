@@ -38,9 +38,10 @@
 }
 
 .messageMediaBig{
-  height: 80%;
+  max-height: 80%;
   width: auto;
-  border-radius: 25px;
+  max-width: 80%;
+  border-radius: 20px;
 }
 
 .messageContent{

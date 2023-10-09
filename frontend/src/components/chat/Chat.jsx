@@ -7,13 +7,9 @@ import { useOnlineUsersContext } from "../../hooks/UseOnlineUsersContext";
 import { useThemeContext } from "../../hooks/UseThemeContext";
 import { useChatsContext } from '../../hooks/UseChats';
 import { socket } from '../../socket';
-import closeIcon from '../../assets/images/close-icon.svg'
 import ChatHeader from './ChatHeader';
 import NewMessage from './NewMessage';
 import ChatField from './ChatField';
-
-const isImage = ['gif','jpg','jpeg','png'];
-const isVideo = ['mp4','mov']
 
 function Chat({screenWidth, openChat, addUserBackToChat}) {
   const { user } = useAuthContext()
@@ -22,8 +18,6 @@ function Chat({screenWidth, openChat, addUserBackToChat}) {
   const { onlineUsers } = useOnlineUsersContext()
   const { isDark } = useThemeContext()
   const [messages, setMessages] = useState([])
-  const [mediaPopup, setMediaPopup] = useState(false)
-  const [bigImage, setBigImage] = useState(null)
   const messagesToSkip = useRef(0)
 
   useEffect(() => {
@@ -144,11 +138,6 @@ function Chat({screenWidth, openChat, addUserBackToChat}) {
       socket.emit('update chat', json)
     }
   }
-  
-  const showBigImage = (media) => {
-    setBigImage(media)
-    setMediaPopup(true)
-  }
 
   const addMessage = (newMessage) => {
     setMessages(prevState => [newMessage, ...prevState])
@@ -165,7 +154,6 @@ function Chat({screenWidth, openChat, addUserBackToChat}) {
         <ChatField
           messages={messages}
           fetchMessages={fetchMessages}
-          showBigImage={showBigImage}
           messagesToSkip={messagesToSkip}
         />
         {currentChat && !currentChat.privateGroup && !currentChat.users.some(u => u._id === user._id) &&
@@ -186,19 +174,6 @@ function Chat({screenWidth, openChat, addUserBackToChat}) {
         }
         <NewMessage addMessage={addMessage}/>
       </>
-      }
-      {mediaPopup &&
-        <div className="popupBackground media">
-          <button onClick={() => setMediaPopup(false)} className="mainButton closePopup">
-            <img src={closeIcon} alt="x" className="mainButtonImg closeIcon"></img>
-          </button>
-          {isImage.some(type => bigImage.includes(type)) &&
-            <img src={bigImage} alt='media big' className='messageMediaBig'></img>
-          }
-          {isVideo.some(type => bigImage.includes(type)) &&
-            <video src={bigImage} className='messageMediaBig' controls></video>
-          }
-        </div>
       }
     </div>
   )
