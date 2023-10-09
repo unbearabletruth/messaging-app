@@ -12,6 +12,7 @@ import leaveIcon from '../../assets/images/logout-icon.svg'
 import requestIcon from '../../assets/images/request.svg'
 import deleteIcon from '../../assets/images/delete-icon.svg'
 import closeIcon from '../../assets/images/close-icon.svg'
+import useAlert from '../../hooks/UseAlert';
 
 function ChatMenu({isGroupChat, handleDrawer}) {
   const { user } = useAuthContext()
@@ -20,7 +21,7 @@ function ChatMenu({isGroupChat, handleDrawer}) {
   const { triggerRef, showMenu } = useClickOutside(false)
   const [deletePopup, setDeletePopup] = useState(false)
   const [requestsPopup, setRequestsPopup] = useState(false)
-  const [noRequests, setNoRequests] = useState(false)
+  const [requestsAlert, setRequestsAlert] = useAlert()
 
   const deleteChat = async () => {
     const response = await fetch(`http://localhost:3000/chats/${currentChat._id}`, {
@@ -76,21 +77,9 @@ function ChatMenu({isGroupChat, handleDrawer}) {
     if (currentChat.requests.length > 0) {
       setRequestsPopup(true)
     } else {
-      setNoRequests(true)
+      setRequestsAlert(true)
     }
   }
-
-  useEffect(() => {
-    if (noRequests) {
-      const timeId = setTimeout(() => {
-          setNoRequests(false)
-        }, 7000)
-    
-      return () => {
-        clearTimeout(timeId)
-      }
-    }
-  }, [noRequests]);
 
   return (
     <>
@@ -153,9 +142,9 @@ function ChatMenu({isGroupChat, handleDrawer}) {
         </div>
       }
       {requestsPopup &&
-        <RequestsPopup handleRequestsPopup={handleRequestsPopup} noRequests={noRequests}/>
+        <RequestsPopup handleRequestsPopup={handleRequestsPopup}/>
       }
-      {noRequests &&
+      {requestsAlert &&
         <div className="alert centered">
           <p className="alertLine">There are no requests</p>
         </div>

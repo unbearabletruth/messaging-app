@@ -121,7 +121,7 @@ exports.updateUser = [
             }
         })
         .optional(),
-    body("bio", "bio shouldn't exceed 50 characters")
+    body("bio", "Bio shouldn't exceed 50 characters")
         .trim()
         .isLength({ max: 50 })
         .optional(),

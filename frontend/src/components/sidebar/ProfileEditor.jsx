@@ -4,6 +4,7 @@ import backIcon from '../../assets/images/back-icon.svg'
 import { useState, useEffect, useRef } from 'react';
 import uniqid from 'uniqid';
 import { useAuthContext } from '../../hooks/UseAuthContext';
+import useAlert from '../../hooks/UseAlert';
 
 const isImage = ['gif','jpg','jpeg','png'];
 const sizeLimit = 1024 * 1024 // 1 Mb
@@ -16,8 +17,8 @@ function ProfileEditor({closeForm}) {
     profilePic: null
   })
   const fileInputRef = useRef(null);
-  const [errors, setErrors] = useState(null)
-  const [wrongFile, setWrongFile] = useState(null)
+  const [errors, setErrors] = useState([])
+  const [errorAlert, setErrorAlert] = useAlert()
 
   useEffect(() => {
     setProfileInfo({
@@ -30,7 +31,7 @@ function ProfileEditor({closeForm}) {
   const onMediaChange = (e) => {
     if (e.target.files[0].size > sizeLimit) {
       fileInputRef.current.value = null
-      setWrongFile('tooBig')
+      setErrorAlert('fileTooBig')
       return
     }
     if(isImage.some(type => e.target.files[0].type.includes(type))) {
@@ -41,7 +42,7 @@ function ProfileEditor({closeForm}) {
       }
     else{
       fileInputRef.current.value = null
-      setWrongFile('wrongType')
+      setErrorAlert('wrongFileType')
     }
   }
 
@@ -68,6 +69,7 @@ function ProfileEditor({closeForm}) {
     const json = await response.json()
     if (!response.ok) {
       setErrors(json.errors)
+      setErrorAlert('wrongTextInput')
     }
     if (response.ok) {
       closeForm()
@@ -77,19 +79,6 @@ function ProfileEditor({closeForm}) {
       localStorage.setItem('user', JSON.stringify(localStateUser))
     } 
   }
-
-  useEffect(() => {
-    if (wrongFile || errors) {
-      const timeId = setTimeout(() => {
-          setWrongFile(null)
-          setErrors(null)
-        }, 7000)
-    
-      return () => {
-        clearTimeout(timeId)
-      }
-    }
-  }, [wrongFile, errors]);
 
   const reverseChanges = () => {
     fileInputRef.current.value = null
@@ -166,15 +155,15 @@ function ProfileEditor({closeForm}) {
           </input>
         </form>
       </>
-      {(wrongFile || errors) &&
+      {errorAlert &&
         <div className="alert">
-          {wrongFile === 'wrongType' &&
+          {errorAlert === 'wrongFileType' &&
             <p className="alertLine">Image: gif, jpg, jpeg, png</p>
           }
-          {wrongFile === 'tooBig' &&
+          {errorAlert === 'fileTooBig' &&
             <p className="alertLine">Image shouldn't exceed 1 Mb</p>
           }
-          {errors && errors.map(err => {
+          {errorAlert === 'wrongTextInput' && errors.map(err => {
           return (
             <p key={uniqid()} className="alertLine">{err.msg}</p>
             )

@@ -11,6 +11,7 @@ import closeIcon from '../../assets/images/close-icon.svg'
 import darkIcon from '../../assets/images/dark-mode.svg'
 import '../../assets/styles/Menu.css'
 import useClickOutside from "../../hooks/UseClickOutside";
+import useAlert from "../../hooks/UseAlert";
 
 function Menu({handleSidebarContent, handleDrawer}) {
   const { user, dispatch } = useAuthContext()
@@ -21,12 +22,12 @@ function Menu({handleSidebarContent, handleDrawer}) {
   const [groupName, setGroupName] = useState('')
   const [isPrivate, setIsPrivate] = useState(false)
   const { triggerRef, nodeRef, showMenu } = useClickOutside(false)
-  const [error, setError] = useState(false)
+  const [errorAlert, setErrorAlert] = useAlert()
 
   const newGroupChat = async (e) => {
     e.preventDefault()
     if (groupName.length < 3 || groupName.length > 25) {
-      setError(true)
+      setErrorAlert(true)
       return
     }
     const newGroup = {
@@ -44,7 +45,7 @@ function Menu({handleSidebarContent, handleDrawer}) {
     })
     const json = await response.json()
     if (!response.ok) {
-      setError(true)
+      setErrorAlert(true)
     }
     if (response.ok) {
       setNewGroupPopup(false)
@@ -62,18 +63,6 @@ function Menu({handleSidebarContent, handleDrawer}) {
     localStorage.removeItem('user')
     dispatch({type: 'logout'})
   }
-
-  useEffect(() => {
-    if (error) {
-      const timeId = setTimeout(() => {
-          setError(null)
-        }, 7000)
-    
-      return () => {
-        clearTimeout(timeId)
-      }
-    }
-  }, [error]);
 
   return (
     <div id="menuWrapper">
@@ -138,7 +127,7 @@ function Menu({handleSidebarContent, handleDrawer}) {
               <button className="formButton">Create</button>
             </form>
           </div>
-          {error &&
+          {errorAlert &&
             <div className="alert">
               <p className="alertLine">Groupname should be 3-25 characters</p>
             </div>

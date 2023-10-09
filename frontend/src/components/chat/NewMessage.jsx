@@ -13,6 +13,7 @@ import useClickOutside from '../../hooks/UseClickOutside';
 import UploadMenu from './UploadMenu';
 import sendIcon from '../../assets/images/send-icon.svg'
 import '../../assets/styles/Textbox.css'
+import useAlert from '../../hooks/UseAlert';
 
 const isImage = ['gif','jpg','jpeg','png'];
 const isVideo = ['mp4','mov']
@@ -24,7 +25,7 @@ function NewMessage({addMessage}) {
   const { currentChat } = useCurrentChatContext()
   const { chats, handleChats } = useChatsContext() 
   const { isDark } = useThemeContext()
-  const [wrongFile, setWrongFile] = useState('')
+  const [errorAlert, setErrorAlert] = useAlert()
   const fileInputRef = useRef(null)
   const imgVidInputRef = useRef(null)
   const textboxRef = useRef(null)
@@ -106,7 +107,7 @@ function NewMessage({addMessage}) {
   const onImageOrVideoChange = (e) => {
     if (e.target.files[0].size > sizeLimit) {
       imgVidInputRef.current.value = null
-      setWrongFile('tooBig')
+      setErrorAlert('fileTooBig')
       return
     }
     if (isImage.some(type => e.target.files[0].type.includes(type)) ||
@@ -119,14 +120,14 @@ function NewMessage({addMessage}) {
     }
     else {
       imgVidInputRef.current.value = null
-      setWrongFile('wrongType')
+      setErrorAlert('wrongFileType')
     }
   }
 
   const onFileChange = (e) => {
     if (e.target.files[0].size > sizeLimit) {
       fileInputRef.current.value = null
-      setWrongFile('tooBig')
+      setErrorAlert('fileTooBig')
       return
     }
     setNewMessage({
@@ -142,18 +143,6 @@ function NewMessage({addMessage}) {
       textboxRef.current.textContent = null
     }
   }, [uploadPopup])
-
-  useEffect(() => {
-    if (wrongFile) {
-      const timeId = setTimeout(() => {
-          setWrongFile('')
-        }, 7000)
-    
-      return () => {
-        clearTimeout(timeId)
-      }
-    }
-  }, [wrongFile]);
 
   const onUploadPopupClose = () => {
     setUploadPopup(false)
@@ -300,9 +289,9 @@ function NewMessage({addMessage}) {
           </div>
         </div>
       }
-      {wrongFile &&
-        <div className="alert">
-          {wrongFile === 'wrongType' ?
+      {errorAlert &&
+        <div className="alert chat">
+          {errorAlert === 'wrongFileType' ?
             <>
               <p className="alertLine">Image: gif, jpg, jpeg, png</p>
               <p className="alertLine">Video: mp4, mov</p>

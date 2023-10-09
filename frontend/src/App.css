@@ -77,13 +77,17 @@ input[type=password]{
   transform: translate(-50%, 0);
   bottom: 3vh;
   width: 330px;
-  padding: 0px 12px;
+  padding: 8px 12px;
   max-width: 90%;
-  height: 60px;
+  min-height: 50px;
   background-color: var(--main-darker);
   color: white;
   font-weight: bold;
   box-shadow: var(--hard-shadow);
+}
+
+.alert.chat{
+  bottom: 80px;
 }
 
 .alert.centered{
