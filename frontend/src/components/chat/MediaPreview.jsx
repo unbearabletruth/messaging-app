@@ -2,7 +2,10 @@ import fileIcon from '../../assets/images/file-icon.svg'
 import { useThemeContext } from "../../hooks/UseThemeContext";
 import formatBytes from '../../utils/formatSize';
 
-function MediaPreview({media, isImage, isVideo}) {
+const isImage = ['gif','jpg','jpeg','png'];
+const isVideo = ['mp4','mov']
+
+function MediaPreview({media}) {
   const { isDark } = useThemeContext()
 
   return (
