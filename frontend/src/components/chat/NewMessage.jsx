@@ -3,7 +3,6 @@ import { useState, useEffect, useRef, useMemo } from 'react';
 import { useAuthContext } from '../../hooks/UseAuthContext';
 import { useCurrentChatContext } from "../../hooks/UseCurrentChatContext";
 import { useThemeContext } from "../../hooks/UseThemeContext";
-import { useChatsContext } from '../../hooks/UseChats';
 import { socket } from '../../socket';
 import smileyIcon from '../../assets/images/smiley-face.svg'
 import data from '@emoji-mart/data'
@@ -13,19 +12,15 @@ import useClickOutside from '../../hooks/UseClickOutside';
 import UploadMenu from './UploadMenu';
 import sendIcon from '../../assets/images/send-icon.svg'
 import '../../assets/styles/Textbox.css'
-import useAlert from '../../hooks/UseAlert';
 
 const isImage = ['gif','jpg','jpeg','png'];
 const isVideo = ['mp4','mov']
-const sizeLimit = 10 * 1024 * 1024 // 10 Mb
 const charLimit = 4096
 
-function NewMessage({addMessage}) {
+function NewMessage({addMessage, updateChatLatestMessage}) {
   const { user } = useAuthContext()
   const { currentChat } = useCurrentChatContext()
-  const { chats, handleChats } = useChatsContext() 
   const { isDark } = useThemeContext()
-  const [errorAlert, setErrorAlert] = useAlert()
   const fileInputRef = useRef(null)
   const imgVidInputRef = useRef(null)
   const textboxRef = useRef(null)
@@ -77,64 +72,6 @@ function NewMessage({addMessage}) {
         if (uploadPopup) {setUploadPopup(false)}
       }
     }
-  }
-
-  const updateChatLatestMessage = async (message) => {
-    const latestMessage = {latestMessage: message._id}
-    const response = await fetch(`http://localhost:3000/chats/${currentChat._id}`, {
-      method: 'PATCH',
-      body: JSON.stringify(latestMessage),
-      headers: {
-        'Content-type': 'application/json'
-      }
-    })
-    const json = await response.json()
-    if (response.ok) {
-      socket.emit('update chat', json)
-      const setChats = chats.map(chat => {
-        if (chat._id === json._id) {
-          return {
-            ...chat, 
-            latestMessage: json.latestMessage
-          };
-        }
-        return chat;
-      })
-      handleChats(setChats);
-    }
-  }
-
-  const onImageOrVideoChange = (e) => {
-    if (e.target.files[0].size > sizeLimit) {
-      imgVidInputRef.current.value = null
-      setErrorAlert('fileTooBig')
-      return
-    }
-    if (isImage.some(type => e.target.files[0].type.includes(type)) ||
-    isVideo.some(type => e.target.files[0].type.includes(type))) {
-      setNewMessage({
-        ...newMessage,
-        media: e.target.files[0]
-      })
-      setUploadPopup(true)  
-    }
-    else {
-      imgVidInputRef.current.value = null
-      setErrorAlert('wrongFileType')
-    }
-  }
-
-  const onFileChange = (e) => {
-    if (e.target.files[0].size > sizeLimit) {
-      fileInputRef.current.value = null
-      setErrorAlert('fileTooBig')
-      return
-    }
-    setNewMessage({
-      ...newMessage,
-      media: e.target.files[0]
-    })
-    setUploadPopup(true)  
   }
 
   useEffect(() => {
@@ -201,6 +138,17 @@ function NewMessage({addMessage}) {
     return string
   }
 
+  const handleUploadPopup = (value) => {
+    setUploadPopup(value)
+  }
+
+  const setMedia = (file) => {
+    setNewMessage({
+      ...newMessage,
+      media: file
+    })
+  }
+  console.log(newMessage, uploadPopup)
   return (
     <>
       <div id='messageFormWrapper'>
@@ -234,11 +182,11 @@ function NewMessage({addMessage}) {
                 {formatTooManySymbols()}
               </div>
             }
-            <UploadMenu 
-              onImageOrVideoChange={onImageOrVideoChange} 
-              onFileChange={onFileChange} 
+            <UploadMenu  
               imgVidInputRef={imgVidInputRef}
               fileInputRef={fileInputRef}
+              handleUploadPopup={handleUploadPopup}
+              setMedia={setMedia}
             />
           </div>
         </form>
@@ -287,18 +235,6 @@ function NewMessage({addMessage}) {
               </div>
             </form>
           </div>
-        </div>
-      }
-      {errorAlert &&
-        <div className="alert chat">
-          {errorAlert === 'wrongFileType' ?
-            <>
-              <p className="alertLine">Image: gif, jpg, jpeg, png</p>
-              <p className="alertLine">Video: mp4, mov</p>
-            </>
-          :
-            <p className="alertLine">File shouldn't exceed 10 Mb</p>
-          }
         </div>
       }
     </>

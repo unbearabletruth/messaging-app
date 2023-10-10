@@ -78,6 +78,31 @@ function Chat({screenWidth, openChat, addUserBackToChat}) {
     }
   }, [onlineUsers, currentChat && currentChat._id])
 
+  const updateChatLatestMessage = async (message) => {
+    const latestMessage = {latestMessage: message._id}
+    const response = await fetch(`http://localhost:3000/chats/${currentChat._id}`, {
+      method: 'PATCH',
+      body: JSON.stringify(latestMessage),
+      headers: {
+        'Content-type': 'application/json'
+      }
+    })
+    const json = await response.json()
+    if (response.ok) {
+      socket.emit('update chat', json)
+      const setChats = chats.map(chat => {
+        if (chat._id === json._id) {
+          return {
+            ...chat, 
+            latestMessage: json.latestMessage
+          };
+        }
+        return chat;
+      })
+      handleChats(setChats);
+    }
+  }
+
   const updateUserTimestampInChat = async () => {
     if (currentChat && currentChat.users.some(u => u._id === user._id)) {
       const userId = {user: user._id}
@@ -172,7 +197,7 @@ function Chat({screenWidth, openChat, addUserBackToChat}) {
             }
           </div>
         }
-        <NewMessage addMessage={addMessage}/>
+        <NewMessage addMessage={addMessage} updateChatLatestMessage={updateChatLatestMessage}/>
       </>
       }
     </div>
