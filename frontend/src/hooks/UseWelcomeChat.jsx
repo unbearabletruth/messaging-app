@@ -59,7 +59,7 @@ export function useWelcomeChat() {
 
   const welcomeMessage = async (chatId, botId) => {
     const message = {
-      text: 'Welcome to the Messaging App. Start a conversation by clicking "write" button on the sidebar or use search instead.',
+      text: 'Welcome to the Messaging App! Start a conversation by clicking "write" button or by using search instead.',
       chat: chatId,
       author: botId
     }

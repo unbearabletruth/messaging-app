@@ -7,7 +7,7 @@ import { useWelcomeChat } from "../hooks/UseWelcomeChat";
 
 function Signup({closePopup}) {
   const navigate = useNavigate()
-  const {dispatch} = useAuthContext()
+  const { dispatch } = useAuthContext()
   const [user, setUser] = useState({
     username: '',
     password: ''
@@ -23,33 +23,30 @@ function Signup({closePopup}) {
     })
   }
 
-  const handleSignup = async (e) => {
+  const signup = async (e) => {
     e.preventDefault()
-    const signup = async (user) => {
-      setIsLoading(true)
-      setErrors(null)
-  
-      const response = await fetch(`http://localhost:3000/users/signup`, {
-        method: 'POST',
-        body: JSON.stringify(user),
-        headers: {
-          'Content-type': 'application/json'
-        }
-      })
-      const json = await response.json()
-      if (!response.ok) {
-        setIsLoading(false)
-        setErrors(json.errors)
+    setIsLoading(true)
+    setErrors(null)
+
+    const response = await fetch(`http://localhost:3000/users/signup`, {
+      method: 'POST',
+      body: JSON.stringify(user),
+      headers: {
+        'Content-type': 'application/json'
       }
-      if (response.ok) {
-        localStorage.setItem('user', JSON.stringify(json))
-        dispatch({type: 'login', payload: json})
-        setIsLoading(false)
-        navigate("/");
-        initBot(json._id)
-      }
+    })
+    const json = await response.json()
+    if (!response.ok) {
+      setIsLoading(false)
+      setErrors(json.errors)
     }
-    await signup(user)
+    if (response.ok) {
+      localStorage.setItem('user', JSON.stringify(json))
+      dispatch({type: 'login', payload: json})
+      setIsLoading(false)
+      navigate("/");
+      initBot(json._id)
+    }
   }
 
   return (
@@ -59,12 +56,12 @@ function Signup({closePopup}) {
           <img src={closeIcon} alt="x" className="mainButtonImg closeIcon"></img>
         </button>
         <h1 id="signupTitle">Sign up</h1>
-        <form id="signupForm" onSubmit={handleSignup}>
+        <form id="signupForm" onSubmit={signup}>
           <div id="signupInputsWrapper">
             <div className="loginInputWithError">
               <input 
                 type="text"
-                className="signupInput" 
+                className={`signupInput ${errors && errors.some(err => err.path === 'username') ? 'invalid' : ''}`}
                 name="username" 
                 onChange={handleInput}
                 aria-label="username"
@@ -81,7 +78,7 @@ function Signup({closePopup}) {
             <div className="loginInputWithError">
               <input 
                 type="password"
-                className="signupInput" 
+                className={`signupInput ${errors && errors.some(err => err.path === 'password') ? 'invalid' : ''}`}
                 name="password" 
                 onChange={handleInput}
                 aria-label="password"

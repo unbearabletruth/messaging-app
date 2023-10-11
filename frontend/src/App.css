@@ -15,6 +15,7 @@ body {
   --hover: #eeeeee;
   --hover-contrast: #e5e5e5;
   --background: #ffffff;
+  --gradient-background: linear-gradient(0deg, rgba(255,245,233,1) 0%, rgba(255,255,255,1) 100%);
   --trans-background: rgba(255, 255, 255, 0.8);
   --main-filter: invert(39%) sepia(0%) saturate(0%) hue-rotate(146deg) brightness(111%) contrast(79%);
   --soft-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
@@ -31,6 +32,7 @@ body.dark{
   --hover: #313131;
   --hover-contrast: #404040;
   --background: #262626;
+  --gradient-background: linear-gradient(0deg, rgba(19,16,28,1) 0%, rgba(38,38,38,1) 100%);
   --trans-background: rgba(38, 38, 38, 0.8);
   --main-filter: invert(98%) sepia(0%) saturate(6246%) hue-rotate(195deg) brightness(116%) contrast(66%);
   --soft-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;

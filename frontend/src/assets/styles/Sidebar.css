@@ -8,7 +8,7 @@
   min-width: 250px;
   border-right: 1px solid var(--light-border);
   position: relative;
-  background-color: var(--background);
+  background: var(--gradient-background);
 }
 
 #sidebarHeader{

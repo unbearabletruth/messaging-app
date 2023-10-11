@@ -12,6 +12,7 @@ import darkIcon from '../../assets/images/dark-mode.svg'
 import '../../assets/styles/Menu.css'
 import useClickOutside from "../../hooks/UseClickOutside";
 import useAlert from "../../hooks/UseAlert";
+import { socket } from '../../socket';
 
 function Menu({handleSidebarContent, handleDrawer}) {
   const { user, dispatch } = useAuthContext()
@@ -62,6 +63,7 @@ function Menu({handleSidebarContent, handleDrawer}) {
   const handleLogout = () => {
     localStorage.removeItem('user')
     dispatch({type: 'logout'})
+    socket.emit("offline", user)
   }
 
   return (

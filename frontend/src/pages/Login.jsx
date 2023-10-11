@@ -7,7 +7,7 @@ import uniqid from 'uniqid';
 
 function Login() {
   const navigate = useNavigate()
-  const {dispatch} = useAuthContext()
+  const { dispatch } = useAuthContext()
   const [user, setUser] = useState({
     username: '',
     password: ''
@@ -23,33 +23,29 @@ function Login() {
     })
   }
 
-  const handleLogin = async (e) => {
+  const login = async (e) => {
     e.preventDefault()
-    const login = async (user) => {
-      setIsLoading(true)
-      setErrors(null)
-  
-      const response = await fetch(`http://localhost:3000/users/login`, {
-        method: 'POST',
-        body: JSON.stringify(user),
-        headers: {
-          'Content-type': 'application/json'
-        }
-      })
-      const json = await response.json()
-      if (!response.ok) {
-        console.log(json)
-        setIsLoading(false)
-        setErrors(json.errors)
+    setIsLoading(true)
+    setErrors(null)
+
+    const response = await fetch(`http://localhost:3000/users/login`, {
+      method: 'POST',
+      body: JSON.stringify(user),
+      headers: {
+        'Content-type': 'application/json'
       }
-      if (response.ok) {
-        localStorage.setItem('user', JSON.stringify(json))
-        dispatch({type: 'login', payload: json})
-        setIsLoading(false)
-        navigate("/");
-      }
+    })
+    const json = await response.json()
+    if (!response.ok) {
+      setIsLoading(false)
+      setErrors(json.errors)
     }
-    await login(user)
+    if (response.ok) {
+      localStorage.setItem('user', JSON.stringify(json))
+      dispatch({type: 'login', payload: json})
+      setIsLoading(false)
+      navigate("/");
+    }
   }
 
   const closePopup = () => {
@@ -59,11 +55,11 @@ function Login() {
   return (
       <div id="loginPage">
         <h1 id="loginTitle">Sign in to Messenger</h1>
-        <form id="loginForm" onSubmit={handleLogin}>
+        <form id="loginForm" onSubmit={login}>
           <div className="loginInputWithError">
             <input 
               type="text"
-              className="loginInput" 
+              className={`loginInput ${errors && errors.some(err => err.path === 'username') ? 'invalid' : ''}`} 
               name="username" 
               onChange={handleInput}
               aria-label="username"
@@ -80,7 +76,7 @@ function Login() {
           <div className="loginInputWithError">
             <input 
               type="password"
-              className="loginInput" 
+              className={`loginInput ${errors && errors.some(err => err.path === 'password') ? 'invalid' : ''}`} 
               name="password" 
               onChange={handleInput}
               aria-label="password"

@@ -7,7 +7,7 @@
   align-items: center;
   color: var(--main-font-color);
   gap: 35px;
-  background-color: var(--background);
+  background: var(--gradient-background);
 }
 
 #loginForm,
@@ -41,6 +41,11 @@
   width: 100%;
 }
 
+.loginInput.invalid,
+.signupInput.invalid{
+  border: 1px solid #ef4444;
+}
+
 .loginInput:focus,
 .signupInput:focus{
   outline: none;
@@ -50,7 +55,7 @@
 .fontButton{
   appearance: none;
   border: 0px;
-  background: var(--background);
+  background: inherit;
   font-size: 1rem;
   color: var(--main-color);
   font-weight: bold;
