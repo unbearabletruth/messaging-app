@@ -44,7 +44,7 @@ const io = require('socket.io')(server, {
       'http://localhost:5173',
       'http://localhost:5174',
       'http://localhost:5175',
-      'https://messaging-app-backend-lops.onrender.com'
+      'https://messaging-app-frontend-5nud.onrender.com'
     ]
   },
   pingTimeout: 60000
