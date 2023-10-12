@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import '../../assets/styles/Search.css'
 import searchIcon from '../../assets/images/search-icon.svg'
 import { useThemeContext } from "../../hooks/UseThemeContext";
+import { URL } from "../../constants";
 
 function Search({handleSidebarContent, handleUserResults, handleChatResults, searchInput, handleSearchInput}){
   const [searchActive, setSearchActive] = useState(false)
@@ -11,8 +12,8 @@ function Search({handleSidebarContent, handleUserResults, handleChatResults, sea
   useEffect(() => {
     const fetchSearch = async () => {
       const [resUsers, resChats] = await Promise.all([
-        fetch(`http://localhost:3000/users/search?search=${searchInput}`),
-        fetch(`http://localhost:3000/chats/search?search=${searchInput}`)
+        fetch(`${URL}/users/search?search=${searchInput}`),
+        fetch(`${URL}/chats/search?search=${searchInput}`)
       ])
       const jsonUsers = await resUsers.json()
       const jsonChats = await resChats.json()

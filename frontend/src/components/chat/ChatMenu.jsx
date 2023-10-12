@@ -13,6 +13,7 @@ import requestIcon from '../../assets/images/request.svg'
 import deleteIcon from '../../assets/images/delete-icon.svg'
 import closeIcon from '../../assets/images/close-icon.svg'
 import useAlert from '../../hooks/UseAlert';
+import { URL } from '../../constants';
 
 function ChatMenu({isGroupChat, handleDrawer}) {
   const { user } = useAuthContext()
@@ -24,7 +25,7 @@ function ChatMenu({isGroupChat, handleDrawer}) {
   const [requestsAlert, setRequestsAlert] = useAlert()
 
   const deleteChat = async () => {
-    const response = await fetch(`http://localhost:3000/chats/${currentChat._id}`, {
+    const response = await fetch(`${URL}/chats/${currentChat._id}`, {
       method: 'DELETE'
     })
     const json = await response.json()
@@ -36,7 +37,7 @@ function ChatMenu({isGroupChat, handleDrawer}) {
 
   const deleteChatForYourself = async () => {
     const userId = {user: user._id}
-    const response = await fetch(`http://localhost:3000/chats/${currentChat._id}/deleteFor`, {
+    const response = await fetch(`${URL}/chats/${currentChat._id}/deleteFor`, {
       method: 'PATCH',
       body: JSON.stringify(userId),
       headers: {
@@ -54,7 +55,7 @@ function ChatMenu({isGroupChat, handleDrawer}) {
 
   const leaveGroupChat = async () => {
     const userId = {user: user._id}
-    const response = await fetch(`http://localhost:3000/chats/${currentChat._id}/remove`, {
+    const response = await fetch(`${URL}/chats/${currentChat._id}/remove`, {
       method: 'PATCH',
       body: JSON.stringify(userId),
       headers: {

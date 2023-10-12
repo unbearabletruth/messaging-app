@@ -4,6 +4,7 @@ import { useNavigate  } from "react-router-dom";
 import Signup from "../components/SignupPopup";
 import '../assets/styles/Login.css'
 import uniqid from 'uniqid';
+import { URL } from "../constants";
 
 function Login() {
   const navigate = useNavigate()
@@ -28,7 +29,7 @@ function Login() {
     setIsLoading(true)
     setErrors(null)
 
-    const response = await fetch(`http://localhost:3000/users/login`, {
+    const response = await fetch(`${URL}/users/login`, {
       method: 'POST',
       body: JSON.stringify(user),
       headers: {

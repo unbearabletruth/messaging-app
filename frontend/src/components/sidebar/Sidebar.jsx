@@ -8,6 +8,7 @@ import Profile from "./Profile";
 import { useAuthContext } from '../../hooks/UseAuthContext';
 import { useOnlineUsersContext } from "../../hooks/UseOnlineUsersContext";
 import moment from 'moment';
+import { URL } from "../../constants";
 
 function Sidebar({allMessages, openChat})  {
   const { user } = useAuthContext()
@@ -21,7 +22,7 @@ function Sidebar({allMessages, openChat})  {
 
   useEffect(() => {
     const fetchUsers = async () => {
-      const response = await fetch(`http://localhost:3000/users`)
+      const response = await fetch(`${URL}/users`)
       const json = await response.json()
       if (response.ok) {
         setUsers(json)

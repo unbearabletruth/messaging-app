@@ -40,7 +40,12 @@ const server = app.listen(port, () => {
 
 const io = require('socket.io')(server, {
   cors: { 
-    origin: ['http://localhost:5173', 'http://localhost:5174', 'http://localhost:5175']
+    origin: [
+      'http://localhost:5173',
+      'http://localhost:5174',
+      'http://localhost:5175',
+      'https://messaging-app-backend-lops.onrender.com'
+    ]
   },
   pingTimeout: 60000
 })

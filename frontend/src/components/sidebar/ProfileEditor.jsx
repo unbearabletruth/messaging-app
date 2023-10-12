@@ -5,6 +5,7 @@ import { useState, useEffect, useRef } from 'react';
 import uniqid from 'uniqid';
 import { useAuthContext } from '../../hooks/UseAuthContext';
 import useAlert from '../../hooks/UseAlert';
+import { URL } from '../../constants';
 
 const isImage = ['gif','jpg','jpeg','png'];
 const sizeLimit = 1024 * 1024 // 1 Mb
@@ -62,7 +63,7 @@ function ProfileEditor({closeForm}) {
     }
     formData.append('bio', profileInfo.bio);
     
-    const response = await fetch(`http://localhost:3000/users/${user._id}`, {
+    const response = await fetch(`${URL}/users/${user._id}`, {
       method: 'PATCH',
       body: formData,
     })

@@ -10,6 +10,7 @@ import { socket } from '../../socket';
 import ChatHeader from './ChatHeader';
 import NewMessage from './NewMessage';
 import ChatField from './ChatField';
+import { URL } from '../../constants';
 
 function Chat({screenWidth, openChat, addUserBackToChat}) {
   const { user } = useAuthContext()
@@ -34,7 +35,7 @@ function Chat({screenWidth, openChat, addUserBackToChat}) {
 
   const fetchMessages = async () => {
     const loadAmount = 50
-    const response = await fetch(`http://localhost:3000/chats/${currentChat._id}/messages?mes=${loadAmount}&skip=${messagesToSkip.current}`)
+    const response = await fetch(`${URL}/chats/${currentChat._id}/messages?mes=${loadAmount}&skip=${messagesToSkip.current}`)
     const json = await response.json()
     if (response.ok) {
       setMessages(prevState => [...prevState, ...json])
@@ -80,7 +81,7 @@ function Chat({screenWidth, openChat, addUserBackToChat}) {
 
   const updateChatLatestMessage = async (message) => {
     const latestMessage = {latestMessage: message._id}
-    const response = await fetch(`http://localhost:3000/chats/${currentChat._id}`, {
+    const response = await fetch(`${URL}/chats/${currentChat._id}`, {
       method: 'PATCH',
       body: JSON.stringify(latestMessage),
       headers: {
@@ -106,7 +107,7 @@ function Chat({screenWidth, openChat, addUserBackToChat}) {
   const updateUserTimestampInChat = async () => {
     if (currentChat && currentChat.users.some(u => u._id === user._id)) {
       const userId = {user: user._id}
-      const response = await fetch(`http://localhost:3000/chats/${currentChat._id}/timestamp`, {
+      const response = await fetch(`${URL}/chats/${currentChat._id}/timestamp`, {
         method: 'PATCH',
         body: JSON.stringify(userId),
         headers: {
@@ -133,7 +134,7 @@ function Chat({screenWidth, openChat, addUserBackToChat}) {
 
   const joinGroupChat = async () => {
     const userId = {user: user._id}
-    const response = await fetch(`http://localhost:3000/chats/${currentChat._id}/add`, {
+    const response = await fetch(`${URL}/chats/${currentChat._id}/add`, {
       method: 'PATCH',
       body: JSON.stringify(userId),
       headers: {
@@ -150,7 +151,7 @@ function Chat({screenWidth, openChat, addUserBackToChat}) {
 
   const addRequest = async () => {
     const userId = {request: user._id}
-    const response = await fetch(`http://localhost:3000/chats/${currentChat._id}/addRequest`, {
+    const response = await fetch(`${URL}/chats/${currentChat._id}/addRequest`, {
       method: 'PATCH',
       body: JSON.stringify(userId),
       headers: {
