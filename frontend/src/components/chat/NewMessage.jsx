@@ -24,6 +24,7 @@ function NewMessage({addMessage, updateChatLatestMessage}) {
   const textboxPopupRef = useRef(null)
   const [uploadPopup, setUploadPopup] = useState(false)
   const { triggerRef, nodeRef, showMenu } = useClickOutside(false)
+  const [loading, setLoading] = useState(false)
   const [newMessage, setNewMessage] = useState({
     author: '',
     chat: '',
@@ -44,6 +45,7 @@ function NewMessage({addMessage, updateChatLatestMessage}) {
 
   const submitMessage = async (e) => {
     e.preventDefault()
+    setLoading(true)
     const formData = new FormData();
     formData.append('media', newMessage.media);
     formData.append('text', newMessage.text);
@@ -54,6 +56,7 @@ function NewMessage({addMessage, updateChatLatestMessage}) {
       body: formData
     })
     const json = await response.json()
+    setLoading(false)
     if (response.ok) {
       setNewMessage({
         ...newMessage,
@@ -170,10 +173,13 @@ function NewMessage({addMessage, updateChatLatestMessage}) {
             />
           </div>
         </form>
-        {(!newMessage.text || newMessage.text.length > 4096) || uploadPopup ?
-          <button className='bigButtonInactive send' form='messageForm' type='button'>
-            <img src={sendIcon} alt='send' className="bigButtonImg"></img>
-          </button>
+        {loading ? 
+          <div className='loader'></div>
+          :
+          (!newMessage.text || newMessage.text.length > 4096) || uploadPopup ?
+            <button className='bigButtonInactive send' form='messageForm' type='button'>
+              <img src={sendIcon} alt='send' className="bigButtonImg"></img>
+            </button>
           :
           <button className='bigButton send' form='messageForm'>
             <img src={sendIcon} alt='send' className="bigButtonImg"></img>
@@ -188,6 +194,7 @@ function NewMessage({addMessage, updateChatLatestMessage}) {
           submitMessage={submitMessage}
           handleMessage={handleMessage}
           handleEnter={handleEnter}
+          loading={loading}
         />
       }
     </>

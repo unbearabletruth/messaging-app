@@ -3,7 +3,7 @@ import MediaPreview from './MediaPreview';
 import { useMemo } from 'react';
 import formatTooManySymbols from '../../utils/formatTooManySymbols';
 
-function UploadPopup({onUploadPopupClose, newMessage, textboxPopupRef, submitMessage, handleMessage, handleEnter}) {
+function UploadPopup({onUploadPopupClose, newMessage, textboxPopupRef, submitMessage, handleMessage, handleEnter, loading}) {
 
   const mediaPreview = useMemo(() => (
     newMessage.media &&
@@ -32,11 +32,12 @@ function UploadPopup({onUploadPopupClose, newMessage, textboxPopupRef, submitMes
           >
           </div>
           <div id='uploadPopupFooter'>
-            {!newMessage.text || newMessage.text.length > 4096 ?
+            {!newMessage.text || newMessage.text.length > 4096 || loading ?
               <button type='button' className="formButtonInactive">Send</button>
               :
               <button className="formButton">Send</button>
             }
+            {loading && <div className='loader smaller'></div>}
             {newMessage.text.length > 4096 &&
               <div className="tooManySymbols">
                 {formatTooManySymbols(newMessage.text.length)}
