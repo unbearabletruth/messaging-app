@@ -1,5 +1,6 @@
 const Message = require("../models/message");
 const { body, validationResult } = require("express-validator");
+const fs = require('fs')
 
 exports.getMessages = async (req, res) => {
     const messages = await Message.find({chat: req.params.id})
@@ -51,6 +52,21 @@ exports.createMessage = [
         }
     }
 ]
+
+exports.deleteChatMessages = async (req, res) => {
+    const messages = await Message.find({chat: req.params.id})
+    await Message.deleteMany({chat: req.params.id})
+    for (mes of messages) {
+        if (mes.media.name) {
+            const filepath = `./public/media/${mes.media.name}`
+            fs.unlink(filepath, (err) => {
+                if (err) {
+                console.error(err)
+                }
+            })
+        }
+    }
+}
 
 exports.deleteMessage = async (req, res) => {
     const message = await Message.findByIdAndDelete(req.params.messageId)

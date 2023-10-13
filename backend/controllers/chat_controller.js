@@ -1,7 +1,6 @@
 const Chat = require("../models/chat");
-const Message = require("../models/message");
 const { body, validationResult } = require("express-validator");
-
+const { deleteChatMessages } = require('./message_controller');
 
 exports.getChats = async (req, res) => {
     const chats = await Chat.find({users: { $in: [req.params.id] }, deletedBy: { $nin: [req.params.id]}})
@@ -112,9 +111,9 @@ exports.updateUserTimestamp = async (req, res) => {
 
 exports.deleteChat = async (req, res) => {
     const chat = await Chat.findByIdAndDelete(req.params.id)
-    await Message.deleteMany({chat: req.params.id})
-
+    
     if (chat){
+        deleteChatMessages(req, res)
         return res.status(200).json(chat)
     }
     res.status(400).json({error: 'No such chat'})
