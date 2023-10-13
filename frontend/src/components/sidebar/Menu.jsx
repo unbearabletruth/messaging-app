@@ -65,6 +65,8 @@ function Menu({handleSidebarContent, handleDrawer}) {
     localStorage.removeItem('user')
     dispatch({type: 'logout'})
     socket.emit("offline", user)
+    handleCurrentChat(null)
+    handleChats([])
   }
 
   return (

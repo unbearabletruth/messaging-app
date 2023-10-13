@@ -4,10 +4,12 @@
   flex: 1;
   height: 100vh;
   position: relative;
+  background-color: #f0e6d3;
   background-image: url('/src/assets/images/background.jpg');
   background-position: center;
 }
 
 #content.dark{
+  background-color: #3c383e;
   background-image: url('/src/assets/images/background-dark.jpg');
 }
