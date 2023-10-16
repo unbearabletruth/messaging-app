@@ -6,9 +6,10 @@ const {
   searchChats, addToChat, removeFromChat, updateUserTimestamp,
   addRequest, removeRequest, deleteFor, addFor 
 } = require('../controllers/chat_controller');
+const { verifyToken } = require('../controllers/user_controller')
 
 
-router.get("/users/:id", getChats);
+router.get("/users/:id", verifyToken, getChats);
 
 router.get("/search", searchChats);
 

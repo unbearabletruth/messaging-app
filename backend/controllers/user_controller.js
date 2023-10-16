@@ -7,6 +7,18 @@ const createToken = (_id) => {
     return jwt.sign({_id}, process.env.SECRET, {expiresIn: '5d'})
 }
 
+exports.verifyToken = async (req, res, next) => {
+    if (req.headers.authorization) {
+        try {
+            token = req.headers.authorization.split(' ')[1]
+            jwt.verify(token, process.env.SECRET)
+            next()
+        } catch (err) {
+            res.status(400).json('Token is not valid')
+        }
+    }
+}
+
 exports.loginUser = [
     body("username")
         .trim()
@@ -39,8 +51,7 @@ exports.loginUser = [
 
         const user = await User.findOne({username})
         const token = createToken(user._id)
-        const _id = user._id
-        res.status(200).json({_id, username, token})
+        res.status(200).json({...user.toObject(), token})
     }
 ]
 
@@ -72,11 +83,11 @@ exports.signupUser = [
 
         const salt = await bcrypt.genSalt(10)
         const hash = await bcrypt.hash(password, salt)
-        const user = await User.create({username, password: hash})
+        await User.create({username, password: hash})
         
+        const user = await User.findOne({username})
         const token = createToken(user._id)
-        const _id = user._id
-        res.status(200).json({_id, username, token})
+        res.status(200).json({...user.toObject(), token})
     }
 ]
 

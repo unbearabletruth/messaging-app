@@ -173,14 +173,13 @@ function NewMessage({addMessage, updateChatLatestMessage}) {
             />
           </div>
         </form>
-        {loading ? 
+        {(!newMessage.text || newMessage.text.length > 4096) || uploadPopup ?
+          <button className='bigButtonInactive send' form='messageForm' type='button'>
+            <img src={sendIcon} alt='send' className="bigButtonImg"></img>
+          </button>
+        : loading ?
           <div className='loader'></div>
-          :
-          (!newMessage.text || newMessage.text.length > 4096) || uploadPopup ?
-            <button className='bigButtonInactive send' form='messageForm' type='button'>
-              <img src={sendIcon} alt='send' className="bigButtonImg"></img>
-            </button>
-          :
+        :
           <button className='bigButton send' form='messageForm'>
             <img src={sendIcon} alt='send' className="bigButtonImg"></img>
           </button>

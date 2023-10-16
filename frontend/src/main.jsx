@@ -8,17 +8,15 @@ import { ThemeContextProvider } from './contexts/ThemeContext.jsx'
 import { ChatsContextProvider } from './contexts/ChatsContext.jsx'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
-    <AuthContextProvider>
-      <ChatsContextProvider>
-        <CurrentChatContextProvider>
-          <OnlineUsersContextProvider>
-            <ThemeContextProvider>
-              <App />
-            </ThemeContextProvider>
-          </OnlineUsersContextProvider>
-        </CurrentChatContextProvider>
-      </ChatsContextProvider>
-    </AuthContextProvider>
-  </React.StrictMode>
+  <AuthContextProvider>
+    <ChatsContextProvider>
+      <CurrentChatContextProvider>
+        <OnlineUsersContextProvider>
+          <ThemeContextProvider>
+            <App />
+          </ThemeContextProvider>
+        </OnlineUsersContextProvider>
+      </CurrentChatContextProvider>
+    </ChatsContextProvider>
+  </AuthContextProvider>
 )

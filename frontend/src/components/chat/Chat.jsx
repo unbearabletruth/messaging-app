@@ -35,7 +35,9 @@ function Chat({screenWidth, openChat, addUserBackToChat}) {
 
   const fetchMessages = async () => {
     const loadAmount = 50
-    const response = await fetch(`${URL}/chats/${currentChat._id}/messages?mes=${loadAmount}&skip=${messagesToSkip.current}`)
+    const response = await fetch(`${URL}/chats/${currentChat._id}/messages?mes=${loadAmount}&skip=${messagesToSkip.current}`, {
+      headers: { authorization: `Bearer ${user.token}` }
+    })
     const json = await response.json()
     if (response.ok) {
       setMessages(prevState => [...prevState, ...json])

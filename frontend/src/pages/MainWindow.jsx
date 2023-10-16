@@ -12,7 +12,7 @@ import { socket } from '../socket';
 import { URL } from "../constants";
 
 function MainWindow() {
-  const { user, dispatch } = useAuthContext()
+  const { user } = useAuthContext()
   const { currentChat, handleCurrentChat } = useCurrentChatContext()
   const { setOnlineUsers } = useOnlineUsersContext()
   const { chats, handleChats } = useChatsContext()
@@ -20,21 +20,10 @@ function MainWindow() {
   const [screenWidth, setScreenWidth] = useState(window.innerWidth)
 
   useEffect(() => {
-    const fetchUser = async () => {
-      const response = await fetch(`${URL}/users/${user._id}`)
-      const json = await response.json()
-      if (response.ok) {
-        dispatch({type: 'set', payload: json})
-      }
-    }
-    if (user) {
-      fetchUser()
-    }
-  }, [])
-
-  useEffect(() => {
     const fetchChats = async () => {
-      const response = await fetch(`${URL}/chats/users/${user._id}`)
+      const response = await fetch(`${URL}/chats/users/${user._id}`, {
+        headers: { authorization: `Bearer ${user.token}` }
+      })
       const json = await response.json()
       if (response.ok) {
         handleChats(json)
