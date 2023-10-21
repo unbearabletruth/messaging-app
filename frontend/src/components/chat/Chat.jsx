@@ -61,18 +61,22 @@ function Chat({screenWidth, openChat, addUserBackToChat}) {
   }, [currentChat && currentChat._id, onlineUsers])
 
   useEffect(() => {
-    socket.on('receive chat', (updatedChat) => {
+    socket.on('receive new chat', (updatedChat) => {
+      handleChats([updatedChat, ...chats])
+    })
+    return () => socket.off('receive new chat')
+  }, [chats])
+
+  useEffect(() => {
+    socket.on('receive chat update', (updatedChat) => {
       if (currentChat && currentChat._id === updatedChat._id) {
         handleCurrentChat(updatedChat)
         handleChats(chats.map(c => c._id === updatedChat._id ? updatedChat : c))
-        if (!chats.some(chat => chat._id === updatedChat._id)) {
-          handleChats([updatedChat, ...chats])
-        }
       } else {
         handleChats(chats.map(c => c._id === updatedChat._id ? updatedChat : c))
       }
     })
-    return () => socket.off('receive chat')
+    return () => socket.off('receive chat update')
   }, [currentChat && currentChat._id, chats])
 
   useEffect(() => {

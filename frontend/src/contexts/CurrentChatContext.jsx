@@ -7,7 +7,9 @@ export const CurrentChatContextProvider = ({children}) => {
 
   const handleCurrentChat = (chat) => {
     setCurrentChat(chat)
-    sessionStorage.setItem("currentChat", JSON.stringify(chat));
+    if (chat) {
+      sessionStorage.setItem("currentChat", JSON.stringify(chat));
+    }
   }
 
   return (

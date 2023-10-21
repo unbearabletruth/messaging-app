@@ -32,6 +32,10 @@ function ChatMenu({isGroupChat, handleDrawer}) {
     if (response.ok) {
       handleChats(chats.filter(c => c._id !== json._id))
       handleCurrentChat(null)
+      const sessionCurrentChat = JSON.parse(sessionStorage.getItem('currentChat'))
+      if (sessionCurrentChat._id === json._id) {
+        sessionStorage.removeItem('currentChat')
+      }
     }
   }
 

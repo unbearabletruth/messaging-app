@@ -12,15 +12,18 @@ function RequestsPopup({handleRequestsPopup}) {
 
   const admitRequest = async (req) => {
     const userId = {user: req._id}
-    await fetch(`${URL}/chats/${currentChat._id}/add`, {
+    const response = await fetch(`${URL}/chats/${currentChat._id}/add`, {
       method: 'PATCH',
       body: JSON.stringify(userId),
       headers: {
         'Content-type': 'application/json'
       }
     })
-
-    removeRequest(req)
+    const json = await response.json()
+    if (response.ok) {
+      socket.emit('new chat', json, req._id)
+      removeRequest(req)
+    }
   }
 
   const removeRequest = async (req) => {

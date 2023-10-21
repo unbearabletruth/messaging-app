@@ -50,6 +50,7 @@ function MainWindow() {
     if (response.ok) {
       handleChats([json, ...chats])
       handleCurrentChat(json)
+      socket.emit('new chat', json, partnerId)
     }
   }
 

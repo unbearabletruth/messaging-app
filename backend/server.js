@@ -90,9 +90,13 @@ io.on("connection", (socket) => {
     });
   })
 
+  socket.on('new chat', (chat, userId) => {
+    socket.in(userId).emit('receive new chat', chat)
+  })
+
   socket.on('update chat', (chat) => {
     chat.users.forEach(user => {
-        socket.in(user._id).emit('receive chat', chat)
+      socket.in(user._id).emit('receive chat update', chat)
     });
   })
 

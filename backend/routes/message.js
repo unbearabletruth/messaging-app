@@ -4,7 +4,7 @@ const { getMessages, createMessage, deleteMessage, updateMessage } = require('..
 const { uploadMedia } = require('../utilities/uploadMessageMedia');
 const { verifyToken } = require('../controllers/user_controller');
 
-router.get("/messages", verifyToken, getMessages);
+router.get("/messages", getMessages);
 
 router.post("/messages", uploadMedia.single('media'), createMessage);
 
