@@ -135,6 +135,20 @@ function MainWindow() {
   }, []);
 
   useEffect(() => {
+    socket.on("lastSeen update", (userOff) => {
+      const chatsUpdate = [...chats]
+      for (let chat of chatsUpdate) {
+        for (let user of chat.users) {
+          if (user._id === userOff._id) {
+            user.lastSeen = userOff.lastSeen
+          }
+        }
+      }
+      handleChats(chatsUpdate)
+    })
+  }, [chats])
+
+  useEffect(() => {
     const handleWindowResize = () => {
       setScreenWidth(window.innerWidth);
     };
@@ -143,7 +157,7 @@ function MainWindow() {
       window.removeEventListener('resize', handleWindowResize);
     };
   }, [])
-
+  
   return (
     screenWidth >= 768 ?
       <>

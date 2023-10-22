@@ -71,10 +71,11 @@ io.on("connection", (socket) => {
   socket.on("offline", async (user) => {
     users = users.filter((u) => u !== user._id);
     console.log("offline", user.username);
-    await User.findByIdAndUpdate(user._id, {
+    const userOff = await User.findByIdAndUpdate(user._id, {
       lastSeen: Date.now()
     }, { new: true })
     io.emit("online", users);
+    io.emit("lastSeen update", userOff)
   });
 
   socket.on('joined chat', (chat) => {
