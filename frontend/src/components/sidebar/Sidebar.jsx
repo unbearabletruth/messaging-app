@@ -28,9 +28,10 @@ function Sidebar({allMessages, openChat})  {
         setUsers(json)
       }
     }
-
-    fetchUsers()
-  }, [])
+    if (sidebarContent === 'write') {
+      fetchUsers()
+    }
+  }, [sidebarContent])
 
   const handleSearchInput = (value) => {
     setSearchInput(value)

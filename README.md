@@ -1,7 +1,13 @@
 # Real-time messaging app
 
 ## Purpose
-MERN stack practice and learning.
+MERN stack practice and learning
+
+## Live demo
+### [Try it out!](https://messaging-app-frontend-5nud.onrender.com/)
+Bear in mind some hosting limits:
+* Wake up delay
+* Disk storage doesn't persist beyond a session
 
 ## Main functionality: 
 * Real-time messaging
@@ -15,14 +21,15 @@ MERN stack practice and learning.
 
 ## Features:
 * Dark theme
-* Infinite scroll with to the bottom button
+* Infinite scroll
 * Auto-growing textbox
 * Number of new messages notification
-* Latest message preview in sidebar's chat list
-* Delete chat for yourself/both
+* Latest message preview in a contact list
+* Chat deletion for yourself/both
 * Enlarged media view
 * Animations, drawers, popups
 * Emoji [(emoji-mart)](https://github.com/missive/emoji-mart)
+* Responsive design
 
 ## Used technologies:
 * MongoDB
