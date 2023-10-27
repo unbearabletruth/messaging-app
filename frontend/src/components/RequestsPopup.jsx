@@ -4,7 +4,7 @@ import { useCurrentChatContext } from "../hooks/UseCurrentChatContext";
 import { socket } from '../socket';
 import moment from 'moment';
 import { useOnlineUsersContext } from "../hooks/UseOnlineUsersContext";
-import { URL } from '../constants';
+import { HOST } from '../constants';
 
 function RequestsPopup({handleRequestsPopup}) {
   const { currentChat, handleCurrentChat } = useCurrentChatContext()
@@ -12,7 +12,7 @@ function RequestsPopup({handleRequestsPopup}) {
 
   const admitRequest = async (req) => {
     const userId = {user: req._id}
-    const response = await fetch(`${URL}/chats/${currentChat._id}/add`, {
+    const response = await fetch(`${HOST}/chats/${currentChat._id}/add`, {
       method: 'PATCH',
       body: JSON.stringify(userId),
       headers: {
@@ -28,7 +28,7 @@ function RequestsPopup({handleRequestsPopup}) {
 
   const removeRequest = async (req) => {
     const reqId = {request: req._id}
-    const response = await fetch(`${URL}/chats/${currentChat._id}/removeRequest`, {
+    const response = await fetch(`${HOST}/chats/${currentChat._id}/removeRequest`, {
       method: 'PATCH',
       body: JSON.stringify(reqId),
       headers: {

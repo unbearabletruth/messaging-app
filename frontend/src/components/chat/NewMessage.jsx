@@ -12,7 +12,7 @@ import sendIcon from '../../assets/images/send-icon.svg'
 import '../../assets/styles/Textbox.css'
 import UploadPopup from './UploadPopup';
 import formatTooManySymbols from '../../utils/formatTooManySymbols';
-import { URL } from '../../constants';
+import { HOST } from '../../constants';
 
 function NewMessage({addMessage, updateChatLatestMessage}) {
   const { user } = useAuthContext()
@@ -51,7 +51,7 @@ function NewMessage({addMessage, updateChatLatestMessage}) {
     formData.append('text', newMessage.text);
     formData.append('chat', newMessage.chat);
     formData.append('author', newMessage.author);
-    const response = await fetch(`${URL}/chats/${currentChat._id}/messages`, {
+    const response = await fetch(`${HOST}/chats/${currentChat._id}/messages`, {
       method: 'POST',
       body: formData
     })

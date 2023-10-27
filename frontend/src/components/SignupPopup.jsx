@@ -4,7 +4,7 @@ import { useNavigate  } from "react-router-dom";
 import closeIcon from '../assets/images/close-icon.svg'
 import uniqid from 'uniqid';
 import { useWelcomeChat } from "../hooks/UseWelcomeChat";
-import { URL } from "../constants";
+import { HOST } from "../constants";
 
 function Signup({closePopup}) {
   const navigate = useNavigate()
@@ -29,7 +29,7 @@ function Signup({closePopup}) {
     setIsLoading(true)
     setErrors(null)
 
-    const response = await fetch(`${URL}/users/signup`, {
+    const response = await fetch(`${HOST}/users/signup`, {
       method: 'POST',
       body: JSON.stringify(user),
       headers: {

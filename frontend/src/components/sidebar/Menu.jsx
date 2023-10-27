@@ -13,7 +13,7 @@ import '../../assets/styles/Menu.css'
 import useClickOutside from "../../hooks/UseClickOutside";
 import useAlert from "../../hooks/UseAlert";
 import { socket } from '../../socket';
-import { URL } from "../../constants";
+import { HOST } from "../../constants";
 
 function Menu({handleSidebarContent, handleDrawer}) {
   const { user, dispatch } = useAuthContext()
@@ -38,7 +38,7 @@ function Menu({handleSidebarContent, handleDrawer}) {
       users: [user._id],
       privateGroup: isPrivate
     }
-    const response = await fetch(`${URL}/chats`, {
+    const response = await fetch(`${HOST}/chats`, {
       method: 'POST',
       body: JSON.stringify(newGroup),
       headers: {

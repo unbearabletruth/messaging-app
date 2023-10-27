@@ -1,6 +1,6 @@
 import { useCurrentChatContext } from "./UseCurrentChatContext";
 import { useChatsContext } from './UseChats';
-import { URL } from "../constants";
+import { HOST } from "../constants";
 
 const botName = 'Welcome Bot'
 
@@ -9,7 +9,7 @@ export function useWelcomeChat() {
   const { chats, handleChats } = useChatsContext()
 
   const initBot = async (userId) => {
-    const response = await fetch(`${URL}/users/bot/${botName}`)
+    const response = await fetch(`${HOST}/users/bot/${botName}`)
     const json = await response.json()
     if (!response.ok) {
       createBot(userId)
@@ -24,7 +24,7 @@ export function useWelcomeChat() {
       username: 'Welcome Bot',
       password: 'whatever'
     }
-    const response = await fetch(`${URL}/users/signup`, {
+    const response = await fetch(`${HOST}/users/signup`, {
       method: 'POST',
       body: JSON.stringify(welcomeBot),
       headers: {
@@ -43,7 +43,7 @@ export function useWelcomeChat() {
       users: [userId, botId]
     }
     console.log(newChat)
-    const response = await fetch(`${URL}/chats`, {
+    const response = await fetch(`${HOST}/chats`, {
       method: 'POST',
       body: JSON.stringify(newChat),
       headers: {
@@ -64,7 +64,7 @@ export function useWelcomeChat() {
       chat: chatId,
       author: botId
     }
-    await fetch(`${URL}/chats/${chatId}/messages`, {
+    await fetch(`${HOST}/chats/${chatId}/messages`, {
       method: 'POST',
       body: JSON.stringify(message),
       headers: {

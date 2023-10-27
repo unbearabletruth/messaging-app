@@ -9,7 +9,7 @@ import { useCurrentChatContext } from "../hooks/UseCurrentChatContext";
 import { useOnlineUsersContext } from "../hooks/UseOnlineUsersContext";
 import { useChatsContext } from "../hooks/UseChats";
 import { socket } from '../socket';
-import { URL } from "../constants";
+import { HOST } from "../constants";
 
 function MainWindow() {
   const { user } = useAuthContext()
@@ -21,7 +21,7 @@ function MainWindow() {
 
   useEffect(() => {
     const fetchChats = async () => {
-      const response = await fetch(`${URL}/chats/users/${user._id}`, {
+      const response = await fetch(`${HOST}/chats/users/${user._id}`, {
         headers: { authorization: `Bearer ${user.token}` }
       })
       const json = await response.json()
@@ -39,7 +39,7 @@ function MainWindow() {
       isGroupChat: false,
       users: [user._id, partnerId]
     }
-    const response = await fetch(`${URL}/chats`, {
+    const response = await fetch(`${HOST}/chats`, {
       method: 'POST',
       body: JSON.stringify(newChat),
       headers: {
@@ -58,7 +58,7 @@ function MainWindow() {
     if (user2 === user._id) return
 
     const fetchChat = async () => {
-      const response = await fetch(`${URL}/chats/byUsers?user1=${user._id}&user2=${user2}`)
+      const response = await fetch(`${HOST}/chats/byUsers?user1=${user._id}&user2=${user2}`)
       const json = await response.json()
       if (!response.ok) {
         newChat(e, user2)
@@ -75,7 +75,7 @@ function MainWindow() {
 
   const addUserBackToChat = async (chat, incoming = false) => {
     const userId = {user: user._id}
-    const response = await fetch(`${URL}/chats/${chat._id}/addFor`, {
+    const response = await fetch(`${HOST}/chats/${chat._id}/addFor`, {
       method: 'PATCH',
       body: JSON.stringify(userId),
       headers: {
@@ -93,7 +93,7 @@ function MainWindow() {
   useEffect(() => {
     const fetchMessages = async () => {
       const response = await Promise.all(chats.map(chat => 
-        fetch(`${URL}/chats/${chat._id}/messages`)
+        fetch(`${HOST}/chats/${chat._id}/messages`)
           .then(res => res.json())
           .then(json => {
             return {id: chat._id, messages: json}
